@@ -130,6 +130,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 .shuf-btn.spin .sh-icon{animation:shspin .4s ease}
 @keyframes shspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .sh-stage{flex:1;padding:32px 28px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;align-items:flex-start}
+.sh-main{flex:1;background:#111;display:flex;flex-direction:column;min-height:calc(100vh - 64px)}
 .rh{display:flex;align-items:center;gap:12px}
 .rl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#3a3a3a;font-family:"DM Mono",monospace}
 .rct{display:flex;gap:4px}
@@ -560,7 +561,9 @@ function buildSlots() {
   for (var i = 0; i < surfCount; i++) cfg.push('surface');
   slots = cfg.map(function(type, i) {
     var ex = slots[i];
-    if (ex && ex.type === type && ex.pinned) return ex;
+    // Keep existing slot if same type (pinned OR not — only new slots get randomised)
+    if (ex && ex.type === type) return ex;
+    // Genuinely new slot — assign random
     return { type: type, surface: pool.length ? randPick(pool) : null, pinned: false };
   });
 }
@@ -585,14 +588,28 @@ function renderShuffler() {
   function mkCard(slot) {
     var wrap = document.createElement('div');
     wrap.className = 'sc' + (slot.pinned ? ' pinned' : '');
-    var ph = document.createElement('div'); ph.className = 'sc-ph';
+    // Image area — use real photo if available, else tinted placeholder
+    var imgArea = document.createElement('div'); imgArea.className = 'sc-ph';
     if (slot.surface) {
-      var cfg = null;
-      for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === slot.surface.colorKey) { cfg = COLOR_CONFIG[i]; break; } }
-      if (cfg) ph.style.background = 'linear-gradient(135deg,' + cfg.swatch + '44,' + cfg.swatch + '11)';
+      var imgSrc = IMAGES[slot.surface.id] || null;
+      if (imgSrc) {
+        var img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = slot.surface.name;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        imgArea.textContent = '';
+        imgArea.appendChild(img);
+        imgArea.style.padding = '0';
+      } else {
+        var cfg = null;
+        for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === slot.surface.colorKey) { cfg = COLOR_CONFIG[i]; break; } }
+        if (cfg) imgArea.style.background = 'linear-gradient(135deg,' + cfg.swatch + '44,' + cfg.swatch + '11)';
+        imgArea.textContent = '🖼';
+      }
+    } else {
+      imgArea.textContent = '🖼';
     }
-    ph.textContent = '🖼';
-    wrap.appendChild(ph);
+    wrap.appendChild(imgArea);
     var pin = document.createElement('button'); pin.type = 'button';
     pin.className = 'pin-btn' + (slot.pinned ? ' on' : '');
     pin.textContent = slot.pinned ? '📌' : '📍';
@@ -633,7 +650,7 @@ function renderShuffler() {
     var r = document.createElement('div'); r.className = 'srow';
     bgSlots.forEach(function(sl) { r.appendChild(mkCard(sl)); }); stage.appendChild(r);
   }
-  stage.appendChild(mkRowHdr('Surface', surfCount, 1, 2, function(n) { surfCount = n; buildSlots(); renderShuffler(); }));  var sr = document.createElement('div'); sr.className = 'srow';
+  stage.appendChild(mkRowHdr('Surface', surfCount, 0, 2, function(n) { surfCount = n; buildSlots(); renderShuffler(); }));  var sr = document.createElement('div'); sr.className = 'srow';
   sfSlots.forEach(function(sl) { sr.appendChild(mkCard(sl)); }); stage.appendChild(sr);
 }
 
