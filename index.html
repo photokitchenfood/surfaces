@@ -23,10 +23,10 @@ header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-
 .mode-btn{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border:none;border-radius:4px;cursor:pointer;background:transparent;color:#888;transition:all .15s}
 .mode-btn.active{background:#fff;color:var(--ink)}
 
-/* SAVE BUTTON */
-#save-btn{display:none;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border-radius:5px;border:1.5px solid #4CAF50;background:transparent;color:#4CAF50;cursor:pointer;transition:all .15s;white-space:nowrap}
-#save-btn.visible{display:block}
-#save-btn:hover{background:#4CAF50;color:#fff}
+/* SAVE BUTTON — subtle like Vessels */
+#save-btn{display:none;align-items:center;gap:6px;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.03em;padding:7px 12px;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#fff;cursor:pointer;transition:border-color .15s;white-space:nowrap}
+#save-btn.visible{display:flex}
+#save-btn:hover{border-color:#fff}
 
 /* CATALOG LAYOUT */
 #catalog-view{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
@@ -40,13 +40,13 @@ header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-
 #search::placeholder{color:var(--ink-faint)}
 aside{flex:1;padding:28px 20px;overflow-y:auto}
 .sidebar-section{margin-bottom:28px}
-.sidebar-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;font-weight:500;display:flex;align-items:center;gap:5px}
+.sidebar-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;font-weight:500;display:flex;align-items:center}
 
-/* INFO ICON */
-.info-icon{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;border:1px solid var(--ink-faint);color:var(--ink-faint);font-size:8px;cursor:pointer;position:relative;flex-shrink:0;transition:all .15s;font-family:"DM Mono",monospace;font-style:normal}
-.info-icon:hover{border-color:var(--ink-soft);color:var(--ink-soft)}
-.info-icon .tooltip{display:none;position:absolute;left:18px;top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;font-size:10px;line-height:1.5;padding:8px 10px;border-radius:5px;white-space:normal;width:210px;z-index:200;font-family:"DM Mono",monospace;letter-spacing:0;text-transform:none}
-.info-icon:hover .tooltip{display:block}
+/* INFO ICON — floating tooltip matching Vessels */
+.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink-soft);color:var(--ink-soft);font-size:8px;font-weight:700;cursor:default;position:relative;flex-shrink:0;margin-left:5px;vertical-align:middle;font-family:"DM Mono",monospace;font-style:normal}
+.info-icon .tooltip{display:none}
+#floating-tooltip{text-transform:uppercase;position:fixed;background:var(--ink);color:var(--surface);font-size:10px;font-family:"DM Mono",monospace;font-weight:400;line-height:1.6;padding:8px 10px;border-radius:6px;width:190px;z-index:9999;white-space:normal;letter-spacing:.01em;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s}
+#floating-tooltip.visible{opacity:1;visibility:visible}
 
 /* COLOR SELECT */
 .color-select-wrap{position:relative;display:flex;align-items:center}
@@ -59,11 +59,18 @@ aside{flex:1;padding:28px 20px;overflow-y:auto}
 .chip{font-family:"DM Mono",monospace;font-size:11px;padding:4px 10px;border-radius:100px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s;white-space:nowrap}
 .chip:hover{border-color:var(--ink);color:var(--ink)}
 .chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+/* No Size chip — amber/goldenrod like Vessels nodims */
+.chip-nosize{background:#fff8dc !important;color:#8B6F00 !important;border-color:#D4A800 !important}
+.chip-nosize.active{background:#D4A800 !important;color:#fff !important;border-color:#D4A800 !important}
 
-/* DIM INPUTS */
-.size-inputs{display:flex;gap:6px;align-items:flex-end}
+/* DIM SELECT — matching Vessels dim-select */
+.dim-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border-radius:var(--radius);border:1.5px solid var(--tag-border);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
+.dim-select:focus{outline:none;border-color:var(--ink)}
+
+/* DIM RANGE INPUTS */
+.size-inputs{display:flex;flex-direction:row;align-items:flex-end;gap:6px}
 .size-input-wrap label{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
-.size-input-wrap input{width:58px;padding:6px 5px;height:32px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:11px;background:var(--bg);color:var(--ink);outline:none}
+.size-input-wrap input{width:52px;padding:6px 5px;box-sizing:border-box;height:32px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:11px;background:var(--bg);color:var(--ink);outline:none}
 .size-input-wrap input:focus{border-color:var(--ink)}
 .reset-btn{width:100%;padding:8px;background:transparent;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;text-transform:uppercase;font-size:11px;color:var(--ink-soft);cursor:pointer;letter-spacing:.05em;transition:all .15s;margin-top:6px}
 .reset-btn:hover{border-color:var(--ink);color:var(--ink)}
@@ -89,13 +96,30 @@ main{padding:28px 32px}
 .card-img-placeholder svg{opacity:.4}
 .card-img-placeholder span{font-size:9px;letter-spacing:.1em;text-transform:uppercase}
 .color-stripe{position:absolute;bottom:0;left:0;right:0;height:3px}
-.id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap}
+.id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap;pointer-events:none}
 .card:hover .id-tag{opacity:1}
 .qty-badge{position:absolute;top:8px;left:8px;background:#fff;color:var(--ink);font-size:10px;padding:2px 6px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+
+/* EDIT BUTTON — bottom-right of image, exactly like Vessels btn-replace-photo */
+.btn-edit-card{position:absolute;bottom:8px;right:8px;background:none;border:none;padding:2px;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;color:var(--ink-soft)}
+.card-img:hover .btn-edit-card{opacity:1}
+.btn-edit-card:hover{color:var(--ink)}
+
+/* CARD BODY */
 .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
 .card-body.no-dims{background:#fff8dc}
+/* card-top: title + size badge side by side, like Vessels */
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
 .card-title{font-family:"Syne",sans-serif;font-weight:600;font-size:13px;line-height:1.3;color:var(--ink)}
-.card-desc{font-size:10px;color:var(--ink-soft);line-height:1.5}
+
+/* SIZE BADGE — inline in card-top, styled like Vessels */
+.size-badge{font-size:9px;font-weight:500;padding:2px 7px;border-radius:100px;white-space:nowrap;flex-shrink:0;letter-spacing:.04em;text-transform:uppercase}
+.size-badge.sz-s {background:#E8F5E9;color:#2E7D32}
+.size-badge.sz-m {background:#FFF3E0;color:#E65100}
+.size-badge.sz-l {background:#E3F2FD;color:#1565C0}
+.size-badge.sz-xl{background:#F3E5F5;color:#6A1B9A}
+.size-badge.sz-none{background:#D4A800;color:#fff}
+
 .card-dims{font-size:10px;color:var(--ink-soft);line-height:1.7}
 .card-dims .dr{display:grid;grid-template-columns:56px 1fr}
 .card-dims .dl{color:var(--ink-faint);text-transform:uppercase;font-size:9px;letter-spacing:.06em}
@@ -103,46 +127,18 @@ main{padding:28px 32px}
 .card-dims .dv.miss{color:#c09000;font-style:italic}
 .card-dims .small-hdr{font-size:9px;color:#CE93D8;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .card-note{font-size:10px;color:var(--ink-soft);font-style:italic;line-height:1.4}
-.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
+
+/* CARD FOOTER / TAGS — like Vessels: color-tag (colored) + mat-tag (gray) */
+.card-footer{display:flex;align-items:center;gap:4px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
 .tag{font-size:9px;padding:2px 7px;border-radius:3px;background:var(--tag-bg);border:1px solid var(--tag-border);color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
-.tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.tag.color-tag{display:inline-flex;align-items:center;gap:4px}
+.tag-dot{width:6px;height:6px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex-shrink:0}
+.tag.mat-tag{background:var(--tag-bg);border-color:var(--tag-border);color:var(--ink-soft)}
 .tag.wet-tag{background:#E3F2FD;border-color:#90CAF9;color:#1565C0}
 .tag.small-tag{background:#F3E5F5;border-color:#CE93D8;color:#6A1B9A}
-.tag.size-tag{background:#E8F5E9;border-color:#A5D6A7;color:#2E7D32}
+
 aside::-webkit-scrollbar{width:4px}
 aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
-
-/* EDIT BUTTON on card */
-.card-edit-btn{position:absolute;bottom:8px;right:8px;width:26px;height:26px;border-radius:5px;border:1.5px solid var(--tag-border);background:rgba(255,255,255,.9);cursor:pointer;display:none;align-items:center;justify-content:center;color:var(--ink-soft);transition:all .15s;font-size:12px;z-index:2}
-.card:hover .card-edit-btn{display:flex}
-.card-edit-btn:hover{border-color:var(--ink);color:var(--ink);background:#fff}
-
-/* EDIT MODAL */
-#edit-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
-#edit-modal-overlay.open{display:flex}
-#edit-modal{background:var(--surface);border-radius:12px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--tag-border);display:flex;align-items:center;justify-content:space-between}
-.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;color:var(--ink)}
-.modal-subtitle{font-size:10px;color:var(--ink-faint);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-.modal-close{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--tag-border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:16px;transition:all .15s;line-height:1}
-.modal-close:hover{border-color:var(--ink);color:var(--ink)}
-.modal-body{padding:20px 24px}
-.modal-field{margin-bottom:16px}
-.modal-field label{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;font-weight:500}
-.modal-field input,.modal-field textarea,.modal-field select{width:100%;padding:8px 10px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:12px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s}
-.modal-field input:focus,.modal-field textarea:focus,.modal-field select:focus{border-color:var(--ink)}
-.modal-field textarea{resize:vertical;min-height:64px;line-height:1.5}
-.modal-dims-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.modal-dims-grid.three{grid-template-columns:1fr 1fr 1fr}
-.modal-checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.modal-checkbox-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--ink);cursor:pointer}
-.modal-checkbox-row label{font-size:11px;color:var(--ink-soft);cursor:pointer;letter-spacing:.03em}
-.modal-section-hdr{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--tag-border)}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--tag-border);display:flex;gap:10px;justify-content:flex-end}
-.modal-btn{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:8px 18px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s}
-.modal-btn:hover{border-color:var(--ink);color:var(--ink)}
-.modal-btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
-.modal-btn.primary:hover{opacity:.85}
 
 /* PASSWORD GATE */
 #pw-gate{position:fixed;inset:0;background:#1A1A18;z-index:9999;display:flex;align-items:center;justify-content:center}
@@ -159,6 +155,53 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 #pw-submit:hover{color:#fff}
 .pw-error{font-size:10px;color:#C0392B;letter-spacing:.06em;text-transform:uppercase;min-height:14px;text-align:center;font-family:"DM Mono",monospace}
 @keyframes pw-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* EDIT MODAL — two-column: photo left, fields right; compact to avoid scrolling */
+#edit-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px}
+#edit-modal-overlay.open{display:flex}
+#edit-modal{background:var(--surface);border-radius:12px;width:660px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,.18);font-family:"DM Mono",monospace;overflow:hidden}
+.modal-inner{display:flex}
+
+/* Photo column */
+.modal-photo-col{width:210px;flex-shrink:0;background:#F0EDE8;display:flex;flex-direction:column}
+.modal-photo-wrap{flex:1;position:relative;overflow:hidden;cursor:pointer;min-height:190px;display:flex;align-items:center;justify-content:center}
+.modal-photo-wrap:hover .modal-photo-hover{opacity:1}
+.modal-photo-wrap img.modal-photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.modal-photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-faint);padding:24px;text-align:center;pointer-events:none}
+.modal-photo-placeholder svg{opacity:.4}
+.modal-photo-placeholder span{font-size:10px;letter-spacing:.06em;text-transform:uppercase;line-height:1.4}
+.modal-photo-hover{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;pointer-events:none}
+.modal-photo-hover span{font-size:10px;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.modal-photo-file{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.modal-id-strip{padding:9px 14px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);border-top:1px solid var(--tag-border);background:var(--surface)}
+
+/* Fields column */
+.modal-fields-col{flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow-y:auto;max-height:90vh}
+.modal-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--ink);line-height:1.2}
+.modal-close{width:27px;height:27px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:13px;transition:all .15s;line-height:1;flex-shrink:0}
+.modal-close:hover{border-color:var(--ink);color:var(--ink)}
+.mf{display:flex;flex-direction:column;gap:4px}
+.mf label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.mf input,.mf select{width:100%;padding:7px 9px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:12px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s;box-sizing:border-box}
+.mf select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-color:var(--bg);padding-right:28px}
+.mf input:focus,.mf select:focus{border-color:var(--ink)}
+/* Row of fields side by side */
+.modal-row{display:flex;gap:8px}
+.modal-row .mf{flex:1;min-width:0}
+/* Checkboxes row */
+.modal-checks{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.mcheck{display:flex;align-items:center;gap:6px;cursor:pointer}
+.mcheck input[type=checkbox]{width:14px;height:14px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
+.mcheck span{font-size:11px;color:var(--ink-soft);user-select:none}
+/* Small dims panel */
+#ef-small-panel{display:none}
+/* Footer */
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;padding-top:4px;border-top:1px solid var(--tag-border);margin-top:2px}
+.modal-btn{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.03em;padding:7px 16px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s}
+.modal-btn:hover{border-color:var(--ink);color:var(--ink)}
+.modal-btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.modal-btn.primary:hover{opacity:.85}
 
 /* SHUFFLER */
 #shuffler-view{display:none;flex-direction:row;min-height:calc(100vh - 64px)}
@@ -208,10 +251,14 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
   .sh-sidebar{width:100%;position:static;height:auto}
   .srow{flex-direction:column}
   .sc{max-width:100%}
+  .modal-inner{flex-direction:column}
+  .modal-photo-col{width:100%;min-height:180px}
 }
 </style>
 </head>
 <body>
+
+<div id="floating-tooltip"></div>
 
 <div id="pw-gate">
   <div class="pw-box">
@@ -227,116 +274,133 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
   </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div id="edit-modal-overlay">
+  <div id="edit-modal">
+    <div class="modal-inner">
+      <!-- LEFT: photo -->
+      <div class="modal-photo-col">
+        <div class="modal-photo-wrap" id="modal-photo-wrap">
+          <input type="file" class="modal-photo-file" id="modal-photo-file" accept="image/*">
+          <div class="modal-photo-placeholder" id="modal-photo-placeholder">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>Click to add photo</span>
+          </div>
+          <img id="modal-photo-preview" class="modal-photo-preview" alt="">
+          <div class="modal-photo-hover"><span>Replace photo</span></div>
+        </div>
+        <div class="modal-id-strip" id="modal-id-strip"></div>
+      </div>
+      <!-- RIGHT: fields -->
+      <div class="modal-fields-col">
+        <div class="modal-head">
+          <div class="modal-title" id="modal-title">Edit Surface</div>
+          <button class="modal-close" id="modal-close-btn">&#10005;</button>
+        </div>
+
+        <div class="mf">
+          <label>Name</label>
+          <input type="text" id="ef-name" placeholder="Surface name">
+        </div>
+
+        <div class="modal-row">
+          <div class="mf">
+            <label>Material</label>
+            <select id="ef-material">
+              <option value="Painted Panels">Painted Panels</option>
+              <option value="Plastic Laminate">Plastic Laminate</option>
+              <option value="Ceramic Tile">Ceramic Tile</option>
+              <option value="Sticker &amp; Printed">Sticker &amp; Printed</option>
+              <option value="Special Material">Special Material</option>
+              <option value="Paper">Paper</option>
+              <option value="3D Elements">3D Elements</option>
+              <option value="Solid Wood">Solid Wood</option>
+            </select>
+          </div>
+          <div class="mf" style="max-width:88px">
+            <label>Size Override</label>
+            <select id="ef-size">
+              <option value="">Auto</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- All 3 dims + qty in one row -->
+        <div class="modal-row">
+          <div class="mf">
+            <label>Length (cm)</label>
+            <input type="number" id="ef-length" placeholder="—" min="0" step="0.1">
+          </div>
+          <div class="mf">
+            <label>Width (cm)</label>
+            <input type="number" id="ef-width" placeholder="—" min="0" step="0.1">
+          </div>
+          <div class="mf">
+            <label>Diameter (cm)</label>
+            <input type="number" id="ef-diameter" placeholder="—" min="0" step="0.1">
+          </div>
+          <div class="mf" style="max-width:60px">
+            <label>Qty</label>
+            <input type="number" id="ef-qty" placeholder="1" min="1" step="1">
+          </div>
+        </div>
+
+        <!-- Property toggles -->
+        <div class="modal-checks">
+          <label class="mcheck">
+            <input type="checkbox" id="ef-wet-safe">
+            <span>💧 Wet-Safe</span>
+          </label>
+          <label class="mcheck">
+            <input type="checkbox" id="ef-has-small">
+            <span>📐 Has Small Version</span>
+          </label>
+        </div>
+
+        <!-- Small dims (shown only when has_small checked) -->
+        <div id="ef-small-panel" class="modal-row">
+          <div class="mf">
+            <label>Small Length (cm)</label>
+            <input type="number" id="ef-small-length" placeholder="—" min="0" step="0.1">
+          </div>
+          <div class="mf">
+            <label>Small Width (cm)</label>
+            <input type="number" id="ef-small-width" placeholder="—" min="0" step="0.1">
+          </div>
+        </div>
+
+        <div class="mf">
+          <label>Notes</label>
+          <input type="text" id="ef-notes" placeholder="e.g. BACK-TO-BACK [D], project refs…">
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-btn" id="modal-cancel-btn">Cancel</button>
+          <button class="modal-btn primary" id="modal-save-btn">Save Surface</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="logo">PhotoKitchen</div>
   <span class="header-meta">Props Catalog 2.0 &mdash; Surfaces</span>
   <div class="header-right">
-    <button id="save-btn" type="button">&#8595; Save Changes</button>
+    <button id="save-btn" type="button">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Save Changes
+    </button>
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="catalog">Catalog</button>
       <button class="mode-btn" data-mode="shuffler">Shuffler</button>
     </div>
   </div>
 </header>
-
-<!-- EDIT MODAL -->
-<div id="edit-modal-overlay">
-  <div id="edit-modal">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="modal-title">Edit Surface</div>
-        <div class="modal-subtitle" id="modal-subtitle"></div>
-      </div>
-      <button class="modal-close" id="modal-close-btn">&#10005;</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-field">
-        <label>Name</label>
-        <input type="text" id="ef-name" placeholder="Surface name">
-      </div>
-      <div class="modal-field">
-        <label>Description</label>
-        <textarea id="ef-desc" placeholder="Visual description of the surface…"></textarea>
-      </div>
-      <div class="modal-field">
-        <label>Material</label>
-        <select id="ef-material">
-          <option value="Painted Panels">Painted Panels</option>
-          <option value="Plastic Laminate">Plastic Laminate</option>
-          <option value="Ceramic Tile">Ceramic Tile</option>
-          <option value="Sticker &amp; Printed">Sticker &amp; Printed</option>
-          <option value="Special Material">Special Material</option>
-          <option value="Paper">Paper</option>
-          <option value="3D Elements">3D Elements</option>
-          <option value="Solid Wood">Solid Wood</option>
-        </select>
-      </div>
-      <div class="modal-field">
-        <label>Size Category</label>
-        <select id="ef-size">
-          <option value="">— No size assigned —</option>
-          <option value="S">S — Small</option>
-          <option value="M">M — Medium</option>
-          <option value="L">L — Large</option>
-          <option value="XL">XL — Extra Large</option>
-        </select>
-      </div>
-
-      <div class="modal-section-hdr">Dimensions</div>
-      <div class="modal-dims-grid">
-        <div class="modal-field">
-          <label>Length (cm)</label>
-          <input type="number" id="ef-length" placeholder="—" min="0" step="0.1">
-        </div>
-        <div class="modal-field">
-          <label>Width (cm)</label>
-          <input type="number" id="ef-width" placeholder="—" min="0" step="0.1">
-        </div>
-        <div class="modal-field">
-          <label>Diameter (cm)</label>
-          <input type="number" id="ef-diameter" placeholder="—" min="0" step="0.1">
-        </div>
-        <div class="modal-field">
-          <label>Qty</label>
-          <input type="number" id="ef-qty" placeholder="1" min="1" step="1">
-        </div>
-      </div>
-
-      <div class="modal-section-hdr">Small Version</div>
-      <div class="modal-checkbox-row">
-        <input type="checkbox" id="ef-has-small">
-        <label for="ef-has-small">Has a small version</label>
-      </div>
-      <div id="ef-small-dims" style="display:none">
-        <div class="modal-dims-grid">
-          <div class="modal-field">
-            <label>Small Length (cm)</label>
-            <input type="number" id="ef-small-length" placeholder="—" min="0" step="0.1">
-          </div>
-          <div class="modal-field">
-            <label>Small Width (cm)</label>
-            <input type="number" id="ef-small-width" placeholder="—" min="0" step="0.1">
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-section-hdr">Properties</div>
-      <div class="modal-checkbox-row">
-        <input type="checkbox" id="ef-wet-safe">
-        <label for="ef-wet-safe">💧 Wet-Safe</label>
-      </div>
-
-      <div class="modal-field" style="margin-top:14px">
-        <label>Notes</label>
-        <textarea id="ef-notes" placeholder="Optional notes…" style="min-height:48px"></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-btn" id="modal-cancel-btn">Cancel</button>
-      <button class="modal-btn primary" id="modal-save-btn">Save Surface</button>
-    </div>
-  </div>
-</div>
 
 <div id="catalog-view">
   <div class="sidebar-col">
@@ -375,11 +439,11 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
         <div class="sidebar-label">Size</div>
         <div class="chip-group" id="size-filters">
           <button class="chip active" data-size="all">All</button>
-          <button class="chip" data-size="S">S</button>
-          <button class="chip" data-size="M">M</button>
-          <button class="chip" data-size="L">L</button>
-          <button class="chip" data-size="XL">XL</button>
-          <button class="chip" data-size="none">No Size</button>
+          <button class="chip" data-size="S">S &lt;40cm</button>
+          <button class="chip" data-size="M">M 40–69cm</button>
+          <button class="chip" data-size="L">L 70–99cm</button>
+          <button class="chip" data-size="XL">XL ≥100cm</button>
+          <button class="chip chip-nosize" data-size="none">No Size</button>
         </div>
       </div>
       <div class="sidebar-section">
@@ -391,26 +455,26 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">
-          Length (cm)
-          <span class="info-icon">i
-            <span class="tooltip">Filter by the longest dimension. Surfaces without a length value are hidden when this filter is active.</span>
-          </span>
+          Dimension Range (cm)
+          <span class="info-icon" data-tip="USE THE FIELD DROPDOWN TO TARGET LENGTH, WIDTH, OR DIAMETER. SURFACES WITHOUT THE SELECTED DIMENSION ARE EXCLUDED WHEN THIS FILTER IS ACTIVE.">i</span>
         </div>
         <div class="size-inputs">
-          <div class="size-input-wrap"><label>Min</label><input type="number" id="min-l" placeholder="0" min="0"></div>
-          <div class="size-input-wrap"><label>Max</label><input type="number" id="max-l" placeholder="any" min="0"></div>
-        </div>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-label">
-          Width (cm)
-          <span class="info-icon">i
-            <span class="tooltip">Filter by width. Circular surfaces use Diameter instead — those will be hidden when this filter is active unless they have a width value.</span>
-          </span>
-        </div>
-        <div class="size-inputs">
-          <div class="size-input-wrap"><label>Min</label><input type="number" id="min-w" placeholder="0" min="0"></div>
-          <div class="size-input-wrap"><label>Max</label><input type="number" id="max-w" placeholder="any" min="0"></div>
+          <div class="size-input-wrap" style="flex:none">
+            <label>Field</label>
+            <select class="dim-select" id="dim-field">
+              <option value="length">Length</option>
+              <option value="width">Width</option>
+              <option value="diameter">Diameter</option>
+            </select>
+          </div>
+          <div class="size-input-wrap">
+            <label>Min</label>
+            <input type="number" id="min-dim" placeholder="0" min="0">
+          </div>
+          <div class="size-input-wrap">
+            <label>Max</label>
+            <input type="number" id="max-dim" placeholder="any" min="0">
+          </div>
         </div>
       </div>
       <button class="reset-btn" id="reset">&#8634; Reset all filters</button>
@@ -449,90 +513,90 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 </div>
 
 <script>
-var IMAGES = {};
-
+// ── COLOR CONFIG ──
 var COLOR_CONFIG = [
   { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' }
 ];
 
-function swatchAccent(cfg) { return cfg.key === 'wh' ? '#999' : cfg.swatch; }
-function swatchPale(cfg) { return cfg.swatch + '18'; }
-
+var IMAGES = {};
 var surfaces = [];
 var loadedColors = {};
-var dirtyColors = {}; // tracks unsaved edits per colorKey
+var dirtyColors = {};
 var curColor = null;
-var fState = { search: '', mat: 'all', size: 'all', wet: false, hasSmall: false, minL: null, maxL: null, minW: null, maxW: null };
+var editTarget = null;
+var editPendingImageB64 = null;
+
+var fState = {
+  search: '', mat: 'all', size: 'all', wet: false, hasSmall: false,
+  dimField: 'length', minDim: null, maxDim: null
+};
 var bgCount = 1, surfCount = 1;
 var shColFilter = ['all'];
 var slots = [];
 var shReady = false, shInited = false;
 
-// ── EDIT MODAL STATE ──
-var editTarget = null; // { colorKey, surfaceId }
-
-function missingDims(s) { return (s.length === null || s.width === null) && s.diameter === null; }
-
+// ── SIZE ──
+function getSizeCategory(s) {
+  if (s.size) return s.size; // explicit override wins
+  var longest = null;
+  if (s.length != null) longest = s.length;
+  if (s.diameter != null && (longest === null || s.diameter > longest)) longest = s.diameter;
+  if (longest === null) return null;
+  if (longest < 40)  return 'S';
+  if (longest < 70)  return 'M';
+  if (longest < 100) return 'L';
+  return 'XL';
+}
+function sizeBadgeClass(cat) {
+  return { S:'sz-s', M:'sz-m', L:'sz-l', XL:'sz-xl' }[cat] || 'sz-none';
+}
+function missingDims(s) {
+  return (s.length == null || s.width == null) && s.diameter == null;
+}
 function dimStr(s) {
   var p = [];
-  if (s.length !== null) p.push('L: ' + s.length + 'cm');
-  if (s.width !== null) p.push('W: ' + s.width + 'cm');
-  if (s.diameter !== null) p.push('D: ' + s.diameter + 'cm');
+  if (s.length != null)   p.push('L: ' + s.length + 'cm');
+  if (s.width != null)    p.push('W: ' + s.width + 'cm');
+  if (s.diameter != null) p.push('D: ' + s.diameter + 'cm');
   return p.join('  ') || '—';
 }
 
 function randPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function shColHas(key) { return shColFilter.indexOf(key) !== -1; }
-function shColAdd(key) { if (!shColHas(key)) shColFilter.push(key); }
-function shColRemove(key) { shColFilter = shColFilter.filter(function(k) { return k !== key; }); }
+function shColHas(k) { return shColFilter.indexOf(k) !== -1; }
+function shColAdd(k) { if (!shColHas(k)) shColFilter.push(k); }
+function shColRemove(k) { shColFilter = shColFilter.filter(function(x) { return x !== k; }); }
 
-// ── SIZE CATEGORY ──
-// Determines size bucket from a surface's dimensions.
-// Thresholds are based on longest side (length, or diameter if no length).
-// S: < 40cm, M: 40–69cm, L: 70–99cm, XL: ≥ 100cm
-// If the surface has an explicit `size` field, that takes precedence.
-function getSizeCategory(s) {
-  if (s.size) return s.size; // explicit override
-  var longest = null;
-  if (s.length !== null) longest = s.length;
-  if (s.diameter !== null && (longest === null || s.diameter > longest)) longest = s.diameter;
-  if (longest === null) return null;
-  if (longest < 40) return 'S';
-  if (longest < 70) return 'M';
-  if (longest < 100) return 'L';
-  return 'XL';
-}
-
+// ── DATA LOADING ──
 function loadScript(cfg) {
   return new Promise(function(res) {
     if (loadedColors[cfg.key]) { res(loadedColors[cfg.key]); return; }
-    var scriptEl = document.createElement('script');
-    scriptEl.src = cfg.file;
-    scriptEl.onload = function() {
-      var data = (window._pkSurfaces || []).map(function(x) { return Object.assign({}, x); });
+    var el = document.createElement('script');
+    el.src = cfg.file;
+    el.onload = function() {
+      var data = (window._pkSurfaces || []).map(function(x) {
+        return Object.assign({}, x, { colorKey: cfg.key });
+      });
       loadedColors[cfg.key] = data;
-      if (window._pkImages) { Object.assign(IMAGES, window._pkImages); }
-      window._pkSurfaces = null;
-      window._pkImages = null;
+      if (window._pkImages) Object.assign(IMAGES, window._pkImages);
+      window._pkSurfaces = null; window._pkImages = null;
       res(data);
     };
-    scriptEl.onerror = function() { loadedColors[cfg.key] = []; res([]); };
-    document.head.appendChild(scriptEl);
+    el.onerror = function() { loadedColors[cfg.key] = []; res([]); };
+    document.head.appendChild(el);
   });
 }
-
 function loadAll() {
   return Promise.all(COLOR_CONFIG.map(function(c) { return loadScript(c); }));
 }
 
+// ── COLOR UI ──
 function selectColor(key) {
   document.querySelectorAll('#mat-filters .chip').forEach(function(c) {
     c.classList.toggle('active', c.getAttribute('data-mat') === 'all');
   });
   fState.mat = 'all';
   if (!key) { curColor = null; surfaces = []; applyColorUI(null); render(); return; }
-  var cfg = null;
-  for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === key) { cfg = COLOR_CONFIG[i]; break; } }
+  var cfg = COLOR_CONFIG.filter(function(c) { return c.key === key; })[0];
   if (!cfg) return;
   loadScript(cfg).then(function(data) { curColor = cfg; surfaces = data; applyColorUI(cfg); render(); });
 }
@@ -546,42 +610,46 @@ function applyColorUI(cfg) {
     sel.style.backgroundImage = '';
     return;
   }
-  var accent = swatchAccent(cfg);
+  var sw = cfg.swatch;
   dot.style.opacity = '1';
   dot.style.background = cfg.swatch2
-    ? 'conic-gradient(' + cfg.swatch + ' 50%,' + cfg.swatch2 + ' 50%)'
-    : cfg.swatch;
-  sel.style.backgroundColor = swatchPale(cfg);
-  sel.style.borderColor = accent;
-  sel.style.color = accent;
+    ? 'conic-gradient(' + sw + ' 50%,' + cfg.swatch2 + ' 50%)' : sw;
+  sel.style.backgroundColor = sw + '1A';
+  sel.style.borderColor = sw;
+  sel.style.color = sw;
+  sel.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M0 0l5 6 5-6z\' fill=\'' + encodeURIComponent(sw) + '\'/%3E%3C/svg%3E")';
 }
 
+// ── FILTERING ──
 function matches(s) {
   if (fState.mat !== 'all' && s.material !== fState.mat) return false;
+  var sc = getSizeCategory(s);
   if (fState.size !== 'all') {
-    var sc = getSizeCategory(s);
     if (fState.size === 'none') { if (sc !== null) return false; }
     else { if (sc !== fState.size) return false; }
   }
   if (fState.wet && !s.wet_safe) return false;
   if (fState.hasSmall && !s.has_small) return false;
-  if (fState.minL !== null && (s.length === null || s.length < fState.minL)) return false;
-  if (fState.maxL !== null && (s.length === null || s.length > fState.maxL)) return false;
-  if (fState.minW !== null && (s.width === null || s.width < fState.minW)) return false;
-  if (fState.maxW !== null && (s.width === null || s.width > fState.maxW)) return false;
+  if (fState.minDim !== null || fState.maxDim !== null) {
+    var val = s[fState.dimField];
+    if (val == null) return false;
+    if (fState.minDim !== null && val < fState.minDim) return false;
+    if (fState.maxDim !== null && val > fState.maxDim) return false;
+  }
   if (fState.search) {
     var q = fState.search.toLowerCase();
-    var hay = [s.name, s.material, s.description || '', s.color, s.notes || ''].join(' ').toLowerCase();
+    var hay = [s.name, s.material, s.notes || ''].join(' ').toLowerCase();
     if (hay.indexOf(q) === -1) return false;
   }
   return true;
 }
 
+// ── RENDER ──
 function render() {
-  var grid = document.getElementById('grid');
+  var grid  = document.getElementById('grid');
   var empty = document.getElementById('empty');
   var count = document.getElementById('results-count');
-  var hdr = document.getElementById('color-header-text');
+  var hdr   = document.getElementById('color-header-text');
 
   if (!curColor) {
     grid.innerHTML = '';
@@ -592,35 +660,26 @@ function render() {
     return;
   }
 
-  var accent = swatchAccent(curColor);
-  var bc = '<span style="color:' + accent + '">' + curColor.label + '</span>';
+  var sw = curColor.swatch;
+  var bc = '<span style="color:' + sw + '">' + curColor.label + '</span>';
   if (fState.mat !== 'all') {
     bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + fState.mat + '</span>';
   }
   if (fState.size !== 'all') {
-    var sl = fState.size === 'none' ? 'No Size' : fState.size;
-    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / ' + sl + '</span>';
+    var sizeLabels = { S:'S (<40cm)', M:'M (40–69cm)', L:'L (70–99cm)', XL:'XL (≥100cm)', none:'No Size' };
+    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / ' + (sizeLabels[fState.size] || fState.size) + '</span>';
   }
-  if (fState.wet) {
-    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
-  }
-  if (fState.hasSmall) {
-    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
-  }
-  hdr.style.color = '';
-  hdr.innerHTML = bc;
+  if (fState.wet)      bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
+  if (fState.hasSmall) bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
+  hdr.style.color = ''; hdr.innerHTML = bc;
 
   var filtered = surfaces.filter(matches);
   count.innerHTML = '<span>' + filtered.length + '</span> surface' + (filtered.length !== 1 ? 's' : '');
 
   if (!filtered.length) { grid.innerHTML = ''; empty.classList.add('show'); return; }
   empty.classList.remove('show');
-
   grid.innerHTML = '';
-  filtered.forEach(function(s, i) {
-    var card = buildCard(s, i);
-    grid.appendChild(card);
-  });
+  filtered.forEach(function(s, i) { grid.appendChild(buildCard(s, i)); });
 
   if ('IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function(entries, o) {
@@ -645,15 +704,17 @@ function render() {
 
 function buildCard(s, i) {
   var miss = missingDims(s);
-  var sw = curColor ? curColor.swatch : '#ccc';
+  var sw   = curColor ? curColor.swatch : '#ccc';
   var imgSrc = IMAGES[s.id] || null;
-  var sizeLabel = getSizeCategory(s);
+  var sc = getSizeCategory(s);
+  var sbClass = sc ? sizeBadgeClass(sc) : 'sz-none';
+  var sbLabel = sc || 'No Size';
 
   var card = document.createElement('div');
   card.className = 'card';
   card.style.animationDelay = Math.min(i * 0.025, 0.3) + 's';
 
-  // Image area
+  // ── IMAGE ──
   var imgDiv = document.createElement('div');
   imgDiv.className = 'card-img';
   if (imgSrc) {
@@ -669,10 +730,12 @@ function buildCard(s, i) {
   ph.style.display = imgSrc ? 'none' : 'flex';
   ph.innerHTML = '<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Photo coming</span>';
   imgDiv.appendChild(ph);
+
   var stripe = document.createElement('div');
   stripe.className = 'color-stripe';
   stripe.style.background = sw;
   imgDiv.appendChild(stripe);
+
   if (s.qty && s.qty > 1) {
     var qb = document.createElement('div');
     qb.className = 'qty-badge';
@@ -683,42 +746,53 @@ function buildCard(s, i) {
   idTag.className = 'id-tag';
   idTag.textContent = s.id.toUpperCase();
   imgDiv.appendChild(idTag);
+
+  // Edit button — bottom-right of image, like Vessels btn-replace-photo
+  var editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'btn-edit-card';
+  editBtn.title = 'Edit surface';
+  editBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  editBtn.addEventListener('click', function(e) { e.stopPropagation(); openEditModal(s); });
+  imgDiv.appendChild(editBtn);
+
   card.appendChild(imgDiv);
 
-  // Body
+  // ── BODY ──
   var body = document.createElement('div');
   body.className = 'card-body' + (miss ? ' no-dims' : '');
 
-  var title = document.createElement('div');
-  title.className = 'card-title';
-  title.textContent = s.name;
-  body.appendChild(title);
-
-  if (s.description) {
-    var desc = document.createElement('div');
-    desc.className = 'card-desc';
-    desc.textContent = s.description;
-    body.appendChild(desc);
-  }
+  // Title + size badge (like Vessels card-top)
+  var top = document.createElement('div');
+  top.className = 'card-top';
+  var titleEl = document.createElement('div');
+  titleEl.className = 'card-title';
+  titleEl.textContent = s.name;
+  top.appendChild(titleEl);
+  var badge = document.createElement('span');
+  badge.className = 'size-badge ' + sbClass;
+  badge.textContent = sbLabel;
+  top.appendChild(badge);
+  body.appendChild(top);
 
   // Dims
   var dims = document.createElement('div');
   dims.className = 'card-dims';
-  function addDimRow(label, val, unit) {
+  function addDR(label, val, unit) {
     var dr = document.createElement('div'); dr.className = 'dr';
     var dl = document.createElement('span'); dl.className = 'dl'; dl.textContent = label;
     var dv = document.createElement('span');
-    dv.className = val !== null ? 'dv' : 'dv miss';
-    dv.textContent = val !== null ? val + (unit || '') : '—';
+    dv.className = val != null ? 'dv' : 'dv miss';
+    dv.textContent = val != null ? val + (unit || '') : '—';
     dr.appendChild(dl); dr.appendChild(dv); dims.appendChild(dr);
   }
-  addDimRow('Length', s.length, 'cm');
-  if (s.diameter !== null) addDimRow('Diameter', s.diameter, 'cm');
-  else addDimRow('Width', s.width, 'cm');
+  addDR('Length', s.length, 'cm');
+  if (s.diameter != null) addDR('Diameter', s.diameter, 'cm');
+  else addDR('Width', s.width, 'cm');
   if (s.has_small && s.small_length) {
-    var sh = document.createElement('div'); sh.className = 'small-hdr'; sh.textContent = 'Small version'; dims.appendChild(sh);
-    addDimRow('Length', s.small_length, 'cm');
-    if (s.small_width) addDimRow('Width', s.small_width, 'cm');
+    var smHdr = document.createElement('div'); smHdr.className = 'small-hdr'; smHdr.textContent = 'Small version'; dims.appendChild(smHdr);
+    addDR('Length', s.small_length, 'cm');
+    if (s.small_width) addDR('Width', s.small_width, 'cm');
   }
   body.appendChild(dims);
 
@@ -726,97 +800,101 @@ function buildCard(s, i) {
     var note = document.createElement('div'); note.className = 'card-note'; note.textContent = s.notes; body.appendChild(note);
   }
 
-  // Tags
-  var tags = document.createElement('div'); tags.className = 'card-tags';
+  // ── FOOTER / TAGS — color-tag (swatch-tinted) + mat-tag (gray), like Vessels ──
+  var footer = document.createElement('div');
+  footer.className = 'card-footer';
+
+  // Color tag — colored border/text/bg, swatch dot
+  var colorTag = document.createElement('span');
+  colorTag.className = 'tag color-tag';
+  colorTag.style.cssText = 'border-color:' + sw + ';color:' + sw + ';background:' + sw + '1A';
+  var dot2 = document.createElement('span'); dot2.className = 'tag-dot'; dot2.style.background = sw;
+  colorTag.appendChild(dot2);
+  colorTag.appendChild(document.createTextNode(curColor.label));
+  footer.appendChild(colorTag);
+
+  // Material tag — always gray, neutral
   var matTag = document.createElement('span');
-  matTag.className = 'tag';
-  matTag.style.cssText = 'border-color:' + sw + ';color:' + sw + ';background:' + sw + '18';
-  var dot = document.createElement('span'); dot.className = 'tag-dot'; dot.style.background = sw;
-  matTag.appendChild(dot);
-  matTag.appendChild(document.createTextNode(s.material));
-  tags.appendChild(matTag);
-  if (sizeLabel) {
-    var st2 = document.createElement('span'); st2.className = 'tag size-tag'; st2.textContent = sizeLabel; tags.appendChild(st2);
+  matTag.className = 'tag mat-tag';
+  matTag.textContent = s.material;
+  footer.appendChild(matTag);
+
+  if (s.wet_safe) {
+    var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '💧 Wet-Safe'; footer.appendChild(wt);
   }
-  if (s.wet_safe) { var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '💧 Wet-Safe'; tags.appendChild(wt); }
-  if (s.has_small) { var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '📐 + Small'; tags.appendChild(st); }
-  body.appendChild(tags);
+  if (s.has_small) {
+    var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '📐 + Small'; footer.appendChild(st);
+  }
+
+  body.appendChild(footer);
   card.appendChild(body);
-
-  // Edit button
-  var editBtn = document.createElement('button');
-  editBtn.type = 'button';
-  editBtn.className = 'card-edit-btn';
-  editBtn.title = 'Edit surface';
-  editBtn.innerHTML = '<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
-  editBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    openEditModal(s);
-  });
-  card.appendChild(editBtn);
-
   return card;
 }
 
 // ── EDIT MODAL ──
 function openEditModal(s) {
   editTarget = s;
+  editPendingImageB64 = null;
   document.getElementById('modal-title').textContent = s.name;
-  document.getElementById('modal-subtitle').textContent = s.id.toUpperCase();
+  document.getElementById('modal-id-strip').textContent = s.id.toUpperCase();
   document.getElementById('ef-name').value = s.name || '';
-  document.getElementById('ef-desc').value = s.description || '';
   document.getElementById('ef-material').value = s.material || '';
   document.getElementById('ef-size').value = s.size || '';
-  document.getElementById('ef-length').value = s.length !== null && s.length !== undefined ? s.length : '';
-  document.getElementById('ef-width').value = s.width !== null && s.width !== undefined ? s.width : '';
-  document.getElementById('ef-diameter').value = s.diameter !== null && s.diameter !== undefined ? s.diameter : '';
+  document.getElementById('ef-length').value   = s.length   != null ? s.length   : '';
+  document.getElementById('ef-width').value    = s.width    != null ? s.width    : '';
+  document.getElementById('ef-diameter').value = s.diameter != null ? s.diameter : '';
   document.getElementById('ef-qty').value = s.qty || '';
   document.getElementById('ef-wet-safe').checked = !!s.wet_safe;
   document.getElementById('ef-has-small').checked = !!s.has_small;
-  document.getElementById('ef-small-dims').style.display = s.has_small ? 'block' : 'none';
+  document.getElementById('ef-small-panel').style.display = s.has_small ? 'flex' : 'none';
   document.getElementById('ef-small-length').value = s.small_length || '';
-  document.getElementById('ef-small-width').value = s.small_width || '';
+  document.getElementById('ef-small-width').value  = s.small_width  || '';
   document.getElementById('ef-notes').value = s.notes || '';
+
+  var preview = document.getElementById('modal-photo-preview');
+  var placeholder = document.getElementById('modal-photo-placeholder');
+  var existing = IMAGES[s.id] || null;
+  if (existing) {
+    preview.src = existing;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    preview.src = '';
+    preview.style.display = 'none';
+    placeholder.style.display = 'flex';
+  }
   document.getElementById('edit-modal-overlay').classList.add('open');
 }
 
 function closeEditModal() {
   document.getElementById('edit-modal-overlay').classList.remove('open');
   editTarget = null;
+  editPendingImageB64 = null;
 }
 
 function saveEditModal() {
   if (!editTarget) return;
   var s = editTarget;
-
-  // Apply edits directly to the surface object in loadedColors
-  s.name = document.getElementById('ef-name').value.trim() || s.name;
-  s.description = document.getElementById('ef-desc').value.trim() || null;
+  s.name     = document.getElementById('ef-name').value.trim() || s.name;
   s.material = document.getElementById('ef-material').value;
-  s.size = document.getElementById('ef-size').value || null;
-
+  s.size     = document.getElementById('ef-size').value || null;
   var lv = document.getElementById('ef-length').value;
   var wv = document.getElementById('ef-width').value;
   var dv = document.getElementById('ef-diameter').value;
   var qv = document.getElementById('ef-qty').value;
-  s.length = lv !== '' ? parseFloat(lv) : null;
-  s.width = wv !== '' ? parseFloat(wv) : null;
+  s.length   = lv !== '' ? parseFloat(lv) : null;
+  s.width    = wv !== '' ? parseFloat(wv) : null;
   s.diameter = dv !== '' ? parseFloat(dv) : null;
-  s.qty = qv !== '' ? parseInt(qv, 10) : null;
-  s.wet_safe = document.getElementById('ef-wet-safe').checked;
+  s.qty      = qv !== '' ? parseInt(qv, 10) : null;
+  s.wet_safe  = document.getElementById('ef-wet-safe').checked;
   s.has_small = document.getElementById('ef-has-small').checked;
   var slv = document.getElementById('ef-small-length').value;
   var swv = document.getElementById('ef-small-width').value;
   s.small_length = slv !== '' ? parseFloat(slv) : null;
-  s.small_width = swv !== '' ? parseFloat(swv) : null;
+  s.small_width  = swv !== '' ? parseFloat(swv) : null;
   s.notes = document.getElementById('ef-notes').value.trim() || null;
-
-  // Mark color as dirty
-  if (curColor) {
-    dirtyColors[curColor.key] = true;
-    updateSaveBtn();
-  }
-
+  if (editPendingImageB64) IMAGES[s.id] = editPendingImageB64;
+  if (curColor) { dirtyColors[curColor.key] = true; updateSaveBtn(); }
   closeEditModal();
   render();
 }
@@ -824,77 +902,81 @@ function saveEditModal() {
 function updateSaveBtn() {
   var hasDirty = Object.keys(dirtyColors).some(function(k) { return dirtyColors[k]; });
   var btn = document.getElementById('save-btn');
-  if (hasDirty) btn.classList.add('visible');
-  else btn.classList.remove('visible');
+  if (hasDirty) btn.classList.add('visible'); else btn.classList.remove('visible');
 }
 
-// ── SAVE / DOWNLOAD ──
-function downloadColorFile(colorKey) {
-  var data = loadedColors[colorKey];
-  if (!data) return;
-  var cfg = null;
-  for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === colorKey) { cfg = COLOR_CONFIG[i]; break; } }
+// ── PHOTO UPLOAD ──
+document.getElementById('modal-photo-file').addEventListener('change', function(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var img2 = new Image();
+    img2.onload = function() {
+      var canvas = document.createElement('canvas');
+      var maxW = 800, scale = img2.width > maxW ? maxW / img2.width : 1;
+      canvas.width = Math.round(img2.width * scale);
+      canvas.height = Math.round(img2.height * scale);
+      canvas.getContext('2d').drawImage(img2, 0, 0, canvas.width, canvas.height);
+      var compressed = canvas.toDataURL('image/jpeg', 0.9);
+      editPendingImageB64 = compressed;
+      var preview = document.getElementById('modal-photo-preview');
+      var placeholder = document.getElementById('modal-photo-placeholder');
+      preview.src = compressed;
+      preview.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    img2.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
 
-  // Build JS file content
+// ── SAVE / DOWNLOAD ──
+document.getElementById('save-btn').addEventListener('click', function() {
+  Object.keys(dirtyColors).filter(function(k) { return dirtyColors[k]; }).forEach(function(k) {
+    downloadColorFile(k); dirtyColors[k] = false;
+  });
+  updateSaveBtn();
+});
+
+function downloadColorFile(colorKey) {
+  var data = loadedColors[colorKey]; if (!data) return;
   var lines = ['window._pkSurfaces = ['];
   data.forEach(function(s, idx) {
-    var props = [];
-    props.push('  id: ' + JSON.stringify(s.id));
-    props.push('  color: ' + JSON.stringify(s.color || ''));
-    props.push('  material: ' + JSON.stringify(s.material || ''));
-    if (s.size !== null && s.size !== undefined) props.push('  size: ' + JSON.stringify(s.size));
-    props.push('  name: ' + JSON.stringify(s.name || ''));
-    if (s.description !== null && s.description !== undefined) props.push('  description: ' + JSON.stringify(s.description));
-    props.push('  length: ' + (s.length !== null && s.length !== undefined ? s.length : null));
-    props.push('  width: ' + (s.width !== null && s.width !== undefined ? s.width : null));
-    props.push('  diameter: ' + (s.diameter !== null && s.diameter !== undefined ? s.diameter : null));
-    if (s.qty !== null && s.qty !== undefined) props.push('  qty: ' + s.qty);
-    props.push('  wet_safe: ' + !!s.wet_safe);
-    props.push('  has_small: ' + !!s.has_small);
-    if (s.small_length !== null && s.small_length !== undefined) props.push('  small_length: ' + s.small_length);
-    if (s.small_width !== null && s.small_width !== undefined) props.push('  small_width: ' + s.small_width);
-    if (s.notes) props.push('  notes: ' + JSON.stringify(s.notes));
-    var comma = idx < data.length - 1 ? ',' : '';
-    lines.push('  {' + props.map(function(p) { return '\n  ' + p; }).join(',') + '\n  }' + comma);
+    var f = [];
+    f.push('  id: ' + JSON.stringify(s.id));
+    f.push('  color: ' + JSON.stringify(s.color || ''));
+    f.push('  material: ' + JSON.stringify(s.material || ''));
+    if (s.size) f.push('  size: ' + JSON.stringify(s.size));
+    f.push('  name: ' + JSON.stringify(s.name || ''));
+    f.push('  length: '   + (s.length   != null ? s.length   : null));
+    f.push('  width: '    + (s.width    != null ? s.width    : null));
+    f.push('  diameter: ' + (s.diameter != null ? s.diameter : null));
+    if (s.qty) f.push('  qty: ' + s.qty);
+    f.push('  wet_safe: ' + !!s.wet_safe);
+    f.push('  has_small: ' + !!s.has_small);
+    if (s.small_length != null) f.push('  small_length: ' + s.small_length);
+    if (s.small_width  != null) f.push('  small_width: '  + s.small_width);
+    if (s.notes) f.push('  notes: ' + JSON.stringify(s.notes));
+    lines.push('  {\n' + f.join(',\n') + '\n  }' + (idx < data.length - 1 ? ',' : ''));
   });
-  lines.push('];');
-
-  // Preserve images — re-use the global IMAGES filtered to this color's IDs
+  lines.push('];', '', 'window._pkImages = {');
   var colorIds = data.map(function(s) { return s.id; });
-  lines.push('');
-  lines.push('window._pkImages = {');
   var imgKeys = Object.keys(IMAGES).filter(function(k) { return colorIds.indexOf(k) !== -1; });
   imgKeys.forEach(function(k, idx) {
-    var comma = idx < imgKeys.length - 1 ? ',' : '';
-    lines.push('  ' + JSON.stringify(k) + ': ' + JSON.stringify(IMAGES[k]) + comma);
+    lines.push('  ' + JSON.stringify(k) + ': ' + JSON.stringify(IMAGES[k]) + (idx < imgKeys.length - 1 ? ',' : ''));
   });
   lines.push('};');
-
-  var content = lines.join('\n');
-  var blob = new Blob([content], { type: 'text/javascript' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  // Date prefix YYMMDD
   var now = new Date();
   var yy = String(now.getFullYear()).slice(2);
   var mm = String(now.getMonth() + 1).padStart(2, '0');
   var dd = String(now.getDate()).padStart(2, '0');
-  a.download = yy + mm + dd + '-' + colorKey + '.js';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  var blob = new Blob([lines.join('\n')], { type: 'text/javascript' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = yy + mm + dd + '-' + colorKey + '.js';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
-
-document.getElementById('save-btn').addEventListener('click', function() {
-  var dirty = Object.keys(dirtyColors).filter(function(k) { return dirtyColors[k]; });
-  dirty.forEach(function(k) {
-    downloadColorFile(k);
-    dirtyColors[k] = false;
-  });
-  updateSaveBtn();
-});
 
 // ── SHUFFLER ──
 function shPool() {
@@ -903,58 +985,46 @@ function shPool() {
   if (shColHas('all')) return all;
   return all.filter(function(s) { return shColHas(s.colorKey); });
 }
-
 function buildSlots() {
-  var pool = shPool();
-  var cfg = [];
-  for (var i = 0; i < bgCount; i++) cfg.push('bg');
-  for (var i = 0; i < surfCount; i++) cfg.push('surface');
-  slots = cfg.map(function(type, i) {
+  var pool = shPool(), cfg2 = [];
+  for (var i = 0; i < bgCount; i++)   cfg2.push('bg');
+  for (var i = 0; i < surfCount; i++) cfg2.push('surface');
+  slots = cfg2.map(function(type, i) {
     var ex = slots[i];
     if (ex && ex.type === type) return ex;
     return { type: type, surface: pool.length ? randPick(pool) : null, pinned: false };
   });
 }
-
 function reshuffle() {
   var pool = shPool();
   slots = slots.map(function(sl) {
     return sl.pinned ? sl : { type: sl.type, surface: pool.length ? randPick(pool) : null, pinned: false };
   });
 }
-
 function renderShuffler() {
   var stage = document.getElementById('sh-stage');
   var loading = document.getElementById('sh-loading');
   if (loading) loading.style.display = 'none';
-  while (stage.firstChild) { stage.removeChild(stage.firstChild); }
-
+  while (stage.firstChild) stage.removeChild(stage.firstChild);
   var bgSlots = slots.filter(function(s) { return s.type === 'bg'; });
   var sfSlots = slots.filter(function(s) { return s.type === 'surface'; });
-
-  function mkCard(slot) {
+  function mkCard2(slot) {
     var wrap = document.createElement('div');
     wrap.className = 'sc' + (slot.pinned ? ' pinned' : '');
     var imgArea = document.createElement('div'); imgArea.className = 'sc-ph';
     if (slot.surface) {
-      var imgSrc = IMAGES[slot.surface.id] || null;
-      if (imgSrc) {
-        var img = document.createElement('img');
-        img.src = imgSrc;
-        img.alt = slot.surface.name;
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
-        imgArea.textContent = '';
-        imgArea.appendChild(img);
-        imgArea.style.padding = '0';
+      var is2 = IMAGES[slot.surface.id] || null;
+      if (is2) {
+        var img3 = document.createElement('img');
+        img3.src = is2; img3.alt = slot.surface.name;
+        img3.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        imgArea.textContent = ''; imgArea.appendChild(img3); imgArea.style.padding = '0';
       } else {
-        var cfg = null;
-        for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === slot.surface.colorKey) { cfg = COLOR_CONFIG[i]; break; } }
-        if (cfg) imgArea.style.background = 'linear-gradient(135deg,' + cfg.swatch + '44,' + cfg.swatch + '11)';
+        var cfg3 = COLOR_CONFIG.filter(function(c) { return c.key === slot.surface.colorKey; })[0];
+        if (cfg3) imgArea.style.background = 'linear-gradient(135deg,' + cfg3.swatch + '44,' + cfg3.swatch + '11)';
         imgArea.textContent = '🖼';
       }
-    } else {
-      imgArea.textContent = '🖼';
-    }
+    } else { imgArea.textContent = '🖼'; }
     wrap.appendChild(imgArea);
     var pin = document.createElement('button'); pin.type = 'button';
     pin.className = 'pin-btn' + (slot.pinned ? ' on' : '');
@@ -962,112 +1032,96 @@ function renderShuffler() {
     pin.addEventListener('click', function() { slot.pinned = !slot.pinned; renderShuffler(); });
     wrap.appendChild(pin);
     if (slot.surface) {
-      var s = slot.surface;
-      var b = document.createElement('div'); b.className = 'sc-body';
-      var t = document.createElement('div'); t.className = 'sc-title'; t.textContent = s.name; b.appendChild(t);
-      var m = document.createElement('div'); m.className = 'sc-tags';
-      var ct = document.createElement('span'); ct.className = 'sc-tag ctag'; ct.textContent = s.color; m.appendChild(ct);
-      var mt = document.createElement('span'); mt.className = 'sc-tag'; mt.textContent = s.material; m.appendChild(mt);
-      b.appendChild(m);
-      var d = document.createElement('div'); d.className = 'sc-dims'; d.textContent = dimStr(s); b.appendChild(d);
-      wrap.appendChild(b);
+      var s2 = slot.surface;
+      var b2 = document.createElement('div'); b2.className = 'sc-body';
+      var t2 = document.createElement('div'); t2.className = 'sc-title'; t2.textContent = s2.name; b2.appendChild(t2);
+      var m2 = document.createElement('div'); m2.className = 'sc-tags';
+      var ct2 = document.createElement('span'); ct2.className = 'sc-tag ctag'; ct2.textContent = s2.colorKey; m2.appendChild(ct2);
+      var mt2 = document.createElement('span'); mt2.className = 'sc-tag'; mt2.textContent = s2.material; m2.appendChild(mt2);
+      b2.appendChild(m2);
+      var d2 = document.createElement('div'); d2.className = 'sc-dims'; d2.textContent = dimStr(s2); b2.appendChild(d2);
+      wrap.appendChild(b2);
     }
     return wrap;
   }
-
   function mkRowHdr(label, cur, min, max, onChange) {
-    var hdr = document.createElement('div'); hdr.className = 'rh';
-    var lbl = document.createElement('div'); lbl.className = 'rl'; lbl.textContent = label; hdr.appendChild(lbl);
+    var hdr2 = document.createElement('div'); hdr2.className = 'rh';
+    var lbl2 = document.createElement('div'); lbl2.className = 'rl'; lbl2.textContent = label; hdr2.appendChild(lbl2);
     var tog = document.createElement('div'); tog.className = 'rct';
     for (var n = min; n <= max; n++) {
       (function(num) {
-        var btn = document.createElement('button'); btn.type = 'button';
-        btn.className = 'rcb' + (num === cur ? ' on' : '');
-        btn.textContent = String(num);
-        btn.addEventListener('click', function() { onChange(num); });
-        tog.appendChild(btn);
+        var btn2 = document.createElement('button'); btn2.type = 'button';
+        btn2.className = 'rcb' + (num === cur ? ' on' : '');
+        btn2.textContent = String(num);
+        btn2.addEventListener('click', function() { onChange(num); });
+        tog.appendChild(btn2);
       })(n);
     }
-    hdr.appendChild(tog); return hdr;
+    hdr2.appendChild(tog); return hdr2;
   }
-
   stage.appendChild(mkRowHdr('Background', bgCount, 0, 2, function(n) { bgCount = n; buildSlots(); renderShuffler(); }));
-  if (bgSlots.length) {
-    var r = document.createElement('div'); r.className = 'srow';
-    bgSlots.forEach(function(sl) { r.appendChild(mkCard(sl)); }); stage.appendChild(r);
-  }
+  if (bgSlots.length) { var r2 = document.createElement('div'); r2.className = 'srow'; bgSlots.forEach(function(sl) { r2.appendChild(mkCard2(sl)); }); stage.appendChild(r2); }
   stage.appendChild(mkRowHdr('Surface', surfCount, 0, 2, function(n) { surfCount = n; buildSlots(); renderShuffler(); }));
-  var sr = document.createElement('div'); sr.className = 'srow';
-  sfSlots.forEach(function(sl) { sr.appendChild(mkCard(sl)); }); stage.appendChild(sr);
+  var sr2 = document.createElement('div'); sr2.className = 'srow';
+  sfSlots.forEach(function(sl) { sr2.appendChild(mkCard2(sl)); }); stage.appendChild(sr2);
 }
-
 function initShuffler() {
   var cont = document.getElementById('sh-chips'); cont.innerHTML = '';
-  function addChip(label, isAll, key) {
-    var c = document.createElement('button'); c.type = 'button';
-    c.className = 'sh-chip' + (isAll ? ' on' : '');
-    c.textContent = label;
-    c.addEventListener('click', function() {
-      if (isAll) {
-        shColFilter = ['all'];
-        cont.querySelectorAll('.sh-chip').forEach(function(x) { x.classList.toggle('on', x === c); });
-      } else {
-        shColRemove('all');
-        cont.querySelector('.sh-chip').classList.remove('on');
-        if (shColHas(key)) { shColRemove(key); c.classList.remove('on'); }
-        else { shColAdd(key); c.classList.add('on'); }
+  function addChip2(label, isAll, key) {
+    var c2 = document.createElement('button'); c2.type = 'button';
+    c2.className = 'sh-chip' + (isAll ? ' on' : '');
+    c2.textContent = label;
+    c2.addEventListener('click', function() {
+      if (isAll) { shColFilter = ['all']; cont.querySelectorAll('.sh-chip').forEach(function(x) { x.classList.toggle('on', x === c2); }); }
+      else {
+        shColRemove('all'); cont.querySelector('.sh-chip').classList.remove('on');
+        if (shColHas(key)) { shColRemove(key); c2.classList.remove('on'); }
+        else { shColAdd(key); c2.classList.add('on'); }
         if (shColFilter.length === 0) { shColAdd('all'); cont.querySelector('.sh-chip').classList.add('on'); }
       }
       if (shReady) { buildSlots(); renderShuffler(); }
     });
-    cont.appendChild(c);
+    cont.appendChild(c2);
   }
-  addChip('All Colors', true, null);
-  COLOR_CONFIG.forEach(function(cfg) { addChip(cfg.label, false, cfg.key); });
+  addChip2('All Colors', true, null);
+  COLOR_CONFIG.forEach(function(cfg) { addChip2(cfg.label, false, cfg.key); });
   loadAll().then(function() { shReady = true; buildSlots(); renderShuffler(); });
 }
-
 function setMode(mode) {
-  document.querySelectorAll('.mode-btn').forEach(function(b) {
-    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
-  });
+  document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-mode') === mode); });
   var cat = document.getElementById('catalog-view');
   var sh = document.getElementById('shuffler-view');
-  if (mode === 'catalog') {
-    cat.style.display = 'grid';
-    sh.style.display = 'none';
-  } else {
-    cat.style.display = 'none';
-    sh.style.display = 'flex';
-    if (!shInited) { shInited = true; initShuffler(); }
-  }
+  if (mode === 'catalog') { cat.style.display = 'grid'; sh.style.display = 'none'; }
+  else { cat.style.display = 'none'; sh.style.display = 'flex'; if (!shInited) { shInited = true; initShuffler(); } }
 }
+
+// ── FLOATING TOOLTIP — like Vessels ──
+(function() {
+  var tip = document.getElementById('floating-tooltip');
+  document.querySelectorAll('.info-icon[data-tip]').forEach(function(icon) {
+    icon.addEventListener('mouseenter', function() { tip.textContent = icon.getAttribute('data-tip'); tip.classList.add('visible'); });
+    icon.addEventListener('mousemove',  function(e) { tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 8) + 'px'; });
+    icon.addEventListener('mouseleave', function() { tip.classList.remove('visible'); });
+  });
+})();
 
 // ── PASSWORD GATE ──
 (function() {
-  var CORRECT = 'pksurfaces2026';
-  var KEY = 'pk_surfaces_auth';
+  var CORRECT = 'pksurfaces2026', KEY = 'pk_surfaces_auth';
   var gate = document.getElementById('pw-gate');
   var input = document.getElementById('pw-input');
-  var submit = document.getElementById('pw-submit');
   var errEl = document.getElementById('pw-error');
-  if (sessionStorage.getItem(KEY) === '1') {
-    gate.classList.add('hidden');
-  } else {
-    setTimeout(function() { input.focus(); }, 100);
-  }
+  if (sessionStorage.getItem(KEY) === '1') { gate.classList.add('hidden'); }
+  else { setTimeout(function() { input.focus(); }, 100); }
   function attempt() {
-    if (input.value === CORRECT) {
-      sessionStorage.setItem(KEY, '1');
-      gate.classList.add('hidden');
-    } else {
+    if (input.value === CORRECT) { sessionStorage.setItem(KEY, '1'); gate.classList.add('hidden'); }
+    else {
       errEl.textContent = 'Incorrect password';
-      input.classList.add('error');
-      input.value = '';
+      input.classList.add('error'); input.value = '';
       setTimeout(function() { input.classList.remove('error'); errEl.textContent = ''; input.focus(); }, 800);
     }
   }
-  submit.addEventListener('click', attempt);
+  document.getElementById('pw-submit').addEventListener('click', attempt);
   input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
 })();
 
@@ -1089,37 +1143,34 @@ document.querySelectorAll('#size-filters .chip').forEach(function(chip) {
     chip.classList.add('active'); fState.size = chip.getAttribute('data-size'); render();
   });
 });
-document.getElementById('wet-chip').addEventListener('click', function() { fState.wet = !fState.wet; this.classList.toggle('active', fState.wet); render(); });
+document.getElementById('wet-chip').addEventListener('click', function()   { fState.wet      = !fState.wet;      this.classList.toggle('active', fState.wet);      render(); });
 document.getElementById('small-chip').addEventListener('click', function() { fState.hasSmall = !fState.hasSmall; this.classList.toggle('active', fState.hasSmall); render(); });
-document.getElementById('min-l').addEventListener('input', function(e) { fState.minL = e.target.value ? +e.target.value : null; render(); });
-document.getElementById('max-l').addEventListener('input', function(e) { fState.maxL = e.target.value ? +e.target.value : null; render(); });
-document.getElementById('min-w').addEventListener('input', function(e) { fState.minW = e.target.value ? +e.target.value : null; render(); });
-document.getElementById('max-w').addEventListener('input', function(e) { fState.maxW = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('dim-field').addEventListener('change',  function(e) { fState.dimField = e.target.value; render(); });
+document.getElementById('min-dim').addEventListener('input',    function(e) { fState.minDim = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('max-dim').addEventListener('input',    function(e) { fState.maxDim = e.target.value ? +e.target.value : null; render(); });
 document.getElementById('reset').addEventListener('click', function() {
-  fState = { search: '', mat: 'all', size: 'all', wet: false, hasSmall: false, minL: null, maxL: null, minW: null, maxW: null };
+  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, dimField:'length', minDim:null, maxDim:null };
   document.getElementById('search').value = '';
-  document.querySelectorAll('#mat-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-mat') === 'all'); });
+  document.querySelectorAll('#mat-filters .chip').forEach(function(c)  { c.classList.toggle('active', c.getAttribute('data-mat')  === 'all'); });
   document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-size') === 'all'); });
   document.getElementById('wet-chip').classList.remove('active');
   document.getElementById('small-chip').classList.remove('active');
-  ['min-l','max-l','min-w','max-w'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('dim-field').value = 'length';
+  document.getElementById('min-dim').value = '';
+  document.getElementById('max-dim').value = '';
   render();
 });
-
-// Modal events
 document.getElementById('modal-close-btn').addEventListener('click', closeEditModal);
 document.getElementById('modal-cancel-btn').addEventListener('click', closeEditModal);
 document.getElementById('modal-save-btn').addEventListener('click', saveEditModal);
-document.getElementById('edit-modal-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeEditModal();
-});
+document.getElementById('edit-modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
 document.getElementById('ef-has-small').addEventListener('change', function() {
-  document.getElementById('ef-small-dims').style.display = this.checked ? 'block' : 'none';
+  document.getElementById('ef-small-panel').style.display = this.checked ? 'flex' : 'none';
 });
-
 document.getElementById('shuf-btn').addEventListener('click', function() {
   if (!shReady) return;
-  var self = this; self.classList.add('spin');
+  this.classList.add('spin');
+  var self = this;
   setTimeout(function() { self.classList.remove('spin'); }, 400);
   reshuffle(); renderShuffler();
 });
