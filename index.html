@@ -319,16 +319,19 @@ function shColRemove(key) { shColFilter = shColFilter.filter(function(k) { retur
 function loadScript(cfg) {
   return new Promise(function(res) {
     if (loadedColors[cfg.key]) { res(loadedColors[cfg.key]); return; }
-    var s = document.createElement('script');
-    s.src = cfg.file;
-    s.onload = function() {
-      loadedColors[cfg.key] = (typeof surfaces !== 'undefined' ? surfaces : []).map(function(x) {
-        return Object.assign({}, x);
-      });
-      res(loadedColors[cfg.key]);
+    var scriptEl = document.createElement('script');
+    scriptEl.src = cfg.file;
+    scriptEl.onload = function() {
+      // ro.js sets window._pkSurfaces and window._pkImages
+      var data = (window._pkSurfaces || []).map(function(x) { return Object.assign({}, x); });
+      loadedColors[cfg.key] = data;
+      if (window._pkImages) { Object.assign(IMAGES, window._pkImages); }
+      window._pkSurfaces = null;
+      window._pkImages = null;
+      res(data);
     };
-    s.onerror = function() { loadedColors[cfg.key] = []; res([]); };
-    document.head.appendChild(s);
+    scriptEl.onerror = function() { loadedColors[cfg.key] = []; res([]); };
+    document.head.appendChild(scriptEl);
   });
 }
 
@@ -399,11 +402,19 @@ function render() {
   }
 
   var accent = swatchAccent(curColor);
-  hdr.style.color = accent;
-  hdr.textContent = curColor.label;
-  if (fState.mat !== 'all') hdr.textContent += ' / ' + fState.mat;
-  if (fState.wet) hdr.textContent += ' / Wet-Safe';
-  if (fState.hasSmall) hdr.textContent += ' / Has Small';
+  // Build breadcrumb using innerHTML for correct mixed styling (matching Vessels)
+  var bc = '<span style="color:' + accent + '">' + curColor.label + '</span>';
+  if (fState.mat !== 'all') {
+    bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + fState.mat + '</span>';
+  }
+  if (fState.wet) {
+    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
+  }
+  if (fState.hasSmall) {
+    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
+  }
+  hdr.style.color = '';
+  hdr.innerHTML = bc;
 
   var filtered = surfaces.filter(matches);
   count.innerHTML = '<span>' + filtered.length + '</span> surface' + (filtered.length !== 1 ? 's' : '');
@@ -565,8 +576,10 @@ function reshuffle() {
 
 function renderShuffler() {
   var stage = document.getElementById('sh-stage');
-  document.getElementById('sh-loading').style.display = 'none';
-  stage.innerHTML = '';
+  var loading = document.getElementById('sh-loading');
+  if (loading) loading.style.display = 'none';
+  // Clear everything except the loading indicator
+  while (stage.firstChild) { stage.removeChild(stage.firstChild); }
 
   var bgSlots = slots.filter(function(s) { return s.type === 'bg'; });
   var sfSlots = slots.filter(function(s) { return s.type === 'surface'; });

@@ -1,4 +1,4 @@
-const surfaces = [
+window._pkSurfaces = [
   // --- PAINTED PANELS ---
   {
     id: 'ro-pp-1',
@@ -401,9 +401,9 @@ const surfaces = [
   },
 ];
 
-const IMAGES = {};
+window._pkImages = {};
 
-const COLOR_META = {
+window._pkColorMeta = {
   label: 'Red / Orange',
   key: 'ro',
   accent: '#C0392B',
