@@ -517,40 +517,41 @@
     to { transform: rotate(360deg); }
   }
 
-  /* Combo layout selector */
-  .combo-selector {
+  /* Row count toggles (1 / 2 buttons per row) */
+  .row-count-toggle {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-bottom: 1px solid #1a1a1a;
-    background: #0a0a0a;
+    gap: 4px;
   }
 
-  .combo-label {
+  .row-count-btn {
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #555;
-    margin-right: 4px;
-  }
-
-  .combo-btn {
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 500;
+    width: 28px;
+    height: 28px;
     border-radius: 6px;
     border: 1.5px solid #2a2a2a;
     background: transparent;
-    color: #666;
+    color: #555;
     cursor: pointer;
     transition: all 0.15s;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .combo-btn:hover { border-color: #444; color: #aaa; }
-  .combo-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.1); }
+  .row-count-btn:hover { border-color: #555; color: #aaa; }
+  .row-count-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.12); }
+
+  /* Row header — label + count toggle side by side */
+  .shuffler-row-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    width: 100%;
+    max-width: 900px;
+  }
 
   /* Shuffler grid area */
   .shuffler-stage {
@@ -852,24 +853,11 @@
   <div class="shuffler-bar">
     <span class="shuffler-label">Colors</span>
     <div class="shuffler-chips" id="shufflerColorChips">
-      <div class="s-chip active" data-scolor="all">All Colors</div>
-      <div class="s-chip" data-scolor="ro">Red / Orange</div>
-      <!-- more colors appear here dynamically -->
+      <!-- populated dynamically from COLOR_CONFIG -->
     </div>
     <button class="shuffle-btn" id="shuffleBtn">
       <span class="shuffle-icon">⟳</span> Shuffle
     </button>
-  </div>
-
-  <!-- Combo mode selector -->
-  <div class="combo-selector">
-    <span class="combo-label">Combo</span>
-    <button class="combo-btn active" data-combo="1b1s">1 BG + 1 Surface</button>
-    <button class="combo-btn" data-combo="1b2s">1 BG + 2 Surfaces</button>
-    <button class="combo-btn" data-combo="2b1s">2 BG + 1 Surface</button>
-    <button class="combo-btn" data-combo="2b2s">2 BG + 2 Surfaces</button>
-    <button class="combo-btn" data-combo="1s">1 Surface Only</button>
-    <button class="combo-btn" data-combo="2s">2 Surfaces Only</button>
   </div>
 
   <!-- Stage -->
@@ -912,10 +900,11 @@ let activeCategories = new Set();
 let activeFlags = { wet_safe: false, has_small: false };
 let dimFilters = { minL: null, maxL: null, minW: null, maxW: null };
 
-// Shuffler state
-let comboMode = '1b1s';
-let shufflerColors = new Set(['all']); // 'all' means every color
-let slots = []; // Array of { type: 'bg'|'surface', surface: obj|null, pinned: bool }
+// Shuffler state — bgCount/surfCount replace comboMode
+let bgCount = 1;    // 0, 1, or 2
+let surfCount = 1;  // 1 or 2
+let shufflerColors = new Set(['all']);
+let slots = []; // { type: 'bg'|'surface', surface: obj|null, pinned: bool }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // UTILITIES
@@ -1243,31 +1232,17 @@ function getShufflerPool() {
   return all.filter(s => shufflerColors.has(s.colorKey));
 }
 
-function getSlotConfig(mode) {
-  // Returns array of {type} objects
-  switch(mode) {
-    case '1b1s': return [{type:'bg'}, {type:'surface'}];
-    case '1b2s': return [{type:'bg'}, {type:'surface'}, {type:'surface'}];
-    case '2b1s': return [{type:'bg'}, {type:'bg'}, {type:'surface'}];
-    case '2b2s': return [{type:'bg'}, {type:'bg'}, {type:'surface'}, {type:'surface'}];
-    case '1s':   return [{type:'surface'}];
-    case '2s':   return [{type:'surface'}, {type:'surface'}];
-    default:     return [{type:'bg'}, {type:'surface'}];
-  }
-}
-
-function buildSlots(mode) {
-  const config = getSlotConfig(mode);
+function buildSlots() {
   const pool = getShufflerPool();
+  const config = [];
+  for (let i = 0; i < bgCount; i++) config.push({ type: 'bg' });
+  for (let i = 0; i < surfCount; i++) config.push({ type: 'surface' });
 
-  // Preserve pinned slots
   const newSlots = config.map((cfg, i) => {
     const existing = slots[i];
-    if (existing && existing.pinned) return existing;
-    const picked = pool.length > 0 ? rand(pool) : null;
-    return { type: cfg.type, surface: picked, pinned: false };
+    if (existing && existing.type === cfg.type && existing.pinned) return existing;
+    return { type: cfg.type, surface: pool.length > 0 ? rand(pool) : null, pinned: false };
   });
-
   slots = newSlots;
 }
 
@@ -1286,11 +1261,10 @@ function renderShuffler() {
   loading.style.display = 'none';
   stage.innerHTML = '';
 
-  const config = getSlotConfig(comboMode);
   const bgSlots = slots.filter(s => s.type === 'bg');
   const surfSlots = slots.filter(s => s.type === 'surface');
 
-  function makeSCard(slot, slotIndex) {
+  function makeSCard(slot) {
     if (!slot.surface) {
       const card = document.createElement('div');
       card.className = 's-card empty';
@@ -1305,23 +1279,14 @@ function renderShuffler() {
     const card = document.createElement('div');
     card.className = 's-card' + (slot.pinned ? ' pinned' : '');
 
-    // Image
-    const imgSrc = null; // will be real once photos embedded
-    if (imgSrc) {
-      const img = document.createElement('img');
-      img.className = 's-card-img';
-      img.src = imgSrc;
-      img.alt = s.name;
-      card.appendChild(img);
-    } else {
-      const ph = document.createElement('div');
-      ph.className = 's-card-img-placeholder';
-      // Show a color swatch as placeholder based on color
-      const colorHex = COLOR_CONFIG.find(c => c.key === s.colorKey)?.accent || '#888';
-      ph.style.background = `linear-gradient(135deg, ${colorHex}33 0%, ${colorHex}11 100%)`;
-      ph.textContent = '🖼';
-      card.appendChild(ph);
-    }
+    // Placeholder (tinted by color accent)
+    const colorCfg = COLOR_CONFIG.find(c => c.key === s.colorKey);
+    const colorHex = colorCfg?.accent || '#888';
+    const ph = document.createElement('div');
+    ph.className = 's-card-img-placeholder';
+    ph.style.background = `linear-gradient(135deg, ${colorHex}44 0%, ${colorHex}11 100%)`;
+    ph.textContent = '🖼';
+    card.appendChild(ph);
 
     // Pin button
     const pinBtn = document.createElement('button');
@@ -1334,7 +1299,6 @@ function renderShuffler() {
     });
     card.appendChild(pinBtn);
 
-    // Body
     const body = document.createElement('div');
     body.className = 's-card-body';
 
@@ -1364,7 +1328,6 @@ function renderShuffler() {
       wt.textContent = '💧 Wet-Safe';
       meta.appendChild(wt);
     }
-
     body.appendChild(meta);
 
     const dimsEl = document.createElement('div');
@@ -1376,44 +1339,110 @@ function renderShuffler() {
     return card;
   }
 
-  // Render BG row (if any bg slots)
+  function makeRowHeader(labelText, currentCount, minCount, maxCount, onCountChange) {
+    const header = document.createElement('div');
+    header.className = 'shuffler-row-header';
+
+    const label = document.createElement('div');
+    label.className = 'shuffler-row-label';
+    label.style.margin = '0';
+    label.textContent = labelText;
+    header.appendChild(label);
+
+    const toggle = document.createElement('div');
+    toggle.className = 'row-count-toggle';
+    for (let n = minCount; n <= maxCount; n++) {
+      const btn = document.createElement('button');
+      btn.className = 'row-count-btn' + (n === currentCount ? ' active' : '');
+      btn.textContent = n;
+      const count = n;
+      btn.addEventListener('click', () => { onCountChange(count); });
+      toggle.appendChild(btn);
+    }
+    header.appendChild(toggle);
+    return header;
+  }
+
+  // BG row (0, 1, or 2)
+  stage.appendChild(makeRowHeader('Background', bgCount, 0, 2, (n) => {
+    bgCount = n;
+    buildSlots();
+    renderShuffler();
+  }));
+
   if (bgSlots.length > 0) {
-    const bgLabel = document.createElement('div');
-    bgLabel.className = 'shuffler-row-label';
-    bgLabel.textContent = 'Background';
-    stage.appendChild(bgLabel);
-
     const row = document.createElement('div');
     row.className = 'shuffler-row';
-    bgSlots.forEach((slot, i) => {
-      const globalIndex = slots.indexOf(slot);
-      row.appendChild(makeSCard(slot, globalIndex));
-    });
+    bgSlots.forEach(slot => row.appendChild(makeSCard(slot)));
     stage.appendChild(row);
   }
 
-  // Render Surface row
-  if (surfSlots.length > 0) {
-    const surfLabel = document.createElement('div');
-    surfLabel.className = 'shuffler-row-label';
-    surfLabel.textContent = 'Surface';
-    stage.appendChild(surfLabel);
+  // Surface row (1 or 2)
+  stage.appendChild(makeRowHeader('Surface', surfCount, 1, 2, (n) => {
+    surfCount = n;
+    buildSlots();
+    renderShuffler();
+  }));
 
-    const row = document.createElement('div');
-    row.className = 'shuffler-row';
-    surfSlots.forEach((slot, i) => {
-      const globalIndex = slots.indexOf(slot);
-      row.appendChild(makeSCard(slot, globalIndex));
-    });
-    stage.appendChild(row);
-  }
+  const surfRow = document.createElement('div');
+  surfRow.className = 'shuffler-row';
+  surfSlots.forEach(slot => surfRow.appendChild(makeSCard(slot)));
+  stage.appendChild(surfRow);
 }
 
 async function initShuffler() {
   const loading = document.getElementById('shufflerLoading');
   loading.style.display = 'flex';
+
+  // Build color chips dynamically so listeners are attached after DOM exists
+  const chipsContainer = document.getElementById('shufflerColorChips');
+  chipsContainer.innerHTML = '';
+
+  const allChip = document.createElement('div');
+  allChip.className = 's-chip active';
+  allChip.dataset.scolor = 'all';
+  allChip.textContent = 'All Colors';
+  chipsContainer.appendChild(allChip);
+
+  COLOR_CONFIG.forEach(cfg => {
+    const chip = document.createElement('div');
+    chip.className = 's-chip';
+    chip.dataset.scolor = cfg.key;
+    chip.textContent = cfg.label;
+    chipsContainer.appendChild(chip);
+  });
+
+  // Attach color chip listeners
+  chipsContainer.querySelectorAll('[data-scolor]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const key = chip.dataset.scolor;
+      if (key === 'all') {
+        shufflerColors.clear();
+        shufflerColors.add('all');
+        chipsContainer.querySelectorAll('[data-scolor]').forEach(c =>
+          c.classList.toggle('active', c.dataset.scolor === 'all'));
+      } else {
+        shufflerColors.delete('all');
+        chipsContainer.querySelector('[data-scolor="all"]').classList.remove('active');
+        if (shufflerColors.has(key)) {
+          shufflerColors.delete(key);
+          chip.classList.remove('active');
+        } else {
+          shufflerColors.add(key);
+          chip.classList.add('active');
+        }
+        if (shufflerColors.size === 0) {
+          shufflerColors.add('all');
+          chipsContainer.querySelector('[data-scolor="all"]').classList.add('active');
+        }
+      }
+      buildSlots();
+      renderShuffler();
+    });
+  });
+
   await loadAllColors();
-  buildSlots(comboMode);
+  buildSlots();
   renderShuffler();
 }
 
@@ -1488,17 +1517,6 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   renderCatalog();
 });
 
-// Shuffler — combo buttons
-document.querySelectorAll('.combo-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.combo-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    comboMode = btn.dataset.combo;
-    buildSlots(comboMode);
-    renderShuffler();
-  });
-});
-
 // Shuffler — shuffle button
 const shuffleBtn = document.getElementById('shuffleBtn');
 shuffleBtn.addEventListener('click', () => {
@@ -1508,35 +1526,6 @@ shuffleBtn.addEventListener('click', () => {
   renderShuffler();
 });
 
-// Shuffler — color chips
-document.querySelectorAll('[data-scolor]').forEach(chip => {
-  chip.addEventListener('click', () => {
-    const key = chip.dataset.scolor;
-    if (key === 'all') {
-      shufflerColors.clear();
-      shufflerColors.add('all');
-      document.querySelectorAll('[data-scolor]').forEach(c => c.classList.toggle('active', c.dataset.scolor === 'all'));
-    } else {
-      shufflerColors.delete('all');
-      document.querySelector('[data-scolor="all"]').classList.remove('active');
-      if (shufflerColors.has(key)) {
-        shufflerColors.delete(key);
-        chip.classList.remove('active');
-      } else {
-        shufflerColors.add(key);
-        chip.classList.add('active');
-      }
-      if (shufflerColors.size === 0) {
-        shufflerColors.add('all');
-        document.querySelector('[data-scolor="all"]').classList.add('active');
-      }
-    }
-    if (shufflerInitialized) {
-      buildSlots(comboMode);
-      renderShuffler();
-    }
-  });
-});
 </script>
 </body>
 </html>
