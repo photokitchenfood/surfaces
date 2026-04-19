@@ -1607,6 +1607,13 @@
   .srow { flex-direction: column; }
   .sc { max-width: 100%; }
 }
+
+/* ── SHUFFLER WRAPPER: sits outside .shell, full-page flex row ── */
+#sh-wrap {
+  display: none;
+  flex-direction: row;
+  min-height: calc(100vh - 64px);
+}
 </style>
 </head>
 <body>
@@ -1620,9 +1627,9 @@
   </div>
 </header>
 
+<!-- ════ CATALOG (inside .shell grid) ════ -->
 <div class="shell" id="shell">
 
-  <!-- CATALOG SIDEBAR -->
   <div class="sidebar-col" id="catSidebar">
     <div class="searchbar">
       <div class="search-wrap">
@@ -1631,7 +1638,6 @@
       </div>
     </div>
     <aside>
-
       <div class="sidebar-section">
         <div class="sidebar-label">Color</div>
         <div class="color-select-wrap">
@@ -1686,7 +1692,6 @@
     </aside>
   </div>
 
-  <!-- CATALOG MAIN -->
   <main id="catMain">
     <div class="results-bar">
       <div id="color-header">
@@ -1700,9 +1705,13 @@
       <p>Try adjusting your filters or search terms.</p>
     </div>
   </main>
+</div>
 
-  <!-- SHUFFLER SIDEBAR -->
-  <div class="shuffle-sidebar-col" id="shSidebar">
+<!-- ════ SHUFFLER (outside .shell, its own flex row) ════ -->
+<div id="sh-wrap">
+
+  <!-- Shuffler sidebar -->
+  <div class="shuffle-sidebar-col" id="shSidebar" style="display:flex;">
     <div class="sh-aside">
       <div class="sh-section">
         <div class="sh-lbl">Color Filter</div>
@@ -1711,8 +1720,8 @@
     </div>
   </div>
 
-  <!-- SHUFFLER MAIN -->
-  <div class="shuffle-main-col" id="shMain">
+  <!-- Shuffler main -->
+  <div class="shuffle-main-col" id="shMain" style="display:flex;flex:1;">
     <div class="sh-topbar">
       <button class="shuf-btn" id="shuf-btn">
         <span class="sh-icon">⟳</span> Shuffle
@@ -2017,16 +2026,14 @@ function initShuffler() {
 // ── MODE SWITCHING ────────────────────────────────────────────────
 function setMode(mode) {
   document.querySelectorAll(".mode-btn").forEach(function(b){b.classList.toggle("active",b.dataset.mode===mode);});
-  var catS=document.getElementById("catSidebar");
-  var catM=document.getElementById("catMain");
-  var shS=document.getElementById("shSidebar");
-  var shM=document.getElementById("shMain");
+  var shell=document.getElementById("shell");
+  var shWrap=document.getElementById("sh-wrap");
   if(mode==="catalog"){
-    catS.style.display=""; catM.style.display="";
-    shS.classList.remove("on"); shM.classList.remove("on");
+    shell.style.display="";
+    shWrap.style.display="none";
   } else {
-    catS.style.display="none"; catM.style.display="none";
-    shS.classList.add("on"); shM.classList.add("on");
+    shell.style.display="none";
+    shWrap.style.display="flex";
     if(!shInited){shInited=true;initShuffler();}
   }
 }
@@ -2067,6 +2074,7 @@ document.getElementById("shuf-btn").addEventListener("click",function(){
   setTimeout(function(){self.classList.remove("spin");},400);
   reshuffle();renderShuffler();
 });
+
 </script>
 </body>
 </html>
