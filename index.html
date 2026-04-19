@@ -61,7 +61,7 @@ main{padding:28px 32px}
 .results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .results-count{font-size:12px;color:var(--ink-soft)}
 .results-count span{font-weight:500;color:var(--ink)}
-#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
 #empty{display:none;text-align:center;padding:80px 20px;color:var(--ink-soft)}
 #empty.show{display:block}
 #empty h3{font-family:"Syne",sans-serif;font-size:20px;margin-bottom:8px;color:var(--ink)}
@@ -71,7 +71,7 @@ main{padding:28px 32px}
 .card{background:var(--surface);border-radius:var(--card-radius);border:1px solid var(--tag-border);overflow:hidden;position:relative;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s;animation:fadeIn .25s ease both}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .card:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);transform:translateY(-2px)}
-.card-img{width:100%;aspect-ratio:4/3;background:#F0EDE8;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.card-img{width:100%;aspect-ratio:3/2;background:#F0EDE8;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .card-img img{width:100%;height:100%;object-fit:cover}
 .card-img-placeholder{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink-faint)}
 .card-img-placeholder svg{opacity:.4}
@@ -129,15 +129,15 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 .sh-icon{font-size:15px;display:inline-block}
 .shuf-btn.spin .sh-icon{animation:shspin .4s ease}
 @keyframes shspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.sh-stage{flex:1;padding:32px 28px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
+.sh-stage{flex:1;padding:32px 28px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;align-items:flex-start}
 .rh{display:flex;align-items:center;gap:12px}
 .rl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#3a3a3a;font-family:"DM Mono",monospace}
 .rct{display:flex;gap:4px}
 .rcb{font-family:"DM Mono",monospace;font-size:11px;width:26px;height:26px;border-radius:5px;border:1.5px solid #2a2a2a;background:transparent;color:#444;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
 .rcb:hover{border-color:#666;color:#aaa}
 .rcb.on{border-color:#888;color:#ddd;background:rgba(255,255,255,.07)}
-.srow{display:flex;gap:16px}
-.sc{flex:1;max-width:420px;background:#1a1a1a;border-radius:10px;border:1.5px solid #252525;overflow:hidden;position:relative}
+.srow{display:flex;gap:20px;flex-wrap:wrap}
+.sc{width:340px;flex-shrink:0;background:#1a1a1a;border-radius:10px;border:1.5px solid #252525;overflow:hidden;position:relative}
 .sc.pinned{border-color:#666}
 .sc-ph{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:28px;color:#2a2a2a;background:#111}
 .sc-body{padding:12px 14px 14px}
@@ -259,14 +259,14 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 
 <div id="shuffler-view">
   <div class="sh-sidebar" style="display:flex;flex-direction:column">
-    <div class="sh-section">
-      <div class="sh-lbl">Color Filter</div>
-      <div id="sh-chips"></div>
-    </div>
-    <div style="margin-top:auto;padding-top:16px">
+    <div style="margin-bottom:24px">
       <button class="shuf-btn" id="shuf-btn" style="width:100%;justify-content:center">
         <span class="sh-icon">&#10227;</span> Shuffle
       </button>
+    </div>
+    <div class="sh-section">
+      <div class="sh-lbl">Color Filter</div>
+      <div id="sh-chips"></div>
     </div>
   </div>
   <div class="sh-main">
