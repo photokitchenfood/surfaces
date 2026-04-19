@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PK Surface Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ───────────────────────────── RESET & BASE ───────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F2EE;
+    --surface: #FFFFFF;
+    --border: #E0DDD9;
+    --text: #1A1A1A;
+    --text-muted: #888;
+    --text-faint: #BBB;
+    --accent: #C0392B;
+    --accent-pale: #C0392B1A;
+    --header-h: 64px;
+    --sidebar-w: 272px;
+    --radius: 10px;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+    --logo: 'Barlow Semi Condensed', sans-serif;
+    --yellow-flag: #FFF8E1;
+    --yellow-flag-border: #FFD54F;
+    --shuffle-bg: #0F0F0F;
+  }
+
+  html { font-size: 14px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+
+  /* ───────────────────────────── HEADER ───────────────────────────── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-h);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: var(--logo);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .header-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+  }
+
+  .header-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Mode toggle */
+  .mode-toggle {
+    display: flex;
+    background: var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+  }
+
+  .mode-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.18s ease;
+    text-transform: uppercase;
+  }
+
+  .mode-btn.active {
+    background: var(--text);
+    color: #fff;
+  }
+
+  .save-btn {
+    display: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .save-btn:hover { opacity: 0.85; }
+  .save-btn.visible { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ───────────────────────────── LAYOUT ───────────────────────────── */
+  .app-body {
+    display: flex;
+    min-height: calc(100vh - var(--header-h));
+  }
+
+  /* ───────────────────────────── SIDEBAR ───────────────────────────── */
+  .sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 24px 20px;
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .filter-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .filter-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* Color dropdown */
+  .color-select-wrap { position: relative; }
+
+  .color-dot {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    display: none;
+  }
+
+  .color-dot.split {
+    background: conic-gradient(var(--dot-a) 50%, var(--dot-b) 50%);
+  }
+
+  select.color-select {
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 12px 10px 32px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color 0.15s;
+  }
+
+  select.color-select:focus { outline: none; border-color: var(--accent); }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+
+  .chip.active {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chip.special { border-style: dashed; }
+  .chip.special.active { border-style: solid; }
+
+  /* Dimension range */
+  .dim-range { display: flex; gap: 6px; align-items: center; }
+
+  .dim-input {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 7px 9px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text);
+    width: 100%;
+  }
+
+  .dim-input:focus { outline: none; border-color: var(--accent); }
+  .dim-sep { color: var(--text-faint); font-size: 12px; }
+
+  .reset-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 0;
+    margin-top: 4px;
+    transition: color 0.15s;
+  }
+
+  .reset-btn:hover { color: var(--accent); }
+
+  /* ───────────────────────────── MAIN GRID ───────────────────────────── */
+  .main {
+    flex: 1;
+    padding: 24px;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    gap: 12px;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon { font-size: 48px; opacity: 0.3; }
+  .empty-state p { font-family: var(--mono); font-size: 13px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  /* ───────────────────────────── CARD ───────────────────────────── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .card.no-dims { border-color: var(--yellow-flag-border); background: var(--yellow-flag); }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    background: var(--bg);
+    display: block;
+  }
+
+  .card-img-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--border) 0%, var(--bg) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    font-size: 32px;
+  }
+
+  .card-body { padding: 12px 14px 14px; }
+
+  .card-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+
+  .card-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--bg);
+  }
+
+  .card-chip.material-chip {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .card-chip.wet-chip {
+    background: #E3F2FD;
+    border-color: #90CAF9;
+    color: #1565C0;
+  }
+
+  .card-chip.small-chip {
+    background: #F3E5F5;
+    border-color: #CE93D8;
+    color: #6A1B9A;
+  }
+
+  .card-name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .card-dims {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .dim-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .dim-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    width: 42px;
+    flex-shrink: 0;
+  }
+
+  .dim-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .dim-val.missing { color: var(--yellow-flag-border); }
+
+  .card-notes {
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+
+  .card-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-faint);
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .card-qty {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ───────────────────────────── COUNT BAR ───────────────────────────── */
+  .count-bar {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ═══════════════════════════ SHUFFLER MODE ═══════════════════════════ */
+  .shuffler-view {
+    display: none;
+    flex: 1;
+    background: var(--shuffle-bg);
+    min-height: calc(100vh - var(--header-h));
+    flex-direction: column;
+  }
+
+  .shuffler-view.active { display: flex; }
+
+  /* Shuffler top bar */
+  .shuffler-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #222;
+    flex-wrap: wrap;
+  }
+
+  .shuffler-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .shuffler-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+
+  .s-chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1.5px solid #333;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .s-chip:hover { border-color: #666; color: #ccc; }
+  .s-chip.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.12); }
+
+  .shuffle-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.15s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .shuffle-btn:hover { opacity: 0.9; }
+  .shuffle-btn:active { transform: scale(0.97); }
+
+  .shuffle-icon { font-size: 16px; display: inline-block; }
+  .shuffle-btn.spinning .shuffle-icon { animation: spin 0.4s ease; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Combo layout selector */
+  .combo-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #0a0a0a;
+  }
+
+  .combo-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+    margin-right: 4px;
+  }
+
+  .combo-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 5px 11px;
+    border-radius: 6px;
+    border: 1.5px solid #2a2a2a;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .combo-btn:hover { border-color: #444; color: #aaa; }
+  .combo-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.1); }
+
+  /* Shuffler grid area */
+  .shuffler-stage {
+    flex: 1;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .shuffler-row-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #444;
+    align-self: flex-start;
+    margin-bottom: -16px;
+  }
+
+  .shuffler-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  /* Shuffler card */
+  .s-card {
+    flex: 1;
+    max-width: 360px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1.5px solid #2a2a2a;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .s-card.pinned { border-color: var(--accent); }
+
+  .s-card.empty {
+    border-style: dashed;
+    border-color: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.15s;
+  }
+
+  .s-card.empty:hover { opacity: 0.7; }
+
+  .s-card-empty-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.06em;
+  }
+
+  .s-card-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+    background: #111;
+  }
+
+  .s-card-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #333;
+  }
+
+  .s-card-body {
+    padding: 12px 14px;
+  }
+
+  .s-card-name {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .s-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+
+  .s-chip-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    color: #666;
+  }
+
+  .s-chip-tag.color-tag { border-color: var(--accent); color: var(--accent); opacity: 0.8; }
+
+  .s-card-dims {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* Pin button */
+  .pin-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1.5px solid #333;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+    color: #666;
+  }
+
+  .pin-btn:hover { border-color: #666; color: #ccc; }
+  .pin-btn.pinned { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.2); }
+
+  /* Shuffler loading */
+  .shuffler-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    flex-direction: column;
+    gap: 12px;
+    color: #444;
+  }
+
+  .loading-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .loading-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  .loading-dot:nth-child(2) { animation-delay: 0.15s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* Card entrance animation */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: cardIn 0.2s ease both; }
+
+  /* ───────────────────────────── CATALOG VIEW ───────────────────────────── */
+  .catalog-view {
+    display: flex;
+    flex: 1;
+  }
+
+  .catalog-view.hidden { display: none; }
+
+  /* ───────────────────────────── SCROLLBAR ───────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ───────────────────────────── RESPONSIVE ───────────────────────────── */
+  @media (max-width: 768px) {
+    :root { --sidebar-w: 100%; }
+    .app-body { flex-direction: column; }
+    .sidebar {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .shuffler-row { flex-direction: column; align-items: center; }
+    .s-card { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
+<header class="header">
+  <span class="logo">PhotoKitchen</span>
+  <div class="header-divider"></div>
+  <span class="header-meta">Props Catalog 2.0 — Surfaces</span>
+  <div class="header-right">
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="catalog">Catalog</button>
+      <button class="mode-btn" data-mode="shuffler">Shuffler</button>
+    </div>
+    <button class="save-btn" id="saveBtn">↓ Save</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ CATALOG VIEW ═══════════════════════════ -->
+<div class="catalog-view" id="catalogView">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="filter-group">
+      <div class="filter-label">Color</div>
+      <div class="color-select-wrap">
+        <div class="color-dot" id="colorDot"></div>
+        <select class="color-select" id="colorSelect">
+          <option value="">Select a Color</option>
+          <option value="ro">Red / Orange</option>
+          <!-- More colors added here as new JS files are created -->
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-group" id="materialFilterGroup" style="display:none">
+      <div class="filter-label">Material</div>
+      <div class="chips" id="materialChips"></div>
+    </div>
+
+    <div class="filter-group" id="flagFilterGroup" style="display:none">
+      <div class="filter-label">Properties</div>
+      <div class="chips">
+        <div class="chip special" data-flag="wet_safe" id="wetChip">💧 Wet-Safe</div>
+        <div class="chip special" data-flag="has_small" id="smallChip">📐 Has Small Version</div>
+      </div>
+    </div>
+
+    <div class="filter-group" id="dimFilterGroup" style="display:none">
+      <div class="filter-label">Min. Length (cm)</div>
+      <div class="dim-range">
+        <input class="dim-input" type="number" id="minL" placeholder="0">
+        <span class="dim-sep">–</span>
+        <input class="dim-input" type="number" id="maxL" placeholder="∞">
+      </div>
+    </div>
+
+    <div class="filter-group" id="dimFilterGroup2" style="display:none">
+      <div class="filter-label">Min. Width (cm)</div>
+      <div class="dim-range">
+        <input class="dim-input" type="number" id="minW" placeholder="0">
+        <span class="dim-sep">–</span>
+        <input class="dim-input" type="number" id="maxW" placeholder="∞">
+      </div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn" style="display:none">↺ Reset All Filters</button>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="mainArea">
+    <div class="empty-state" id="emptyState">
+      <div class="icon">🎨</div>
+      <p>Select a color to view surfaces</p>
+    </div>
+    <div class="count-bar" id="countBar" style="display:none"></div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+</div>
+
+<!-- ═══════════════════════════ SHUFFLER VIEW ═══════════════════════════ -->
+<div class="shuffler-view" id="shufflerView">
+
+  <!-- Top bar: color filter + shuffle button -->
+  <div class="shuffler-bar">
+    <span class="shuffler-label">Colors</span>
+    <div class="shuffler-chips" id="shufflerColorChips">
+      <div class="s-chip active" data-scolor="all">All Colors</div>
+      <div class="s-chip" data-scolor="ro">Red / Orange</div>
+      <!-- more colors appear here dynamically -->
+    </div>
+    <button class="shuffle-btn" id="shuffleBtn">
+      <span class="shuffle-icon">⟳</span> Shuffle
+    </button>
+  </div>
+
+  <!-- Combo mode selector -->
+  <div class="combo-selector">
+    <span class="combo-label">Combo</span>
+    <button class="combo-btn active" data-combo="1b1s">1 BG + 1 Surface</button>
+    <button class="combo-btn" data-combo="1b2s">1 BG + 2 Surfaces</button>
+    <button class="combo-btn" data-combo="2b1s">2 BG + 1 Surface</button>
+    <button class="combo-btn" data-combo="2b2s">2 BG + 2 Surfaces</button>
+    <button class="combo-btn" data-combo="1s">1 Surface Only</button>
+    <button class="combo-btn" data-combo="2s">2 Surfaces Only</button>
+  </div>
+
+  <!-- Stage -->
+  <div class="shuffler-stage" id="shufflerStage">
+    <div class="shuffler-loading" id="shufflerLoading">
+      <div class="loading-dots">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+      <span style="font-family:var(--mono);font-size:11px;color:#444;letter-spacing:0.05em">Loading surfaces…</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+const COLOR_CONFIG = [
+  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', accent: '#C0392B', accentPale: '#C0392B1A', dots: ['#C0392B','#E8621A'] },
+  // Add more colors here as new data files are created:
+  // { key: 'gr', label: 'Green', file: 'data/gr.js', accent: '#2E7D32', accentPale: '#2E7D321A', dots: ['#2E7D32'] },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════════════
+
+let currentColor = null;
+let currentSurfaces = [];
+let loadedColors = {}; // { colorKey: surfaces[] }
+let isDirty = false;
+let dirtyColors = new Set();
+
+// Catalog filters
+let activeCategories = new Set();
+let activeFlags = { wet_safe: false, has_small: false };
+let dimFilters = { minL: null, maxL: null, minW: null, maxW: null };
+
+// Shuffler state
+let comboMode = '1b1s';
+let shufflerColors = new Set(['all']); // 'all' means every color
+let slots = []; // Array of { type: 'bg'|'surface', surface: obj|null, pinned: bool }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+function hasMissingDims(s) {
+  // Flag yellow if any primary dim is missing (null)
+  return (s.length === null || s.width === null) && s.diameter === null;
+}
+
+function dimStr(s) {
+  const parts = [];
+  if (s.length !== null) parts.push(`L: ${s.length}cm`);
+  else parts.push(`L: —`);
+  if (s.width !== null) parts.push(`W: ${s.width}cm`);
+  else if (s.diameter === null) parts.push(`W: —`);
+  if (s.diameter !== null) parts.push(`D: ${s.diameter}cm`);
+  return parts.join('  ');
+}
+
+function rand(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════════════════════════════════════
+
+function loadColorScript(cfg) {
+  return new Promise((resolve, reject) => {
+    if (loadedColors[cfg.key]) { resolve(loadedColors[cfg.key]); return; }
+    const script = document.createElement('script');
+    script.src = cfg.file;
+    script.onload = () => {
+      if (typeof surfaces !== 'undefined') {
+        loadedColors[cfg.key] = [...surfaces];
+        resolve(loadedColors[cfg.key]);
+      } else {
+        reject(new Error('surfaces not defined in ' + cfg.file));
+      }
+    };
+    script.onerror = () => reject(new Error('Failed to load ' + cfg.file));
+    document.head.appendChild(script);
+  });
+}
+
+async function loadAllColors() {
+  const loads = COLOR_CONFIG.map(cfg => loadColorScript(cfg).catch(() => []));
+  await Promise.all(loads);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CATALOG — RENDERING
+// ═══════════════════════════════════════════════════════════════════════════
+
+function buildCard(s) {
+  const missing = hasMissingDims(s);
+  const card = document.createElement('div');
+  card.className = 'card' + (missing ? ' no-dims' : '');
+  card.dataset.id = s.id;
+
+  // Image
+  const imgSrc = (typeof IMAGES !== 'undefined' && IMAGES[s.id]) ? IMAGES[s.id] : null;
+  if (imgSrc) {
+    const img = document.createElement('img');
+    img.className = 'card-img';
+    img.src = imgSrc;
+    img.alt = s.name;
+    img.loading = 'lazy';
+    card.appendChild(img);
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'card-img-placeholder';
+    ph.textContent = '🖼';
+    card.appendChild(ph);
+  }
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'card-body';
+
+  // Chips row
+  const chips = document.createElement('div');
+  chips.className = 'card-chips';
+  const matChip = document.createElement('span');
+  matChip.className = 'card-chip material-chip';
+  matChip.textContent = s.material;
+  chips.appendChild(matChip);
+  if (s.wet_safe) {
+    const wc = document.createElement('span');
+    wc.className = 'card-chip wet-chip';
+    wc.textContent = '💧 Wet-Safe';
+    chips.appendChild(wc);
+  }
+  if (s.has_small) {
+    const sc = document.createElement('span');
+    sc.className = 'card-chip small-chip';
+    sc.textContent = '📐 + Small';
+    chips.appendChild(sc);
+  }
+  body.appendChild(chips);
+
+  // Name
+  const name = document.createElement('div');
+  name.className = 'card-name';
+  name.textContent = s.name;
+  body.appendChild(name);
+
+  // Desc
+  if (s.description) {
+    const desc = document.createElement('div');
+    desc.className = 'card-desc';
+    desc.textContent = s.description;
+    body.appendChild(desc);
+  }
+
+  // Dimensions
+  const dims = document.createElement('div');
+  dims.className = 'card-dims';
+
+  function dimRow(label, val, unit) {
+    const row = document.createElement('div');
+    row.className = 'dim-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'dim-label';
+    lbl.textContent = label;
+    const v = document.createElement('span');
+    v.className = 'dim-val' + (val === null ? ' missing' : '');
+    v.textContent = val !== null ? `${val}${unit}` : '—';
+    row.appendChild(lbl);
+    row.appendChild(v);
+    return row;
+  }
+
+  dims.appendChild(dimRow('Length', s.length, 'cm'));
+  dims.appendChild(dimRow('Width', s.width, 'cm'));
+  if (s.diameter !== null) dims.appendChild(dimRow('Diameter', s.diameter, 'cm'));
+
+  if (s.has_small) {
+    const smallLabel = document.createElement('div');
+    smallLabel.className = 'dim-label';
+    smallLabel.style.marginTop = '6px';
+    smallLabel.style.color = '#CE93D8';
+    smallLabel.textContent = 'Small version';
+    dims.appendChild(smallLabel);
+    dims.appendChild(dimRow('Length', s.small_length, 'cm'));
+    dims.appendChild(dimRow('Width', s.small_width, 'cm'));
+  }
+
+  body.appendChild(dims);
+
+  // Qty
+  if (s.qty !== null) {
+    const qty = document.createElement('div');
+    qty.className = 'card-qty';
+    qty.textContent = `Qty: ${s.qty}`;
+    body.appendChild(qty);
+  }
+
+  // Notes
+  if (s.notes) {
+    const notes = document.createElement('div');
+    notes.className = 'card-notes';
+    notes.textContent = s.notes;
+    body.appendChild(notes);
+  }
+
+  // ID
+  const idEl = document.createElement('div');
+  idEl.className = 'card-id';
+  idEl.textContent = s.id;
+  body.appendChild(idEl);
+
+  card.appendChild(body);
+  return card;
+}
+
+function getFilteredSurfaces() {
+  return currentSurfaces.filter(s => {
+    if (activeCategories.size > 0 && !activeCategories.has(s.material)) return false;
+    if (activeFlags.wet_safe && !s.wet_safe) return false;
+    if (activeFlags.has_small && !s.has_small) return false;
+    if (dimFilters.minL !== null && (s.length === null || s.length < dimFilters.minL)) return false;
+    if (dimFilters.maxL !== null && (s.length === null || s.length > dimFilters.maxL)) return false;
+    if (dimFilters.minW !== null && (s.width === null || s.width < dimFilters.minW)) return false;
+    if (dimFilters.maxW !== null && (s.width === null || s.width > dimFilters.maxW)) return false;
+    return true;
+  });
+}
+
+function renderCatalog() {
+  const grid = document.getElementById('grid');
+  const countBar = document.getElementById('countBar');
+  const emptyState = document.getElementById('emptyState');
+  grid.innerHTML = '';
+
+  if (!currentColor) {
+    emptyState.style.display = 'flex';
+    countBar.style.display = 'none';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  countBar.style.display = 'block';
+
+  const filtered = getFilteredSurfaces();
+  countBar.textContent = `${filtered.length} surface${filtered.length !== 1 ? 's' : ''}`;
+
+  filtered.forEach((s, i) => {
+    const card = buildCard(s);
+    card.style.animationDelay = `${Math.min(i * 0.03, 0.3)}s`;
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CATALOG — COLOR LOADING
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function selectColor(key) {
+  if (!key) {
+    currentColor = null;
+    currentSurfaces = [];
+    renderCatalog();
+    updateColorUI(null);
+    return;
+  }
+
+  const cfg = COLOR_CONFIG.find(c => c.key === key);
+  if (!cfg) return;
+
+  try {
+    const data = await loadColorScript(cfg);
+    currentColor = key;
+    currentSurfaces = data;
+    activeCategories.clear();
+    buildMaterialChips();
+    renderCatalog();
+    updateColorUI(cfg);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function updateColorUI(cfg) {
+  const dot = document.getElementById('colorDot');
+  const sel = document.getElementById('colorSelect');
+
+  if (!cfg) {
+    document.documentElement.style.setProperty('--accent', '#C0392B');
+    document.documentElement.style.setProperty('--accent-pale', '#C0392B1A');
+    dot.style.display = 'none';
+    sel.style.borderColor = '';
+    sel.style.color = '';
+    return;
+  }
+
+  document.documentElement.style.setProperty('--accent', cfg.accent);
+  document.documentElement.style.setProperty('--accent-pale', cfg.accentPale);
+
+  dot.style.display = 'block';
+  if (cfg.dots.length >= 2) {
+    dot.className = 'color-dot split';
+    dot.style.setProperty('--dot-a', cfg.dots[0]);
+    dot.style.setProperty('--dot-b', cfg.dots[1]);
+  } else {
+    dot.className = 'color-dot';
+    dot.style.background = cfg.dots[0];
+  }
+
+  sel.style.backgroundColor = cfg.accentPale;
+  sel.style.borderColor = cfg.accent;
+  sel.style.color = cfg.key === 'wh' ? '#999' : cfg.accent;
+
+  // Show filter groups
+  document.getElementById('materialFilterGroup').style.display = 'flex';
+  document.getElementById('flagFilterGroup').style.display = 'flex';
+  document.getElementById('dimFilterGroup').style.display = 'flex';
+  document.getElementById('dimFilterGroup2').style.display = 'flex';
+  document.getElementById('resetBtn').style.display = 'block';
+}
+
+function buildMaterialChips() {
+  const container = document.getElementById('materialChips');
+  container.innerHTML = '';
+  const materials = [...new Set(currentSurfaces.map(s => s.material))];
+  materials.forEach(mat => {
+    const count = currentSurfaces.filter(s => s.material === mat).length;
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = `${mat} (${count})`;
+    chip.dataset.material = mat;
+    chip.addEventListener('click', () => toggleMaterialChip(chip, mat));
+    container.appendChild(chip);
+  });
+}
+
+function toggleMaterialChip(chip, mat) {
+  if (activeCategories.has(mat)) {
+    activeCategories.delete(mat);
+    chip.classList.remove('active');
+  } else {
+    activeCategories.add(mat);
+    chip.classList.add('active');
+  }
+  renderCatalog();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SHUFFLER
+// ═══════════════════════════════════════════════════════════════════════════
+
+function getShufflerPool() {
+  const all = Object.values(loadedColors).flat();
+  if (shufflerColors.has('all')) return all;
+  return all.filter(s => shufflerColors.has(s.colorKey));
+}
+
+function getSlotConfig(mode) {
+  // Returns array of {type} objects
+  switch(mode) {
+    case '1b1s': return [{type:'bg'}, {type:'surface'}];
+    case '1b2s': return [{type:'bg'}, {type:'surface'}, {type:'surface'}];
+    case '2b1s': return [{type:'bg'}, {type:'bg'}, {type:'surface'}];
+    case '2b2s': return [{type:'bg'}, {type:'bg'}, {type:'surface'}, {type:'surface'}];
+    case '1s':   return [{type:'surface'}];
+    case '2s':   return [{type:'surface'}, {type:'surface'}];
+    default:     return [{type:'bg'}, {type:'surface'}];
+  }
+}
+
+function buildSlots(mode) {
+  const config = getSlotConfig(mode);
+  const pool = getShufflerPool();
+
+  // Preserve pinned slots
+  const newSlots = config.map((cfg, i) => {
+    const existing = slots[i];
+    if (existing && existing.pinned) return existing;
+    const picked = pool.length > 0 ? rand(pool) : null;
+    return { type: cfg.type, surface: picked, pinned: false };
+  });
+
+  slots = newSlots;
+}
+
+function reshuffleUnpinned() {
+  const pool = getShufflerPool();
+  slots = slots.map(slot => {
+    if (slot.pinned) return slot;
+    const picked = pool.length > 0 ? rand(pool) : null;
+    return { ...slot, surface: picked };
+  });
+}
+
+function renderShuffler() {
+  const stage = document.getElementById('shufflerStage');
+  const loading = document.getElementById('shufflerLoading');
+  loading.style.display = 'none';
+  stage.innerHTML = '';
+
+  const config = getSlotConfig(comboMode);
+  const bgSlots = slots.filter(s => s.type === 'bg');
+  const surfSlots = slots.filter(s => s.type === 'surface');
+
+  function makeSCard(slot, slotIndex) {
+    if (!slot.surface) {
+      const card = document.createElement('div');
+      card.className = 's-card empty';
+      const lbl = document.createElement('span');
+      lbl.className = 's-card-empty-label';
+      lbl.textContent = 'No surfaces loaded';
+      card.appendChild(lbl);
+      return card;
+    }
+
+    const s = slot.surface;
+    const card = document.createElement('div');
+    card.className = 's-card' + (slot.pinned ? ' pinned' : '');
+
+    // Image
+    const imgSrc = null; // will be real once photos embedded
+    if (imgSrc) {
+      const img = document.createElement('img');
+      img.className = 's-card-img';
+      img.src = imgSrc;
+      img.alt = s.name;
+      card.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 's-card-img-placeholder';
+      // Show a color swatch as placeholder based on color
+      const colorHex = COLOR_CONFIG.find(c => c.key === s.colorKey)?.accent || '#888';
+      ph.style.background = `linear-gradient(135deg, ${colorHex}33 0%, ${colorHex}11 100%)`;
+      ph.textContent = '🖼';
+      card.appendChild(ph);
+    }
+
+    // Pin button
+    const pinBtn = document.createElement('button');
+    pinBtn.className = 'pin-btn' + (slot.pinned ? ' pinned' : '');
+    pinBtn.textContent = slot.pinned ? '📌' : '📍';
+    pinBtn.title = slot.pinned ? 'Unpin' : 'Pin this surface';
+    pinBtn.addEventListener('click', () => {
+      slot.pinned = !slot.pinned;
+      renderShuffler();
+    });
+    card.appendChild(pinBtn);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 's-card-body';
+
+    const sname = document.createElement('div');
+    sname.className = 's-card-name';
+    sname.textContent = s.name;
+    body.appendChild(sname);
+
+    const meta = document.createElement('div');
+    meta.className = 's-card-meta';
+
+    const colorTag = document.createElement('span');
+    colorTag.className = 's-chip-tag color-tag';
+    colorTag.textContent = s.color;
+    meta.appendChild(colorTag);
+
+    const matTag = document.createElement('span');
+    matTag.className = 's-chip-tag';
+    matTag.textContent = s.material;
+    meta.appendChild(matTag);
+
+    if (s.wet_safe) {
+      const wt = document.createElement('span');
+      wt.className = 's-chip-tag';
+      wt.style.borderColor = '#90CAF9';
+      wt.style.color = '#90CAF9';
+      wt.textContent = '💧 Wet-Safe';
+      meta.appendChild(wt);
+    }
+
+    body.appendChild(meta);
+
+    const dimsEl = document.createElement('div');
+    dimsEl.className = 's-card-dims';
+    dimsEl.textContent = dimStr(s);
+    body.appendChild(dimsEl);
+
+    card.appendChild(body);
+    return card;
+  }
+
+  // Render BG row (if any bg slots)
+  if (bgSlots.length > 0) {
+    const bgLabel = document.createElement('div');
+    bgLabel.className = 'shuffler-row-label';
+    bgLabel.textContent = 'Background';
+    stage.appendChild(bgLabel);
+
+    const row = document.createElement('div');
+    row.className = 'shuffler-row';
+    bgSlots.forEach((slot, i) => {
+      const globalIndex = slots.indexOf(slot);
+      row.appendChild(makeSCard(slot, globalIndex));
+    });
+    stage.appendChild(row);
+  }
+
+  // Render Surface row
+  if (surfSlots.length > 0) {
+    const surfLabel = document.createElement('div');
+    surfLabel.className = 'shuffler-row-label';
+    surfLabel.textContent = 'Surface';
+    stage.appendChild(surfLabel);
+
+    const row = document.createElement('div');
+    row.className = 'shuffler-row';
+    surfSlots.forEach((slot, i) => {
+      const globalIndex = slots.indexOf(slot);
+      row.appendChild(makeSCard(slot, globalIndex));
+    });
+    stage.appendChild(row);
+  }
+}
+
+async function initShuffler() {
+  const loading = document.getElementById('shufflerLoading');
+  loading.style.display = 'flex';
+  await loadAllColors();
+  buildSlots(comboMode);
+  renderShuffler();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MODE SWITCHING
+// ═══════════════════════════════════════════════════════════════════════════
+
+let shufflerInitialized = false;
+
+function setMode(mode) {
+  const catalogView = document.getElementById('catalogView');
+  const shufflerView = document.getElementById('shufflerView');
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+
+  if (mode === 'catalog') {
+    catalogView.classList.remove('hidden');
+    shufflerView.classList.remove('active');
+  } else {
+    catalogView.classList.add('hidden');
+    shufflerView.classList.add('active');
+    if (!shufflerInitialized) {
+      shufflerInitialized = true;
+      initShuffler();
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Mode buttons
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => setMode(btn.dataset.mode));
+});
+
+// Color select
+document.getElementById('colorSelect').addEventListener('change', e => {
+  selectColor(e.target.value);
+});
+
+// Flag chips
+document.getElementById('wetChip').addEventListener('click', function() {
+  activeFlags.wet_safe = !activeFlags.wet_safe;
+  this.classList.toggle('active', activeFlags.wet_safe);
+  renderCatalog();
+});
+
+document.getElementById('smallChip').addEventListener('click', function() {
+  activeFlags.has_small = !activeFlags.has_small;
+  this.classList.toggle('active', activeFlags.has_small);
+  renderCatalog();
+});
+
+// Dim inputs
+['minL','maxL','minW','maxW'].forEach(id => {
+  document.getElementById(id).addEventListener('input', e => {
+    dimFilters[id] = e.target.value !== '' ? parseFloat(e.target.value) : null;
+    renderCatalog();
+  });
+});
+
+// Reset
+document.getElementById('resetBtn').addEventListener('click', () => {
+  activeCategories.clear();
+  activeFlags = { wet_safe: false, has_small: false };
+  dimFilters = { minL: null, maxL: null, minW: null, maxW: null };
+  document.querySelectorAll('#materialChips .chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('wetChip').classList.remove('active');
+  document.getElementById('smallChip').classList.remove('active');
+  ['minL','maxL','minW','maxW'].forEach(id => document.getElementById(id).value = '');
+  renderCatalog();
+});
+
+// Shuffler — combo buttons
+document.querySelectorAll('.combo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.combo-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    comboMode = btn.dataset.combo;
+    buildSlots(comboMode);
+    renderShuffler();
+  });
+});
+
+// Shuffler — shuffle button
+const shuffleBtn = document.getElementById('shuffleBtn');
+shuffleBtn.addEventListener('click', () => {
+  shuffleBtn.classList.add('spinning');
+  setTimeout(() => shuffleBtn.classList.remove('spinning'), 400);
+  reshuffleUnpinned();
+  renderShuffler();
+});
+
+// Shuffler — color chips
+document.querySelectorAll('[data-scolor]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const key = chip.dataset.scolor;
+    if (key === 'all') {
+      shufflerColors.clear();
+      shufflerColors.add('all');
+      document.querySelectorAll('[data-scolor]').forEach(c => c.classList.toggle('active', c.dataset.scolor === 'all'));
+    } else {
+      shufflerColors.delete('all');
+      document.querySelector('[data-scolor="all"]').classList.remove('active');
+      if (shufflerColors.has(key)) {
+        shufflerColors.delete(key);
+        chip.classList.remove('active');
+      } else {
+        shufflerColors.add(key);
+        chip.classList.add('active');
+      }
+      if (shufflerColors.size === 0) {
+        shufflerColors.add('all');
+        document.querySelector('[data-scolor="all"]').classList.add('active');
+      }
+    }
+    if (shufflerInitialized) {
+      buildSlots(comboMode);
+      renderShuffler();
+    }
+  });
+});
+</script>
+</body>
+</html>
