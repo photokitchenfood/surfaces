@@ -8,770 +8,267 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  /* ───────────────────────────── RESET & BASE ───────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #F5F2EE;
-    --surface: #FFFFFF;
-    --border: #E0DDD9;
-    --text: #1A1A1A;
-    --text-muted: #888;
-    --text-faint: #BBB;
-    --accent: #C0392B;
-    --accent-pale: #C0392B1A;
-    --header-h: 64px;
-    --sidebar-w: 272px;
-    --radius: 10px;
-    --mono: 'DM Mono', monospace;
-    --sans: 'Syne', sans-serif;
-    --logo: 'Barlow Semi Condensed', sans-serif;
-    --yellow-flag: #FFF8E1;
-    --yellow-flag-border: #FFD54F;
-    --shuffle-bg: #0F0F0F;
-  }
-
-  html { font-size: 14px; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-  }
-
-  /* ───────────────────────────── HEADER ───────────────────────────── */
-  .header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    height: var(--header-h);
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    gap: 16px;
-  }
-
-  .logo {
-    font-family: var(--logo);
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text);
-    white-space: nowrap;
-  }
-
-  .header-divider {
-    width: 1px;
-    height: 24px;
-    background: var(--border);
-  }
-
-  .header-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-  }
-
-  .header-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  /* Mode toggle */
-  .mode-toggle {
-    display: flex;
-    background: var(--border);
-    border-radius: 8px;
-    padding: 3px;
-    gap: 2px;
-  }
-
-  .mode-btn {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: transparent;
-    color: var(--text-muted);
-    transition: all 0.18s ease;
-    text-transform: uppercase;
-  }
-
-  .mode-btn.active {
-    background: var(--text);
-    color: #fff;
-  }
-
-  .save-btn {
-    display: none;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .save-btn:hover { opacity: 0.85; }
-  .save-btn.visible { display: inline-flex; align-items: center; gap: 6px; }
-
-  /* ───────────────────────────── LAYOUT ───────────────────────────── */
-  .app-body {
-    display: flex;
-    min-height: calc(100vh - var(--header-h));
-  }
-
-  /* ───────────────────────────── SIDEBAR ───────────────────────────── */
-  .sidebar {
-    width: var(--sidebar-w);
-    flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    padding: 24px 20px;
-    position: sticky;
-    top: var(--header-h);
-    height: calc(100vh - var(--header-h));
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .filter-group { display: flex; flex-direction: column; gap: 8px; }
-
-  .filter-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  /* Color dropdown */
-  .color-select-wrap { position: relative; }
-
-  .color-dot {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--accent);
-    pointer-events: none;
-    display: none;
-  }
-
-  .color-dot.split {
-    background: conic-gradient(var(--dot-a) 50%, var(--dot-b) 50%);
-  }
-
-  select.color-select {
-    width: 100%;
-    font-family: var(--sans);
-    font-size: 15px;
-    font-weight: 600;
-    padding: 10px 12px 10px 32px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    transition: border-color 0.15s;
-  }
-
-  select.color-select:focus { outline: none; border-color: var(--accent); }
-
-  /* Chips */
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-
-  .chip {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 5px 10px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
-  .chip:hover { border-color: var(--accent); color: var(--text); }
-
-  .chip.active {
-    background: var(--accent-pale);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .chip.special { border-style: dashed; }
-  .chip.special.active { border-style: solid; }
-
-  /* Dimension range */
-  .dim-range { display: flex; gap: 6px; align-items: center; }
-
-  .dim-input {
-    flex: 1;
-    font-family: var(--mono);
-    font-size: 12px;
-    padding: 7px 9px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--text);
-    width: 100%;
-  }
-
-  .dim-input:focus { outline: none; border-color: var(--accent); }
-  .dim-sep { color: var(--text-faint); font-size: 12px; }
-
-  .reset-btn {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px 0;
-    margin-top: 4px;
-    transition: color 0.15s;
-  }
-
-  .reset-btn:hover { color: var(--accent); }
-
-  /* ───────────────────────────── MAIN GRID ───────────────────────────── */
-  .main {
-    flex: 1;
-    padding: 24px;
-  }
-
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 60vh;
-    gap: 12px;
-    color: var(--text-muted);
-  }
-
-  .empty-state .icon { font-size: 48px; opacity: 0.3; }
-  .empty-state p { font-family: var(--mono); font-size: 13px; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-  }
-
-  /* ───────────────────────────── CARD ───────────────────────────── */
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1.5px solid var(--border);
-    overflow: hidden;
-    transition: transform 0.15s, box-shadow 0.15s;
-    position: relative;
-  }
-
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  }
-
-  .card.no-dims { border-color: var(--yellow-flag-border); background: var(--yellow-flag); }
-
-  .card-img {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    background: var(--bg);
-    display: block;
-  }
-
-  .card-img-placeholder {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: linear-gradient(135deg, var(--border) 0%, var(--bg) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-faint);
-    font-size: 32px;
-  }
-
-  .card-body { padding: 12px 14px 14px; }
-
-  .card-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
-
-  .card-chip {
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    background: var(--bg);
-  }
-
-  .card-chip.material-chip {
-    background: var(--accent-pale);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .card-chip.wet-chip {
-    background: #E3F2FD;
-    border-color: #90CAF9;
-    color: #1565C0;
-  }
-
-  .card-chip.small-chip {
-    background: #F3E5F5;
-    border-color: #CE93D8;
-    color: #6A1B9A;
-  }
-
-  .card-name {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
-
-  .card-desc {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 10px;
-  }
-
-  .card-dims {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .dim-row {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .dim-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    width: 42px;
-    flex-shrink: 0;
-  }
-
-  .dim-val {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text);
-  }
-
-  .dim-val.missing { color: var(--yellow-flag-border); }
-
-  .card-notes {
-    margin-top: 8px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    font-style: italic;
-    border-top: 1px solid var(--border);
-    padding-top: 8px;
-  }
-
-  .card-id {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-faint);
-    margin-top: 8px;
-    letter-spacing: 0.04em;
-  }
-
-  .card-qty {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
-  /* ───────────────────────────── COUNT BAR ───────────────────────────── */
-  .count-bar {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-    letter-spacing: 0.03em;
-  }
-
-  /* ═══════════════════════════ SHUFFLER MODE ═══════════════════════════ */
-  .shuffler-view {
-    display: none;
-    flex: 1;
-    background: var(--shuffle-bg);
-    min-height: calc(100vh - var(--header-h));
-    flex-direction: column;
-  }
-
-  .shuffler-view.active { display: flex; }
-
-  /* Shuffler top bar */
-  .shuffler-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 24px;
-    border-bottom: 1px solid #222;
-    flex-wrap: wrap;
-  }
-
-  .shuffler-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #666;
-    white-space: nowrap;
-  }
-
-  .shuffler-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
-
-  .s-chip {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1.5px solid #333;
-    background: transparent;
-    color: #888;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-
-  .s-chip:hover { border-color: #666; color: #ccc; }
-  .s-chip.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.12); }
-
-  .shuffle-btn {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 10px 24px;
-    border-radius: 8px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.15s;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .shuffle-btn:hover { opacity: 0.9; }
-  .shuffle-btn:active { transform: scale(0.97); }
-
-  .shuffle-icon { font-size: 16px; display: inline-block; }
-  .shuffle-btn.spinning .shuffle-icon { animation: spin 0.4s ease; }
-
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* Row count toggles (1 / 2 buttons per row) */
-  .row-count-toggle {
-    display: flex;
-    gap: 4px;
-  }
-
-  .row-count-btn {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    border: 1.5px solid #2a2a2a;
-    background: transparent;
-    color: #555;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .row-count-btn:hover { border-color: #555; color: #aaa; }
-  .row-count-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.12); }
-
-  /* Row header — label + count toggle side by side */
-  .shuffler-row-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    align-self: flex-start;
-    width: 100%;
-    max-width: 900px;
-  }
-
-  /* Shuffler grid area */
-  .shuffler-stage {
-    flex: 1;
-    padding: 32px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
-  }
-
-  .shuffler-row-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #444;
-    align-self: flex-start;
-    margin-bottom: -16px;
-  }
-
-  .shuffler-row {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    width: 100%;
-    max-width: 900px;
-  }
-
-  /* Shuffler card */
-  .s-card {
-    flex: 1;
-    max-width: 360px;
-    background: #1a1a1a;
-    border-radius: 12px;
-    border: 1.5px solid #2a2a2a;
-    overflow: hidden;
-    position: relative;
-    transition: all 0.2s ease;
-  }
-
-  .s-card.pinned { border-color: var(--accent); }
-
-  .s-card.empty {
-    border-style: dashed;
-    border-color: #2a2a2a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 240px;
-    cursor: pointer;
-    opacity: 0.4;
-    transition: opacity 0.15s;
-  }
-
-  .s-card.empty:hover { opacity: 0.7; }
-
-  .s-card-empty-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: #555;
-    letter-spacing: 0.06em;
-  }
-
-  .s-card-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    display: block;
-    background: #111;
-  }
-
-  .s-card-img-placeholder {
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    color: #333;
-  }
-
-  .s-card-body {
-    padding: 12px 14px;
-  }
-
-  .s-card-name {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    color: #e0e0e0;
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
-
-  .s-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 8px;
-  }
-
-  .s-chip-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    color: #666;
-  }
-
-  .s-chip-tag.color-tag { border-color: var(--accent); color: var(--accent); opacity: 0.8; }
-
-  .s-card-dims {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: #555;
-    line-height: 1.6;
-  }
-
-  /* Pin button */
-  .pin-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: 1.5px solid #333;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: all 0.15s;
-    color: #666;
-  }
-
-  .pin-btn:hover { border-color: #666; color: #ccc; }
-  .pin-btn.pinned { border-color: var(--accent); color: var(--accent); background: rgba(192,57,43,0.2); }
-
-  /* Shuffler loading */
-  .shuffler-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-    flex-direction: column;
-    gap: 12px;
-    color: #444;
-  }
-
-  .loading-dots {
-    display: flex;
-    gap: 6px;
-  }
-
-  .loading-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 1s ease-in-out infinite;
-  }
-
-  .loading-dot:nth-child(2) { animation-delay: 0.15s; }
-  .loading-dot:nth-child(3) { animation-delay: 0.3s; }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 0.2; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.1); }
-  }
-
-  /* Card entrance animation */
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card { animation: cardIn 0.2s ease both; }
-
-  /* ───────────────────────────── CATALOG VIEW ───────────────────────────── */
-  .catalog-view {
-    display: flex;
-    flex: 1;
-  }
-
-  .catalog-view.hidden { display: none; }
-
-  /* ───────────────────────────── SCROLLBAR ───────────────────────────── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  /* ───────────────────────────── RESPONSIVE ───────────────────────────── */
-  @media (max-width: 768px) {
-    :root { --sidebar-w: 100%; }
-    .app-body { flex-direction: column; }
-    .sidebar {
-      position: static;
-      height: auto;
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-    }
-    .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .shuffler-row { flex-direction: column; align-items: center; }
-    .s-card { max-width: 100%; }
-  }
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F5F2EE;
+  --surface: #FFFFFF;
+  --border: #E0DDD9;
+  --text: #1A1A1A;
+  --text-muted: #888;
+  --text-faint: #BBB;
+  --accent: #888;
+  --accent-pale: rgba(136,136,136,0.08);
+  --header-h: 64px;
+  --sidebar-w: 260px;
+  --radius: 10px;
+  --mono: 'DM Mono', monospace;
+  --sans: 'Syne', sans-serif;
+  --logo: 'Barlow Semi Condensed', sans-serif;
+  --yellow-flag: #FFF8E1;
+  --yellow-flag-border: #FFD54F;
+  --sh-bg: #111111;
+  --sh-border: #222222;
+  --sh-muted: #555555;
+  --sh-text: #cccccc;
+}
+
+html { font-size: 14px; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+/* ─── HEADER ─── */
+.header {
+  position: sticky; top: 0; z-index: 200; height: var(--header-h);
+  display: flex; align-items: center; gap: 16px; padding: 0 24px;
+  border-bottom: 1px solid var(--border); background: var(--bg);
+  transition: background 0.2s, border-color 0.2s;
+}
+.header.sh { background: var(--sh-bg); border-color: var(--sh-border); }
+
+.logo { font-family: var(--logo); font-size: 18px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; color: var(--text); transition: color 0.2s; }
+.header.sh .logo { color: #fff; }
+
+.hdiv { width: 1px; height: 24px; background: var(--border); transition: background 0.2s; }
+.header.sh .hdiv { background: var(--sh-border); }
+
+.hmeta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--text-muted); transition: color 0.2s; }
+.header.sh .hmeta { color: #444; }
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+.mode-toggle { display: flex; border-radius: 8px; padding: 3px; gap: 2px; background: var(--border); transition: background 0.2s; }
+.header.sh .mode-toggle { background: #1e1e1e; }
+
+.mode-btn { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.05em; padding: 6px 14px; border: none; border-radius: 6px; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.15s; }
+.header.sh .mode-btn { color: #444; }
+.mode-btn.active { background: var(--text); color: #fff; }
+.header.sh .mode-btn.active { background: #fff; color: #111; }
+
+.save-btn { display: none; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; padding: 8px 16px; border-radius: 8px; border: none; background: var(--accent); color: #fff; cursor: pointer; }
+.save-btn.visible { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ─── LAYOUT ─── */
+.app-body { display: flex; min-height: calc(100vh - var(--header-h)); }
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0;
+  position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h));
+  overflow-y: auto; padding: 20px 16px;
+  display: flex; flex-direction: column; gap: 18px;
+  border-right: 1px solid var(--border); background: var(--bg);
+  transition: background 0.2s, border-color 0.2s;
+}
+.sidebar.sh { background: var(--sh-bg); border-color: var(--sh-border); }
+
+/* Color name (big, Vessels-style) */
+.sb-color-name {
+  font-family: var(--sans); font-size: 21px; font-weight: 700;
+  color: var(--accent); line-height: 1.2; transition: color 0.2s;
+  min-height: 0; max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.2s, opacity 0.2s;
+}
+.sb-color-name.visible { max-height: 80px; opacity: 1; }
+
+/* Active filter breadcrumbs */
+.breadcrumb-row { display: flex; flex-wrap: wrap; gap: 5px; min-height: 0; }
+.breadcrumb-chip {
+  font-family: var(--mono); font-size: 10px; padding: 3px 9px;
+  border-radius: 12px; background: var(--accent-pale);
+  border: 1px solid var(--accent); color: var(--accent); white-space: nowrap;
+}
+
+/* Count */
+.sb-count { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+.sidebar.sh .sb-count { color: var(--sh-muted); }
+
+.sep { height: 1px; background: var(--border); }
+.sidebar.sh .sep { background: var(--sh-border); }
+
+/* Filter group */
+.fg { display: flex; flex-direction: column; gap: 8px; }
+.fl { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.sidebar.sh .fl { color: var(--sh-muted); }
+
+/* Color dropdown */
+.dot-wrap { position: relative; }
+.cdot { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; border-radius: 50%; pointer-events: none; display: none; }
+.cdot.split { background: conic-gradient(var(--da) 50%, var(--db) 50%); }
+
+select.csel {
+  width: 100%; font-family: var(--sans); font-size: 15px; font-weight: 600;
+  padding: 10px 12px 10px 32px; border: 1.5px solid var(--border);
+  border-radius: var(--radius); background-color: var(--surface);
+  color: var(--text); cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-repeat: no-repeat; background-position: right 12px center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  transition: border-color 0.15s;
+}
+select.csel:focus { outline: none; }
+
+/* Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font-family: var(--mono); font-size: 11px; padding: 5px 10px;
+  border-radius: 20px; border: 1.5px solid var(--border);
+  background: var(--surface); color: var(--text-muted);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap; user-select: none;
+}
+.chip:hover { border-color: var(--accent); color: var(--text); }
+.chip.active { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+.chip.dashed { border-style: dashed; }
+.chip.dashed.active { border-style: solid; }
+
+/* Shuffler sidebar chips */
+.sidebar.sh .chip { background: transparent; border-color: #2a2a2a; color: var(--sh-muted); }
+.sidebar.sh .chip:hover { border-color: #555; color: #aaa; }
+.sidebar.sh .chip.active { background: rgba(255,255,255,0.06); border-color: #777; color: #bbb; }
+
+/* Dim inputs */
+.dr { display: flex; gap: 6px; align-items: center; }
+.di { flex: 1; font-family: var(--mono); font-size: 12px; padding: 7px 9px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); width: 100%; }
+.di:focus { outline: none; border-color: var(--accent); }
+.dsep { color: var(--text-faint); font-size: 12px; }
+
+.reset-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 4px 0; transition: color 0.15s; }
+.reset-btn:hover { color: var(--accent); }
+
+/* ─── MAIN ─── */
+.main { flex: 1; padding: 24px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 12px; color: var(--text-muted); }
+.empty-state .icon { font-size: 48px; opacity: 0.3; }
+.empty-state p { font-family: var(--mono); font-size: 13px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+
+/* ─── CARD ─── */
+.card { background: var(--surface); border-radius: var(--radius); border: 1.5px solid var(--border); overflow: hidden; transition: transform 0.15s, box-shadow 0.15s; animation: cardIn 0.2s ease both; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.card.no-dims { border-color: var(--yellow-flag-border); background: var(--yellow-flag); }
+.card-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; background: var(--bg); display: block; }
+.card-ph { width: 100%; aspect-ratio: 3/4; background: linear-gradient(135deg, var(--border) 0%, var(--bg) 100%); display: flex; align-items: center; justify-content: center; color: var(--text-faint); font-size: 32px; }
+.card-body { padding: 12px 14px 14px; }
+.card-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.cc { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 12px; border: 1px solid var(--border); color: var(--text-muted); background: var(--bg); }
+.cc.mat { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+.cc.wet { background: #E3F2FD; border-color: #90CAF9; color: #1565C0; }
+.cc.sm  { background: #F3E5F5; border-color: #CE93D8; color: #6A1B9A; }
+.card-name { font-family: var(--sans); font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+.card-desc { font-family: var(--mono); font-size: 10px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
+.card-dims { display: flex; flex-direction: column; gap: 3px; }
+.drow { display: flex; gap: 6px; align-items: center; }
+.dlbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); width: 52px; flex-shrink: 0; }
+.dval { font-family: var(--mono); font-size: 11px; color: var(--text); }
+.dval.miss { color: var(--yellow-flag-border); }
+.small-hdr { font-family: var(--mono); font-size: 9px; color: #CE93D8; margin-top: 5px; letter-spacing: 0.05em; text-transform: uppercase; }
+.card-qty { font-family: var(--mono); font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+.card-notes { margin-top: 8px; font-family: var(--mono); font-size: 10px; color: var(--text-muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 8px; }
+.card-id { font-family: var(--mono); font-size: 9px; color: var(--text-faint); margin-top: 8px; }
+
+/* ─── SHUFFLER STAGE ─── */
+.sh-main { flex: 1; background: var(--sh-bg); display: flex; flex-direction: column; }
+.sh-topbar { display: flex; align-items: center; justify-content: flex-end; padding: 12px 20px; border-bottom: 1px solid var(--sh-border); }
+.shuf-btn {
+  font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 10px 28px; border-radius: 8px; border: none; background: #fff; color: #111;
+  cursor: pointer; display: flex; align-items: center; gap: 8px; transition: opacity 0.15s;
+}
+.shuf-btn:hover { opacity: 0.88; }
+.shuf-btn:active { transform: scale(0.97); }
+.shuf-icon { font-size: 15px; display: inline-block; }
+.shuf-btn.spinning .shuf-icon { animation: spin 0.4s ease; }
+
+.sh-stage { flex: 1; padding: 28px 20px; display: flex; flex-direction: column; gap: 20px; align-items: center; overflow-y: auto; }
+
+.rh { display: flex; align-items: center; gap: 10px; align-self: flex-start; width: 100%; max-width: 860px; }
+.rl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sh-muted); }
+.rct { display: flex; gap: 4px; }
+.rcb {
+  font-family: var(--mono); font-size: 11px; font-weight: 500; width: 26px; height: 26px;
+  border-radius: 6px; border: 1.5px solid #2a2a2a; background: transparent;
+  color: var(--sh-muted); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.rcb:hover { border-color: #555; color: #aaa; }
+.rcb.active { border-color: #888; color: #fff; background: rgba(255,255,255,0.08); }
+
+.srow { display: flex; gap: 14px; justify-content: center; width: 100%; max-width: 860px; }
+
+.sc { flex: 1; max-width: 400px; background: #1a1a1a; border-radius: 12px; border: 1.5px solid #252525; overflow: hidden; position: relative; }
+.sc.pinned { border-color: #555; }
+.sc-ph { width: 100%; aspect-ratio: 4/3; background: #111; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #2a2a2a; }
+.sc-body { padding: 12px 14px; }
+.sc-name { font-family: var(--sans); font-size: 13px; font-weight: 600; color: #ccc; margin-bottom: 6px; line-height: 1.3; }
+.sc-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+.sc-tag { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 10px; border: 1px solid #2a2a2a; color: #555; }
+.sc-tag.ctag { border-color: #333; color: #666; }
+.sc-dims { font-family: var(--mono); font-size: 10px; color: #444; line-height: 1.6; }
+
+.pin-btn {
+  position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 7px;
+  border: 1.5px solid #252525; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all 0.15s; color: var(--sh-muted);
+}
+.pin-btn:hover { border-color: #555; color: #aaa; }
+.pin-btn.pinned { border-color: #777; color: #ccc; background: rgba(255,255,255,0.07); }
+
+.sh-loading { display: flex; align-items: center; justify-content: center; height: 200px; flex-direction: column; gap: 12px; }
+.ldots { display: flex; gap: 6px; }
+.ldot { width: 6px; height: 6px; border-radius: 50%; background: #333; animation: pulse 1s ease-in-out infinite; }
+.ldot:nth-child(2) { animation-delay: 0.15s; }
+.ldot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ─── ANIMATIONS ─── */
+@keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
+
+/* ─── VIEW HIDE/SHOW ─── */
+.view { display: none; }
+.view.on { display: flex; flex: 1; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.sidebar.sh::-webkit-scrollbar-thumb { background: #2a2a2a; }
+
+@media (max-width: 768px) {
+  .app-body { flex-direction: column; }
+  .sidebar { position: static; height: auto; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+  .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .srow { flex-direction: column; align-items: center; }
+  .sc { max-width: 100%; }
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════ HEADER ═══════════════════════════ -->
-<header class="header">
+<header class="header" id="hdr">
   <span class="logo">PhotoKitchen</span>
-  <div class="header-divider"></div>
-  <span class="header-meta">Props Catalog 2.0 — Surfaces</span>
+  <div class="hdiv"></div>
+  <span class="hmeta">Props Catalog 2.0 — Surfaces</span>
   <div class="header-right">
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="catalog">Catalog</button>
@@ -781,751 +278,487 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════ CATALOG VIEW ═══════════════════════════ -->
-<div class="catalog-view" id="catalogView">
+<div class="app-body">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <!-- ══ CATALOG SIDEBAR ══ -->
+  <aside class="sidebar" id="sbCatalog">
+    <div class="sb-color-name" id="sbColorName"></div>
+    <div class="breadcrumb-row" id="bcRow"></div>
+    <div class="sb-count" id="sbCount"></div>
+    <div class="sep"></div>
 
-    <div class="filter-group">
-      <div class="filter-label">Color</div>
-      <div class="color-select-wrap">
-        <div class="color-dot" id="colorDot"></div>
-        <select class="color-select" id="colorSelect">
+    <div class="fg">
+      <div class="fl">Color</div>
+      <div class="dot-wrap">
+        <div class="cdot" id="cdot"></div>
+        <select class="csel" id="csel">
           <option value="">Select a Color</option>
           <option value="ro">Red / Orange</option>
-          <!-- More colors added here as new JS files are created -->
         </select>
       </div>
     </div>
 
-    <div class="filter-group" id="materialFilterGroup" style="display:none">
-      <div class="filter-label">Material</div>
-      <div class="chips" id="materialChips"></div>
+    <div class="fg">
+      <div class="fl">Material</div>
+      <div class="chips" id="matChips">
+        <div class="chip" data-mat="Painted Panels">Painted Panels</div>
+        <div class="chip" data-mat="Plastic Laminate">Plastic Laminate</div>
+        <div class="chip" data-mat="Ceramic Tile">Ceramic Tile</div>
+        <div class="chip" data-mat="Sticker &amp; Printed">Sticker &amp; Printed</div>
+        <div class="chip" data-mat="Special Material">Special Material</div>
+        <div class="chip" data-mat="Paper">Paper</div>
+        <div class="chip" data-mat="3D Elements">3D Elements</div>
+        <div class="chip" data-mat="Solid Wood">Solid Wood</div>
+      </div>
     </div>
 
-    <div class="filter-group" id="flagFilterGroup" style="display:none">
-      <div class="filter-label">Properties</div>
+    <div class="fg">
+      <div class="fl">Properties</div>
       <div class="chips">
-        <div class="chip special" data-flag="wet_safe" id="wetChip">💧 Wet-Safe</div>
-        <div class="chip special" data-flag="has_small" id="smallChip">📐 Has Small Version</div>
+        <div class="chip dashed" id="wetChip">💧 Wet-Safe</div>
+        <div class="chip dashed" id="smallChip">📐 Has Small Version</div>
       </div>
     </div>
 
-    <div class="filter-group" id="dimFilterGroup" style="display:none">
-      <div class="filter-label">Min. Length (cm)</div>
-      <div class="dim-range">
-        <input class="dim-input" type="number" id="minL" placeholder="0">
-        <span class="dim-sep">–</span>
-        <input class="dim-input" type="number" id="maxL" placeholder="∞">
+    <div class="fg">
+      <div class="fl">Length (cm)</div>
+      <div class="dr">
+        <input class="di" type="number" id="minL" placeholder="min">
+        <span class="dsep">–</span>
+        <input class="di" type="number" id="maxL" placeholder="max">
       </div>
     </div>
 
-    <div class="filter-group" id="dimFilterGroup2" style="display:none">
-      <div class="filter-label">Min. Width (cm)</div>
-      <div class="dim-range">
-        <input class="dim-input" type="number" id="minW" placeholder="0">
-        <span class="dim-sep">–</span>
-        <input class="dim-input" type="number" id="maxW" placeholder="∞">
+    <div class="fg">
+      <div class="fl">Width (cm)</div>
+      <div class="dr">
+        <input class="di" type="number" id="minW" placeholder="min">
+        <span class="dsep">–</span>
+        <input class="di" type="number" id="maxW" placeholder="max">
       </div>
     </div>
 
-    <button class="reset-btn" id="resetBtn" style="display:none">↺ Reset All Filters</button>
-
+    <button class="reset-btn" id="resetBtn">↺ Reset All Filters</button>
   </aside>
 
-  <!-- MAIN -->
-  <main class="main" id="mainArea">
-    <div class="empty-state" id="emptyState">
-      <div class="icon">🎨</div>
-      <p>Select a color to view surfaces</p>
-    </div>
-    <div class="count-bar" id="countBar" style="display:none"></div>
-    <div class="grid" id="grid"></div>
-  </main>
-
-</div>
-
-<!-- ═══════════════════════════ SHUFFLER VIEW ═══════════════════════════ -->
-<div class="shuffler-view" id="shufflerView">
-
-  <!-- Top bar: color filter + shuffle button -->
-  <div class="shuffler-bar">
-    <span class="shuffler-label">Colors</span>
-    <div class="shuffler-chips" id="shufflerColorChips">
-      <!-- populated dynamically from COLOR_CONFIG -->
-    </div>
-    <button class="shuffle-btn" id="shuffleBtn">
-      <span class="shuffle-icon">⟳</span> Shuffle
-    </button>
+  <!-- ══ CATALOG VIEW ══ -->
+  <div class="view on" id="vCatalog" style="flex-direction:column;">
+    <main class="main">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">🎨</div>
+        <p>Select a color to view surfaces</p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </main>
   </div>
 
-  <!-- Stage -->
-  <div class="shuffler-stage" id="shufflerStage">
-    <div class="shuffler-loading" id="shufflerLoading">
-      <div class="loading-dots">
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
+  <!-- ══ SHUFFLER SIDEBAR ══ -->
+  <aside class="sidebar sh" id="sbShuffler" style="display:none;">
+    <div class="fg">
+      <div class="fl" style="color:#3a3a3a;">Color Filter</div>
+      <div class="chips" id="shColorChips"></div>
+    </div>
+  </aside>
+
+  <!-- ══ SHUFFLER VIEW ══ -->
+  <div class="view" id="vShuffler" style="flex-direction:column; background:var(--sh-bg);">
+    <div class="sh-topbar">
+      <button class="shuf-btn" id="shufBtn">
+        <span class="shuf-icon">⟳</span> Shuffle
+      </button>
+    </div>
+    <div class="sh-stage" id="shStage">
+      <div class="sh-loading" id="shLoading">
+        <div class="ldots">
+          <div class="ldot"></div><div class="ldot"></div><div class="ldot"></div>
+        </div>
+        <span style="font-family:var(--mono);font-size:11px;color:#333;letter-spacing:0.05em">Loading surfaces…</span>
       </div>
-      <span style="font-family:var(--mono);font-size:11px;color:#444;letter-spacing:0.05em">Loading surfaces…</span>
     </div>
   </div>
 
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════════════
-// CONFIGURATION
-// ═══════════════════════════════════════════════════════════════════════════
-
+// ── CONFIG ──────────────────────────────────────────
 const COLOR_CONFIG = [
-  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', accent: '#C0392B', accentPale: '#C0392B1A', dots: ['#C0392B','#E8621A'] },
-  // Add more colors here as new data files are created:
-  // { key: 'gr', label: 'Green', file: 'data/gr.js', accent: '#2E7D32', accentPale: '#2E7D321A', dots: ['#2E7D32'] },
+  { key:'ro', label:'Red / Orange', file:'data/ro.js', accent:'#C0392B', accentPale:'rgba(192,57,43,0.1)', dots:['#C0392B','#E8621A'] },
+  // { key:'gr', label:'Green', file:'data/gr.js', accent:'#2D6A4F', accentPale:'rgba(45,106,79,0.1)', dots:['#2D6A4F'] },
 ];
 
-// ═══════════════════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════════════════
+// ── STATE ────────────────────────────────────────────
+let curColorKey = null;
+let curSurfaces = [];
+let loadedColors = {};
+let activeMats = new Set();
+let activeFlags = { wet_safe:false, has_small:false };
+let dimF = { minL:null, maxL:null, minW:null, maxW:null };
 
-let currentColor = null;
-let currentSurfaces = [];
-let loadedColors = {}; // { colorKey: surfaces[] }
-let isDirty = false;
-let dirtyColors = new Set();
+let bgCount = 1, surfCount = 1;
+let shColorFilter = new Set(['all']);
+let slots = [];
+let shReady = false;
 
-// Catalog filters
-let activeCategories = new Set();
-let activeFlags = { wet_safe: false, has_small: false };
-let dimFilters = { minL: null, maxL: null, minW: null, maxW: null };
-
-// Shuffler state — bgCount/surfCount replace comboMode
-let bgCount = 1;    // 0, 1, or 2
-let surfCount = 1;  // 1 or 2
-let shufflerColors = new Set(['all']);
-let slots = []; // { type: 'bg'|'surface', surface: obj|null, pinned: bool }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// UTILITIES
-// ═══════════════════════════════════════════════════════════════════════════
-
-function hasMissingDims(s) {
-  // Flag yellow if any primary dim is missing (null)
-  return (s.length === null || s.width === null) && s.diameter === null;
-}
-
+// ── UTILS ────────────────────────────────────────────
+function missingDims(s) { return (s.length===null || s.width===null) && s.diameter===null; }
 function dimStr(s) {
-  const parts = [];
-  if (s.length !== null) parts.push(`L: ${s.length}cm`);
-  else parts.push(`L: —`);
-  if (s.width !== null) parts.push(`W: ${s.width}cm`);
-  else if (s.diameter === null) parts.push(`W: —`);
-  if (s.diameter !== null) parts.push(`D: ${s.diameter}cm`);
-  return parts.join('  ');
+  const p = [];
+  p.push(s.length!==null ? 'L: '+s.length+'cm' : 'L: —');
+  if (s.diameter!==null) p.push('D: '+s.diameter+'cm');
+  else p.push(s.width!==null ? 'W: '+s.width+'cm' : 'W: —');
+  return p.join('  ');
 }
+function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
 
-function rand(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// DATA LOADING
-// ═══════════════════════════════════════════════════════════════════════════
-
-function loadColorScript(cfg) {
-  return new Promise((resolve, reject) => {
-    if (loadedColors[cfg.key]) { resolve(loadedColors[cfg.key]); return; }
-    const script = document.createElement('script');
-    script.src = cfg.file;
-    script.onload = () => {
+// ── DATA LOADING ─────────────────────────────────────
+function loadScript(cfg) {
+  return new Promise((res, rej) => {
+    if (loadedColors[cfg.key]) { res(loadedColors[cfg.key]); return; }
+    const s = document.createElement('script');
+    s.src = cfg.file;
+    s.onload = () => {
       if (typeof surfaces !== 'undefined') {
-        loadedColors[cfg.key] = [...surfaces];
-        resolve(loadedColors[cfg.key]);
-      } else {
-        reject(new Error('surfaces not defined in ' + cfg.file));
-      }
+        loadedColors[cfg.key] = surfaces.map(x => ({...x}));
+        res(loadedColors[cfg.key]);
+      } else rej(new Error('no surfaces in '+cfg.file));
     };
-    script.onerror = () => reject(new Error('Failed to load ' + cfg.file));
-    document.head.appendChild(script);
+    s.onerror = () => rej(new Error('failed: '+cfg.file));
+    document.head.appendChild(s);
   });
 }
-
-async function loadAllColors() {
-  const loads = COLOR_CONFIG.map(cfg => loadColorScript(cfg).catch(() => []));
-  await Promise.all(loads);
+async function loadAll() {
+  await Promise.all(COLOR_CONFIG.map(c => loadScript(c).catch(()=>[])));
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// CATALOG — RENDERING
-// ═══════════════════════════════════════════════════════════════════════════
-
-function buildCard(s) {
-  const missing = hasMissingDims(s);
-  const card = document.createElement('div');
-  card.className = 'card' + (missing ? ' no-dims' : '');
-  card.dataset.id = s.id;
-
-  // Image
-  const imgSrc = (typeof IMAGES !== 'undefined' && IMAGES[s.id]) ? IMAGES[s.id] : null;
-  if (imgSrc) {
-    const img = document.createElement('img');
-    img.className = 'card-img';
-    img.src = imgSrc;
-    img.alt = s.name;
-    img.loading = 'lazy';
-    card.appendChild(img);
-  } else {
-    const ph = document.createElement('div');
-    ph.className = 'card-img-placeholder';
-    ph.textContent = '🖼';
-    card.appendChild(ph);
-  }
-
-  // Body
-  const body = document.createElement('div');
-  body.className = 'card-body';
-
-  // Chips row
-  const chips = document.createElement('div');
-  chips.className = 'card-chips';
-  const matChip = document.createElement('span');
-  matChip.className = 'card-chip material-chip';
-  matChip.textContent = s.material;
-  chips.appendChild(matChip);
-  if (s.wet_safe) {
-    const wc = document.createElement('span');
-    wc.className = 'card-chip wet-chip';
-    wc.textContent = '💧 Wet-Safe';
-    chips.appendChild(wc);
-  }
-  if (s.has_small) {
-    const sc = document.createElement('span');
-    sc.className = 'card-chip small-chip';
-    sc.textContent = '📐 + Small';
-    chips.appendChild(sc);
-  }
-  body.appendChild(chips);
-
-  // Name
-  const name = document.createElement('div');
-  name.className = 'card-name';
-  name.textContent = s.name;
-  body.appendChild(name);
-
-  // Desc
-  if (s.description) {
-    const desc = document.createElement('div');
-    desc.className = 'card-desc';
-    desc.textContent = s.description;
-    body.appendChild(desc);
-  }
-
-  // Dimensions
-  const dims = document.createElement('div');
-  dims.className = 'card-dims';
-
-  function dimRow(label, val, unit) {
-    const row = document.createElement('div');
-    row.className = 'dim-row';
-    const lbl = document.createElement('span');
-    lbl.className = 'dim-label';
-    lbl.textContent = label;
-    const v = document.createElement('span');
-    v.className = 'dim-val' + (val === null ? ' missing' : '');
-    v.textContent = val !== null ? `${val}${unit}` : '—';
-    row.appendChild(lbl);
-    row.appendChild(v);
-    return row;
-  }
-
-  dims.appendChild(dimRow('Length', s.length, 'cm'));
-  dims.appendChild(dimRow('Width', s.width, 'cm'));
-  if (s.diameter !== null) dims.appendChild(dimRow('Diameter', s.diameter, 'cm'));
-
-  if (s.has_small) {
-    const smallLabel = document.createElement('div');
-    smallLabel.className = 'dim-label';
-    smallLabel.style.marginTop = '6px';
-    smallLabel.style.color = '#CE93D8';
-    smallLabel.textContent = 'Small version';
-    dims.appendChild(smallLabel);
-    dims.appendChild(dimRow('Length', s.small_length, 'cm'));
-    dims.appendChild(dimRow('Width', s.small_width, 'cm'));
-  }
-
-  body.appendChild(dims);
-
-  // Qty
-  if (s.qty !== null) {
-    const qty = document.createElement('div');
-    qty.className = 'card-qty';
-    qty.textContent = `Qty: ${s.qty}`;
-    body.appendChild(qty);
-  }
-
-  // Notes
-  if (s.notes) {
-    const notes = document.createElement('div');
-    notes.className = 'card-notes';
-    notes.textContent = s.notes;
-    body.appendChild(notes);
-  }
-
-  // ID
-  const idEl = document.createElement('div');
-  idEl.className = 'card-id';
-  idEl.textContent = s.id;
-  body.appendChild(idEl);
-
-  card.appendChild(body);
-  return card;
-}
-
-function getFilteredSurfaces() {
-  return currentSurfaces.filter(s => {
-    if (activeCategories.size > 0 && !activeCategories.has(s.material)) return false;
-    if (activeFlags.wet_safe && !s.wet_safe) return false;
-    if (activeFlags.has_small && !s.has_small) return false;
-    if (dimFilters.minL !== null && (s.length === null || s.length < dimFilters.minL)) return false;
-    if (dimFilters.maxL !== null && (s.length === null || s.length > dimFilters.maxL)) return false;
-    if (dimFilters.minW !== null && (s.width === null || s.width < dimFilters.minW)) return false;
-    if (dimFilters.maxW !== null && (s.width === null || s.width > dimFilters.maxW)) return false;
-    return true;
-  });
-}
-
-function renderCatalog() {
-  const grid = document.getElementById('grid');
-  const countBar = document.getElementById('countBar');
-  const emptyState = document.getElementById('emptyState');
-  grid.innerHTML = '';
-
-  if (!currentColor) {
-    emptyState.style.display = 'flex';
-    countBar.style.display = 'none';
-    return;
-  }
-
-  emptyState.style.display = 'none';
-  countBar.style.display = 'block';
-
-  const filtered = getFilteredSurfaces();
-  countBar.textContent = `${filtered.length} surface${filtered.length !== 1 ? 's' : ''}`;
-
-  filtered.forEach((s, i) => {
-    const card = buildCard(s);
-    card.style.animationDelay = `${Math.min(i * 0.03, 0.3)}s`;
-    grid.appendChild(card);
-  });
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// CATALOG — COLOR LOADING
-// ═══════════════════════════════════════════════════════════════════════════
-
+// ── CATALOG: COLOR SELECTION ─────────────────────────
 async function selectColor(key) {
+  activeMats.clear();
+  document.querySelectorAll('#matChips .chip').forEach(c => c.classList.remove('active'));
+
   if (!key) {
-    currentColor = null;
-    currentSurfaces = [];
-    renderCatalog();
-    updateColorUI(null);
-    return;
+    curColorKey = null; curSurfaces = [];
+    applyColorUI(null); renderCatalog(); return;
   }
-
-  const cfg = COLOR_CONFIG.find(c => c.key === key);
+  const cfg = COLOR_CONFIG.find(c => c.key===key);
   if (!cfg) return;
-
   try {
-    const data = await loadColorScript(cfg);
-    currentColor = key;
-    currentSurfaces = data;
-    activeCategories.clear();
-    buildMaterialChips();
-    renderCatalog();
-    updateColorUI(cfg);
-  } catch (e) {
-    console.error(e);
-  }
+    const data = await loadScript(cfg);
+    curColorKey = key; curSurfaces = data;
+    applyColorUI(cfg); renderCatalog();
+  } catch(e) { console.error(e); }
 }
 
-function updateColorUI(cfg) {
-  const dot = document.getElementById('colorDot');
-  const sel = document.getElementById('colorSelect');
+function applyColorUI(cfg) {
+  const dot = document.getElementById('cdot');
+  const sel = document.getElementById('csel');
+  const nm  = document.getElementById('sbColorName');
 
   if (!cfg) {
-    document.documentElement.style.setProperty('--accent', '#C0392B');
-    document.documentElement.style.setProperty('--accent-pale', '#C0392B1A');
+    document.documentElement.style.setProperty('--accent','#888');
+    document.documentElement.style.setProperty('--accent-pale','rgba(136,136,136,0.08)');
     dot.style.display = 'none';
-    sel.style.borderColor = '';
-    sel.style.color = '';
-    return;
+    sel.style.backgroundColor=''; sel.style.borderColor=''; sel.style.color='';
+    sel.style.backgroundImage = arrowSVG('#888');
+    nm.textContent=''; nm.classList.remove('visible');
+    updateBC(); updateCount(); return;
   }
 
   document.documentElement.style.setProperty('--accent', cfg.accent);
   document.documentElement.style.setProperty('--accent-pale', cfg.accentPale);
 
   dot.style.display = 'block';
-  if (cfg.dots.length >= 2) {
-    dot.className = 'color-dot split';
-    dot.style.setProperty('--dot-a', cfg.dots[0]);
-    dot.style.setProperty('--dot-b', cfg.dots[1]);
-  } else {
-    dot.className = 'color-dot';
-    dot.style.background = cfg.dots[0];
-  }
+  if (cfg.dots.length>=2) {
+    dot.className='cdot split';
+    dot.style.setProperty('--da', cfg.dots[0]);
+    dot.style.setProperty('--db', cfg.dots[1]);
+  } else { dot.className='cdot'; dot.style.background=cfg.dots[0]; }
 
   sel.style.backgroundColor = cfg.accentPale;
   sel.style.borderColor = cfg.accent;
-  sel.style.color = cfg.key === 'wh' ? '#999' : cfg.accent;
+  sel.style.color = cfg.accent;
+  sel.style.backgroundImage = arrowSVG(cfg.accent);
 
-  // Show filter groups
-  document.getElementById('materialFilterGroup').style.display = 'flex';
-  document.getElementById('flagFilterGroup').style.display = 'flex';
-  document.getElementById('dimFilterGroup').style.display = 'flex';
-  document.getElementById('dimFilterGroup2').style.display = 'flex';
-  document.getElementById('resetBtn').style.display = 'block';
+  nm.textContent = cfg.label; nm.classList.add('visible');
+  updateBC(); updateCount();
 }
 
-function buildMaterialChips() {
-  const container = document.getElementById('materialChips');
-  container.innerHTML = '';
-  const materials = [...new Set(currentSurfaces.map(s => s.material))];
-  materials.forEach(mat => {
-    const count = currentSurfaces.filter(s => s.material === mat).length;
-    const chip = document.createElement('div');
-    chip.className = 'chip';
-    chip.textContent = `${mat} (${count})`;
-    chip.dataset.material = mat;
-    chip.addEventListener('click', () => toggleMaterialChip(chip, mat));
-    container.appendChild(chip);
+function arrowSVG(color) {
+  const enc = encodeURIComponent(color);
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='${enc}' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`;
+}
+
+// ── CATALOG: BREADCRUMBS + COUNT ─────────────────────
+function updateBC() {
+  const row = document.getElementById('bcRow');
+  row.innerHTML = '';
+  activeMats.forEach(m => { const c=document.createElement('span'); c.className='breadcrumb-chip'; c.textContent=m; row.appendChild(c); });
+  if (activeFlags.wet_safe) { const c=document.createElement('span'); c.className='breadcrumb-chip'; c.textContent='💧 Wet-Safe'; row.appendChild(c); }
+  if (activeFlags.has_small) { const c=document.createElement('span'); c.className='breadcrumb-chip'; c.textContent='📐 Small Version'; row.appendChild(c); }
+}
+function updateCount() {
+  const el = document.getElementById('sbCount');
+  if (!curColorKey) { el.textContent=''; return; }
+  const n=filtered().length, t=curSurfaces.length;
+  el.textContent = n===t ? t+' surfaces' : n+' of '+t+' surfaces';
+}
+
+// ── CATALOG: FILTER + RENDER ─────────────────────────
+function filtered() {
+  return curSurfaces.filter(s => {
+    if (activeMats.size>0 && !activeMats.has(s.material)) return false;
+    if (activeFlags.wet_safe && !s.wet_safe) return false;
+    if (activeFlags.has_small && !s.has_small) return false;
+    if (dimF.minL!==null && (s.length===null||s.length<dimF.minL)) return false;
+    if (dimF.maxL!==null && (s.length===null||s.length>dimF.maxL)) return false;
+    if (dimF.minW!==null && (s.width===null||s.width<dimF.minW)) return false;
+    if (dimF.maxW!==null && (s.width===null||s.width>dimF.maxW)) return false;
+    return true;
   });
 }
 
-function toggleMaterialChip(chip, mat) {
-  if (activeCategories.has(mat)) {
-    activeCategories.delete(mat);
-    chip.classList.remove('active');
-  } else {
-    activeCategories.add(mat);
-    chip.classList.add('active');
-  }
-  renderCatalog();
+function mkDimRow(label, val, unit) {
+  const row=document.createElement('div'); row.className='drow';
+  const l=document.createElement('span'); l.className='dlbl'; l.textContent=label;
+  const v=document.createElement('span'); v.className='dval'+(val===null?' miss':''); v.textContent=val!==null?val+unit:'—';
+  row.appendChild(l); row.appendChild(v); return row;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SHUFFLER
-// ═══════════════════════════════════════════════════════════════════════════
+function buildCard(s, delay) {
+  const miss = missingDims(s);
+  const card = document.createElement('div');
+  card.className = 'card'+(miss?' no-dims':'');
+  card.style.animationDelay = delay+'s';
 
-function getShufflerPool() {
-  const all = Object.values(loadedColors).flat();
-  if (shufflerColors.has('all')) return all;
-  return all.filter(s => shufflerColors.has(s.colorKey));
+  const imgSrc = (typeof IMAGES!=='undefined' && IMAGES[s.id]) ? IMAGES[s.id] : null;
+  if (imgSrc) { const img=document.createElement('img'); img.className='card-img'; img.src=imgSrc; img.alt=s.name; img.loading='lazy'; card.appendChild(img); }
+  else { const ph=document.createElement('div'); ph.className='card-ph'; ph.textContent='🖼'; card.appendChild(ph); }
+
+  const body=document.createElement('div'); body.className='card-body';
+
+  const chips=document.createElement('div'); chips.className='card-chips';
+  const mc=document.createElement('span'); mc.className='cc mat'; mc.textContent=s.material; chips.appendChild(mc);
+  if (s.wet_safe) { const c=document.createElement('span'); c.className='cc wet'; c.textContent='💧 Wet-Safe'; chips.appendChild(c); }
+  if (s.has_small) { const c=document.createElement('span'); c.className='cc sm'; c.textContent='📐 + Small'; chips.appendChild(c); }
+  body.appendChild(chips);
+
+  const nm=document.createElement('div'); nm.className='card-name'; nm.textContent=s.name; body.appendChild(nm);
+  if (s.description) { const d=document.createElement('div'); d.className='card-desc'; d.textContent=s.description; body.appendChild(d); }
+
+  const dims=document.createElement('div'); dims.className='card-dims';
+  dims.appendChild(mkDimRow('Length', s.length, 'cm'));
+  dims.appendChild(mkDimRow('Width', s.width, 'cm'));
+  if (s.diameter!==null) dims.appendChild(mkDimRow('Diameter', s.diameter, 'cm'));
+  if (s.has_small) {
+    const sh=document.createElement('div'); sh.className='small-hdr'; sh.textContent='Small version'; dims.appendChild(sh);
+    dims.appendChild(mkDimRow('Length', s.small_length, 'cm'));
+    dims.appendChild(mkDimRow('Width', s.small_width, 'cm'));
+  }
+  body.appendChild(dims);
+
+  if (s.qty!==null) { const q=document.createElement('div'); q.className='card-qty'; q.textContent='Qty: '+s.qty; body.appendChild(q); }
+  if (s.notes) { const n=document.createElement('div'); n.className='card-notes'; n.textContent=s.notes; body.appendChild(n); }
+  const id=document.createElement('div'); id.className='card-id'; id.textContent=s.id; body.appendChild(id);
+
+  card.appendChild(body); return card;
+}
+
+function renderCatalog() {
+  const grid=document.getElementById('grid'), emp=document.getElementById('emptyState');
+  grid.innerHTML='';
+  if (!curColorKey) { emp.style.display='flex'; return; }
+  emp.style.display='none';
+  filtered().forEach((s,i) => grid.appendChild(buildCard(s, Math.min(i*0.025, 0.25))));
+  updateCount(); updateBC();
+}
+
+// ── SHUFFLER ─────────────────────────────────────────
+function shPool() {
+  const all=Object.values(loadedColors).flat();
+  if (shColorFilter.has('all')) return all;
+  return all.filter(s => shColorFilter.has(s.colorKey));
 }
 
 function buildSlots() {
-  const pool = getShufflerPool();
-  const config = [];
-  for (let i = 0; i < bgCount; i++) config.push({ type: 'bg' });
-  for (let i = 0; i < surfCount; i++) config.push({ type: 'surface' });
-
-  const newSlots = config.map((cfg, i) => {
-    const existing = slots[i];
-    if (existing && existing.type === cfg.type && existing.pinned) return existing;
-    return { type: cfg.type, surface: pool.length > 0 ? rand(pool) : null, pinned: false };
+  const pool=shPool();
+  const cfg=[];
+  for (let i=0;i<bgCount;i++) cfg.push('bg');
+  for (let i=0;i<surfCount;i++) cfg.push('surface');
+  slots = cfg.map((type,i) => {
+    const ex=slots[i];
+    if (ex && ex.type===type && ex.pinned) return ex;
+    return { type, surface: pool.length?pick(pool):null, pinned:false };
   });
-  slots = newSlots;
 }
 
-function reshuffleUnpinned() {
-  const pool = getShufflerPool();
-  slots = slots.map(slot => {
-    if (slot.pinned) return slot;
-    const picked = pool.length > 0 ? rand(pool) : null;
-    return { ...slot, surface: picked };
-  });
+function reshuffle() {
+  const pool=shPool();
+  slots=slots.map(sl => sl.pinned ? sl : {...sl, surface:pool.length?pick(pool):null});
 }
 
 function renderShuffler() {
-  const stage = document.getElementById('shufflerStage');
-  const loading = document.getElementById('shufflerLoading');
-  loading.style.display = 'none';
-  stage.innerHTML = '';
+  const stage=document.getElementById('shStage');
+  document.getElementById('shLoading').style.display='none';
+  stage.innerHTML='';
 
-  const bgSlots = slots.filter(s => s.type === 'bg');
-  const surfSlots = slots.filter(s => s.type === 'surface');
+  const bgSlots=slots.filter(s=>s.type==='bg');
+  const sfSlots=slots.filter(s=>s.type==='surface');
 
-  function makeSCard(slot) {
-    if (!slot.surface) {
-      const card = document.createElement('div');
-      card.className = 's-card empty';
-      const lbl = document.createElement('span');
-      lbl.className = 's-card-empty-label';
-      lbl.textContent = 'No surfaces loaded';
-      card.appendChild(lbl);
-      return card;
+  function mkCard(slot) {
+    const card=document.createElement('div');
+    card.className='sc'+(slot.pinned?' pinned':'');
+    const ph=document.createElement('div'); ph.className='sc-ph';
+    if (slot.surface) {
+      const cfg=COLOR_CONFIG.find(c=>c.key===slot.surface.colorKey);
+      const hex=cfg?cfg.accent:'#444';
+      ph.style.background=`linear-gradient(135deg,${hex}55 0%,${hex}11 100%)`;
     }
+    ph.textContent='🖼'; card.appendChild(ph);
 
-    const s = slot.surface;
-    const card = document.createElement('div');
-    card.className = 's-card' + (slot.pinned ? ' pinned' : '');
+    const pb=document.createElement('button');
+    pb.className='pin-btn'+(slot.pinned?' pinned':'');
+    pb.textContent=slot.pinned?'📌':'📍';
+    pb.addEventListener('click',()=>{ slot.pinned=!slot.pinned; renderShuffler(); });
+    card.appendChild(pb);
 
-    // Placeholder (tinted by color accent)
-    const colorCfg = COLOR_CONFIG.find(c => c.key === s.colorKey);
-    const colorHex = colorCfg?.accent || '#888';
-    const ph = document.createElement('div');
-    ph.className = 's-card-img-placeholder';
-    ph.style.background = `linear-gradient(135deg, ${colorHex}44 0%, ${colorHex}11 100%)`;
-    ph.textContent = '🖼';
-    card.appendChild(ph);
-
-    // Pin button
-    const pinBtn = document.createElement('button');
-    pinBtn.className = 'pin-btn' + (slot.pinned ? ' pinned' : '');
-    pinBtn.textContent = slot.pinned ? '📌' : '📍';
-    pinBtn.title = slot.pinned ? 'Unpin' : 'Pin this surface';
-    pinBtn.addEventListener('click', () => {
-      slot.pinned = !slot.pinned;
-      renderShuffler();
-    });
-    card.appendChild(pinBtn);
-
-    const body = document.createElement('div');
-    body.className = 's-card-body';
-
-    const sname = document.createElement('div');
-    sname.className = 's-card-name';
-    sname.textContent = s.name;
-    body.appendChild(sname);
-
-    const meta = document.createElement('div');
-    meta.className = 's-card-meta';
-
-    const colorTag = document.createElement('span');
-    colorTag.className = 's-chip-tag color-tag';
-    colorTag.textContent = s.color;
-    meta.appendChild(colorTag);
-
-    const matTag = document.createElement('span');
-    matTag.className = 's-chip-tag';
-    matTag.textContent = s.material;
-    meta.appendChild(matTag);
-
-    if (s.wet_safe) {
-      const wt = document.createElement('span');
-      wt.className = 's-chip-tag';
-      wt.style.borderColor = '#90CAF9';
-      wt.style.color = '#90CAF9';
-      wt.textContent = '💧 Wet-Safe';
-      meta.appendChild(wt);
+    if (slot.surface) {
+      const s=slot.surface;
+      const body=document.createElement('div'); body.className='sc-body';
+      const nm=document.createElement('div'); nm.className='sc-name'; nm.textContent=s.name; body.appendChild(nm);
+      const meta=document.createElement('div'); meta.className='sc-meta';
+      const ct=document.createElement('span'); ct.className='sc-tag ctag'; ct.textContent=s.color; meta.appendChild(ct);
+      const mt=document.createElement('span'); mt.className='sc-tag'; mt.textContent=s.material; meta.appendChild(mt);
+      body.appendChild(meta);
+      const de=document.createElement('div'); de.className='sc-dims'; de.textContent=dimStr(s); body.appendChild(de);
+      card.appendChild(body);
     }
-    body.appendChild(meta);
-
-    const dimsEl = document.createElement('div');
-    dimsEl.className = 's-card-dims';
-    dimsEl.textContent = dimStr(s);
-    body.appendChild(dimsEl);
-
-    card.appendChild(body);
     return card;
   }
 
-  function makeRowHeader(labelText, currentCount, minCount, maxCount, onCountChange) {
-    const header = document.createElement('div');
-    header.className = 'shuffler-row-header';
-
-    const label = document.createElement('div');
-    label.className = 'shuffler-row-label';
-    label.style.margin = '0';
-    label.textContent = labelText;
-    header.appendChild(label);
-
-    const toggle = document.createElement('div');
-    toggle.className = 'row-count-toggle';
-    for (let n = minCount; n <= maxCount; n++) {
-      const btn = document.createElement('button');
-      btn.className = 'row-count-btn' + (n === currentCount ? ' active' : '');
-      btn.textContent = n;
-      const count = n;
-      btn.addEventListener('click', () => { onCountChange(count); });
-      toggle.appendChild(btn);
+  function mkRowHeader(labelText, cur, min, max, onChange) {
+    const hdr=document.createElement('div'); hdr.className='rh';
+    const lbl=document.createElement('div'); lbl.className='rl'; lbl.textContent=labelText; hdr.appendChild(lbl);
+    const tog=document.createElement('div'); tog.className='rct';
+    for (let n=min;n<=max;n++) {
+      const btn=document.createElement('button');
+      btn.className='rcb'+(n===cur?' active':'');
+      btn.textContent=n;
+      const _n=n;
+      btn.addEventListener('click', e => { e.stopPropagation(); onChange(_n); });
+      tog.appendChild(btn);
     }
-    header.appendChild(toggle);
-    return header;
+    hdr.appendChild(tog); return hdr;
   }
 
-  // BG row (0, 1, or 2)
-  stage.appendChild(makeRowHeader('Background', bgCount, 0, 2, (n) => {
-    bgCount = n;
-    buildSlots();
-    renderShuffler();
-  }));
-
-  if (bgSlots.length > 0) {
-    const row = document.createElement('div');
-    row.className = 'shuffler-row';
-    bgSlots.forEach(slot => row.appendChild(makeSCard(slot)));
-    stage.appendChild(row);
+  stage.appendChild(mkRowHeader('Background', bgCount, 0, 2, n=>{ bgCount=n; buildSlots(); renderShuffler(); }));
+  if (bgSlots.length>0) {
+    const row=document.createElement('div'); row.className='srow';
+    bgSlots.forEach(sl=>row.appendChild(mkCard(sl))); stage.appendChild(row);
   }
 
-  // Surface row (1 or 2)
-  stage.appendChild(makeRowHeader('Surface', surfCount, 1, 2, (n) => {
-    surfCount = n;
-    buildSlots();
-    renderShuffler();
-  }));
-
-  const surfRow = document.createElement('div');
-  surfRow.className = 'shuffler-row';
-  surfSlots.forEach(slot => surfRow.appendChild(makeSCard(slot)));
-  stage.appendChild(surfRow);
+  stage.appendChild(mkRowHeader('Surface', surfCount, 1, 2, n=>{ surfCount=n; buildSlots(); renderShuffler(); }));
+  const sfRow=document.createElement('div'); sfRow.className='srow';
+  sfSlots.forEach(sl=>sfRow.appendChild(mkCard(sl))); stage.appendChild(sfRow);
 }
 
 async function initShuffler() {
-  const loading = document.getElementById('shufflerLoading');
-  loading.style.display = 'flex';
+  const chips=document.getElementById('shColorChips');
+  chips.innerHTML='';
 
-  // Build color chips dynamically so listeners are attached after DOM exists
-  const chipsContainer = document.getElementById('shufflerColorChips');
-  chipsContainer.innerHTML = '';
-
-  const allChip = document.createElement('div');
-  allChip.className = 's-chip active';
-  allChip.dataset.scolor = 'all';
-  allChip.textContent = 'All Colors';
-  chipsContainer.appendChild(allChip);
-
-  COLOR_CONFIG.forEach(cfg => {
-    const chip = document.createElement('div');
-    chip.className = 's-chip';
-    chip.dataset.scolor = cfg.key;
-    chip.textContent = cfg.label;
-    chipsContainer.appendChild(chip);
-  });
-
-  // Attach color chip listeners
-  chipsContainer.querySelectorAll('[data-scolor]').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const key = chip.dataset.scolor;
-      if (key === 'all') {
-        shufflerColors.clear();
-        shufflerColors.add('all');
-        chipsContainer.querySelectorAll('[data-scolor]').forEach(c =>
-          c.classList.toggle('active', c.dataset.scolor === 'all'));
+  function mkChip(label, isAll, key) {
+    const c=document.createElement('div'); c.className='chip'+(isAll?' active':'');
+    c.textContent=label;
+    c.addEventListener('click', () => {
+      if (isAll) {
+        shColorFilter.clear(); shColorFilter.add('all');
+        chips.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===c));
       } else {
-        shufflerColors.delete('all');
-        chipsContainer.querySelector('[data-scolor="all"]').classList.remove('active');
-        if (shufflerColors.has(key)) {
-          shufflerColors.delete(key);
-          chip.classList.remove('active');
-        } else {
-          shufflerColors.add(key);
-          chip.classList.add('active');
-        }
-        if (shufflerColors.size === 0) {
-          shufflerColors.add('all');
-          chipsContainer.querySelector('[data-scolor="all"]').classList.add('active');
-        }
+        shColorFilter.delete('all');
+        chips.querySelector('[data-isall]').classList.remove('active');
+        if (shColorFilter.has(key)) { shColorFilter.delete(key); c.classList.remove('active'); }
+        else { shColorFilter.add(key); c.classList.add('active'); }
+        if (shColorFilter.size===0) { shColorFilter.add('all'); chips.querySelector('[data-isall]').classList.add('active'); }
       }
-      buildSlots();
-      renderShuffler();
+      if (shReady) { buildSlots(); renderShuffler(); }
     });
-  });
+    if (isAll) c.dataset.isall='1';
+    return c;
+  }
 
-  await loadAllColors();
-  buildSlots();
-  renderShuffler();
+  chips.appendChild(mkChip('All Colors', true, null));
+  COLOR_CONFIG.forEach(cfg => chips.appendChild(mkChip(cfg.label, false, cfg.key)));
+
+  await loadAll();
+  shReady=true;
+  buildSlots(); renderShuffler();
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// MODE SWITCHING
-// ═══════════════════════════════════════════════════════════════════════════
-
-let shufflerInitialized = false;
+// ── MODE SWITCHING ────────────────────────────────────
+let shInited=false;
 
 function setMode(mode) {
-  const catalogView = document.getElementById('catalogView');
-  const shufflerView = document.getElementById('shufflerView');
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  const hdr=document.getElementById('hdr');
+  const vCat=document.getElementById('vCatalog'), vSh=document.getElementById('vShuffler');
+  const sbCat=document.getElementById('sbCatalog'), sbSh=document.getElementById('sbShuffler');
 
-  if (mode === 'catalog') {
-    catalogView.classList.remove('hidden');
-    shufflerView.classList.remove('active');
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+
+  if (mode==='catalog') {
+    hdr.classList.remove('sh');
+    vCat.classList.add('on'); vSh.classList.remove('on');
+    sbCat.style.display=''; sbSh.style.display='none';
   } else {
-    catalogView.classList.add('hidden');
-    shufflerView.classList.add('active');
-    if (!shufflerInitialized) {
-      shufflerInitialized = true;
-      initShuffler();
-    }
+    hdr.classList.add('sh');
+    vCat.classList.remove('on'); vSh.classList.add('on');
+    sbCat.style.display='none'; sbSh.style.display='';
+    if (!shInited) { shInited=true; initShuffler(); }
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// EVENT LISTENERS
-// ═══════════════════════════════════════════════════════════════════════════
+// ── EVENT LISTENERS ───────────────────────────────────
+document.querySelectorAll('.mode-btn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
 
-// Mode buttons
-document.querySelectorAll('.mode-btn').forEach(btn => {
-  btn.addEventListener('click', () => setMode(btn.dataset.mode));
-});
+document.getElementById('csel').addEventListener('change', e=>selectColor(e.target.value));
 
-// Color select
-document.getElementById('colorSelect').addEventListener('change', e => {
-  selectColor(e.target.value);
-});
-
-// Flag chips
-document.getElementById('wetChip').addEventListener('click', function() {
-  activeFlags.wet_safe = !activeFlags.wet_safe;
-  this.classList.toggle('active', activeFlags.wet_safe);
-  renderCatalog();
-});
-
-document.getElementById('smallChip').addEventListener('click', function() {
-  activeFlags.has_small = !activeFlags.has_small;
-  this.classList.toggle('active', activeFlags.has_small);
-  renderCatalog();
-});
-
-// Dim inputs
-['minL','maxL','minW','maxW'].forEach(id => {
-  document.getElementById(id).addEventListener('input', e => {
-    dimFilters[id] = e.target.value !== '' ? parseFloat(e.target.value) : null;
+document.querySelectorAll('#matChips .chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const mat=chip.dataset.mat;
+    if (activeMats.has(mat)) { activeMats.delete(mat); chip.classList.remove('active'); }
+    else { activeMats.add(mat); chip.classList.add('active'); }
     renderCatalog();
   });
 });
 
-// Reset
-document.getElementById('resetBtn').addEventListener('click', () => {
-  activeCategories.clear();
-  activeFlags = { wet_safe: false, has_small: false };
-  dimFilters = { minL: null, maxL: null, minW: null, maxW: null };
-  document.querySelectorAll('#materialChips .chip').forEach(c => c.classList.remove('active'));
+document.getElementById('wetChip').addEventListener('click',function(){
+  activeFlags.wet_safe=!activeFlags.wet_safe;
+  this.classList.toggle('active',activeFlags.wet_safe); renderCatalog();
+});
+document.getElementById('smallChip').addEventListener('click',function(){
+  activeFlags.has_small=!activeFlags.has_small;
+  this.classList.toggle('active',activeFlags.has_small); renderCatalog();
+});
+
+['minL','maxL','minW','maxW'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',e=>{
+    dimF[id]=e.target.value!==''?parseFloat(e.target.value):null; renderCatalog();
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  activeMats.clear(); activeFlags={wet_safe:false,has_small:false};
+  dimF={minL:null,maxL:null,minW:null,maxW:null};
+  document.querySelectorAll('#matChips .chip').forEach(c=>c.classList.remove('active'));
   document.getElementById('wetChip').classList.remove('active');
   document.getElementById('smallChip').classList.remove('active');
-  ['minL','maxL','minW','maxW'].forEach(id => document.getElementById(id).value = '');
+  ['minL','maxL','minW','maxW'].forEach(id=>document.getElementById(id).value='');
   renderCatalog();
 });
 
-// Shuffler — shuffle button
-const shuffleBtn = document.getElementById('shuffleBtn');
-shuffleBtn.addEventListener('click', () => {
-  shuffleBtn.classList.add('spinning');
-  setTimeout(() => shuffleBtn.classList.remove('spinning'), 400);
-  reshuffleUnpinned();
-  renderShuffler();
+document.getElementById('shufBtn').addEventListener('click',()=>{
+  if (!shReady) return;
+  const btn=document.getElementById('shufBtn');
+  btn.classList.add('spinning'); setTimeout(()=>btn.classList.remove('spinning'),400);
+  reshuffle(); renderShuffler();
 });
-
 </script>
 </body>
 </html>
