@@ -22,11 +22,9 @@ header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-
 .mode-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:6px;padding:3px;gap:2px}
 .mode-btn{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border:none;border-radius:4px;cursor:pointer;background:transparent;color:#888;transition:all .15s}
 .mode-btn.active{background:#fff;color:var(--ink)}
-
-/* SAVE BUTTON — subtle like Vessels */
-#save-btn{display:none;align-items:center;gap:6px;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.03em;padding:7px 12px;border-radius:var(--radius);border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#fff;cursor:pointer;transition:border-color .15s;white-space:nowrap}
-#save-btn.visible{display:flex}
-#save-btn:hover{border-color:#fff}
+.save-btn{display:none;font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:7px 16px;border-radius:5px;border:none;background:#4CAF50;color:#fff;cursor:pointer;transition:opacity .15s;align-items:center;gap:6px}
+.save-btn.visible{display:inline-flex}
+.save-btn:hover{opacity:.85}
 
 /* CATALOG LAYOUT */
 #catalog-view{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 64px)}
@@ -40,13 +38,7 @@ header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-
 #search::placeholder{color:var(--ink-faint)}
 aside{flex:1;padding:28px 20px;overflow-y:auto}
 .sidebar-section{margin-bottom:28px}
-.sidebar-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;font-weight:500;display:flex;align-items:center}
-
-/* INFO ICON — floating tooltip matching Vessels */
-.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink-soft);color:var(--ink-soft);font-size:8px;font-weight:700;cursor:default;position:relative;flex-shrink:0;margin-left:5px;vertical-align:middle;font-family:"DM Mono",monospace;font-style:normal}
-.info-icon .tooltip{display:none}
-#floating-tooltip{text-transform:uppercase;position:fixed;background:var(--ink);color:var(--surface);font-size:10px;font-family:"DM Mono",monospace;font-weight:400;line-height:1.6;padding:8px 10px;border-radius:6px;width:190px;z-index:9999;white-space:normal;letter-spacing:.01em;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .15s,visibility .15s}
-#floating-tooltip.visible{opacity:1;visibility:visible}
+.sidebar-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;font-weight:500}
 
 /* COLOR SELECT */
 .color-select-wrap{position:relative;display:flex;align-items:center}
@@ -59,18 +51,11 @@ aside{flex:1;padding:28px 20px;overflow-y:auto}
 .chip{font-family:"DM Mono",monospace;font-size:11px;padding:4px 10px;border-radius:100px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s;white-space:nowrap}
 .chip:hover{border-color:var(--ink);color:var(--ink)}
 .chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
-/* No Size chip — amber/goldenrod like Vessels nodims */
-.chip-nosize{background:#fff8dc !important;color:#8B6F00 !important;border-color:#D4A800 !important}
-.chip-nosize.active{background:#D4A800 !important;color:#fff !important;border-color:#D4A800 !important}
 
-/* DIM SELECT — matching Vessels dim-select */
-.dim-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border-radius:var(--radius);border:1.5px solid var(--tag-border);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
-.dim-select:focus{outline:none;border-color:var(--ink)}
-
-/* DIM RANGE INPUTS */
-.size-inputs{display:flex;flex-direction:row;align-items:flex-end;gap:6px}
+/* DIM INPUTS */
+.size-inputs{display:flex;gap:6px;align-items:flex-end}
 .size-input-wrap label{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px}
-.size-input-wrap input{width:52px;padding:6px 5px;box-sizing:border-box;height:32px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:11px;background:var(--bg);color:var(--ink);outline:none}
+.size-input-wrap input{width:58px;padding:6px 5px;height:32px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:11px;background:var(--bg);color:var(--ink);outline:none}
 .size-input-wrap input:focus{border-color:var(--ink)}
 .reset-btn{width:100%;padding:8px;background:transparent;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;text-transform:uppercase;font-size:11px;color:var(--ink-soft);cursor:pointer;letter-spacing:.05em;transition:all .15s;margin-top:6px}
 .reset-btn:hover{border-color:var(--ink);color:var(--ink)}
@@ -96,30 +81,16 @@ main{padding:28px 32px}
 .card-img-placeholder svg{opacity:.4}
 .card-img-placeholder span{font-size:9px;letter-spacing:.1em;text-transform:uppercase}
 .color-stripe{position:absolute;bottom:0;left:0;right:0;height:3px}
-.id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap;pointer-events:none}
+.id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap}
 .card:hover .id-tag{opacity:1}
+.edit-btn{position:absolute;bottom:8px;right:8px;width:28px;height:28px;border-radius:5px;border:1.5px solid var(--tag-border);background:rgba(255,255,255,.9);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;opacity:0;transition:opacity .15s;color:var(--ink-soft)}
+.card:hover .edit-btn{opacity:1}
+.edit-btn:hover{border-color:var(--ink);color:var(--ink)}
 .qty-badge{position:absolute;top:8px;left:8px;background:#fff;color:var(--ink);font-size:10px;padding:2px 6px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-
-/* EDIT BUTTON — bottom-right of image, exactly like Vessels btn-replace-photo */
-.btn-edit-card{position:absolute;bottom:8px;right:8px;background:none;border:none;padding:2px;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;color:var(--ink-soft)}
-.card-img:hover .btn-edit-card{opacity:1}
-.btn-edit-card:hover{color:var(--ink)}
-
-/* CARD BODY */
 .card-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:7px;flex:1}
 .card-body.no-dims{background:#fff8dc}
-/* card-top: title + size badge side by side, like Vessels */
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
 .card-title{font-family:"Syne",sans-serif;font-weight:600;font-size:13px;line-height:1.3;color:var(--ink)}
-
-/* SIZE BADGE — inline in card-top, styled like Vessels */
-.size-badge{font-size:9px;font-weight:500;padding:2px 7px;border-radius:100px;white-space:nowrap;flex-shrink:0;letter-spacing:.04em;text-transform:uppercase}
-.size-badge.sz-s {background:#E8F5E9;color:#2E7D32}
-.size-badge.sz-m {background:#FFF3E0;color:#E65100}
-.size-badge.sz-l {background:#E3F2FD;color:#1565C0}
-.size-badge.sz-xl{background:#F3E5F5;color:#6A1B9A}
-.size-badge.sz-none{background:#D4A800;color:#fff}
-
+.card-desc{font-size:10px;color:var(--ink-soft);line-height:1.5}
 .card-dims{font-size:10px;color:var(--ink-soft);line-height:1.7}
 .card-dims .dr{display:grid;grid-template-columns:56px 1fr}
 .card-dims .dl{color:var(--ink-faint);text-transform:uppercase;font-size:9px;letter-spacing:.06em}
@@ -127,18 +98,38 @@ main{padding:28px 32px}
 .card-dims .dv.miss{color:#c09000;font-style:italic}
 .card-dims .small-hdr{font-size:9px;color:#CE93D8;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .card-note{font-size:10px;color:var(--ink-soft);font-style:italic;line-height:1.4}
-
-/* CARD FOOTER / TAGS — like Vessels: color-tag (colored) + mat-tag (gray) */
-.card-footer{display:flex;align-items:center;gap:4px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
 .tag{font-size:9px;padding:2px 7px;border-radius:3px;background:var(--tag-bg);border:1px solid var(--tag-border);color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
-.tag.color-tag{display:inline-flex;align-items:center;gap:4px}
-.tag-dot{width:6px;height:6px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex-shrink:0}
-.tag.mat-tag{background:var(--tag-bg);border-color:var(--tag-border);color:var(--ink-soft)}
+.tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .tag.wet-tag{background:#E3F2FD;border-color:#90CAF9;color:#1565C0}
 .tag.small-tag{background:#F3E5F5;border-color:#CE93D8;color:#6A1B9A}
-
 aside::-webkit-scrollbar{width:4px}
 aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
+
+/* EDIT MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:10px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid var(--tag-border)}
+.modal-title{font-family:"Syne",sans-serif;font-size:16px;font-weight:700}
+.modal-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--ink-soft);padding:2px 6px;line-height:1}
+.modal-close:hover{color:var(--ink)}
+.modal-body{padding:20px 22px}
+.ef-row{margin-bottom:16px}
+.ef-row label{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px}
+.ef-row input,.ef-row textarea,.ef-row select{width:100%;padding:8px 10px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:12px;color:var(--ink);background:var(--bg);outline:none}
+.ef-row input:focus,.ef-row textarea:focus,.ef-row select:focus{border-color:var(--ink)}
+.ef-row textarea{resize:vertical;min-height:60px}
+.ef-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.ef-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ef-check{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--ink-soft)}
+.ef-check input{width:auto;cursor:pointer}
+.ef-small-dims{margin-top:10px;padding:12px;background:var(--bg);border-radius:var(--radius);border:1px solid var(--tag-border)}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 18px;border-top:1px solid var(--tag-border)}
+.ef-cancel{padding:8px 18px;border:1.5px solid var(--tag-border);border-radius:var(--radius);background:transparent;font-family:"DM Mono",monospace;font-size:11px;cursor:pointer;color:var(--ink-soft)}
+.ef-cancel:hover{border-color:var(--ink);color:var(--ink)}
+.ef-save{padding:8px 18px;border:none;border-radius:var(--radius);background:var(--ink);color:#fff;font-family:"DM Mono",monospace;font-size:11px;cursor:pointer}
+.ef-save:hover{opacity:.85}
 
 /* PASSWORD GATE */
 #pw-gate{position:fixed;inset:0;background:#1A1A18;z-index:9999;display:flex;align-items:center;justify-content:center}
@@ -155,53 +146,6 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 #pw-submit:hover{color:#fff}
 .pw-error{font-size:10px;color:#C0392B;letter-spacing:.06em;text-transform:uppercase;min-height:14px;text-align:center;font-family:"DM Mono",monospace}
 @keyframes pw-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-
-/* EDIT MODAL — two-column: photo left, fields right; compact to avoid scrolling */
-#edit-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:20px}
-#edit-modal-overlay.open{display:flex}
-#edit-modal{background:var(--surface);border-radius:12px;width:660px;max-width:95vw;box-shadow:0 8px 32px rgba(0,0,0,.18);font-family:"DM Mono",monospace;overflow:hidden}
-.modal-inner{display:flex}
-
-/* Photo column */
-.modal-photo-col{width:210px;flex-shrink:0;background:#F0EDE8;display:flex;flex-direction:column}
-.modal-photo-wrap{flex:1;position:relative;overflow:hidden;cursor:pointer;min-height:190px;display:flex;align-items:center;justify-content:center}
-.modal-photo-wrap:hover .modal-photo-hover{opacity:1}
-.modal-photo-wrap img.modal-photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
-.modal-photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--ink-faint);padding:24px;text-align:center;pointer-events:none}
-.modal-photo-placeholder svg{opacity:.4}
-.modal-photo-placeholder span{font-size:10px;letter-spacing:.06em;text-transform:uppercase;line-height:1.4}
-.modal-photo-hover{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;pointer-events:none}
-.modal-photo-hover span{font-size:10px;color:#fff;letter-spacing:.06em;text-transform:uppercase}
-.modal-photo-file{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.modal-id-strip{padding:9px 14px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);border-top:1px solid var(--tag-border);background:var(--surface)}
-
-/* Fields column */
-.modal-fields-col{flex:1;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow-y:auto;max-height:90vh}
-.modal-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
-.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--ink);line-height:1.2}
-.modal-close{width:27px;height:27px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:13px;transition:all .15s;line-height:1;flex-shrink:0}
-.modal-close:hover{border-color:var(--ink);color:var(--ink)}
-.mf{display:flex;flex-direction:column;gap:4px}
-.mf label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-.mf input,.mf select{width:100%;padding:7px 9px;border:1.5px solid var(--tag-border);border-radius:var(--radius);font-family:"DM Mono",monospace;font-size:12px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s;box-sizing:border-box}
-.mf select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-color:var(--bg);padding-right:28px}
-.mf input:focus,.mf select:focus{border-color:var(--ink)}
-/* Row of fields side by side */
-.modal-row{display:flex;gap:8px}
-.modal-row .mf{flex:1;min-width:0}
-/* Checkboxes row */
-.modal-checks{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.mcheck{display:flex;align-items:center;gap:6px;cursor:pointer}
-.mcheck input[type=checkbox]{width:14px;height:14px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
-.mcheck span{font-size:11px;color:var(--ink-soft);user-select:none}
-/* Small dims panel */
-#ef-small-panel{display:none}
-/* Footer */
-.modal-footer{display:flex;gap:8px;justify-content:flex-end;padding-top:4px;border-top:1px solid var(--tag-border);margin-top:2px}
-.modal-btn{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.03em;padding:7px 16px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s}
-.modal-btn:hover{border-color:var(--ink);color:var(--ink)}
-.modal-btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
-.modal-btn.primary:hover{opacity:.85}
 
 /* SHUFFLER */
 #shuffler-view{display:none;flex-direction:row;min-height:calc(100vh - 64px)}
@@ -251,14 +195,10 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
   .sh-sidebar{width:100%;position:static;height:auto}
   .srow{flex-direction:column}
   .sc{max-width:100%}
-  .modal-inner{flex-direction:column}
-  .modal-photo-col{width:100%;min-height:180px}
 }
 </style>
 </head>
 <body>
-
-<div id="floating-tooltip"></div>
 
 <div id="pw-gate">
   <div class="pw-box">
@@ -275,114 +215,57 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 </div>
 
 <!-- EDIT MODAL -->
-<div id="edit-modal-overlay">
-  <div id="edit-modal">
-    <div class="modal-inner">
-      <!-- LEFT: photo -->
-      <div class="modal-photo-col">
-        <div class="modal-photo-wrap" id="modal-photo-wrap">
-          <input type="file" class="modal-photo-file" id="modal-photo-file" accept="image/*">
-          <div class="modal-photo-placeholder" id="modal-photo-placeholder">
-            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-            <span>Click to add photo</span>
-          </div>
-          <img id="modal-photo-preview" class="modal-photo-preview" alt="">
-          <div class="modal-photo-hover"><span>Replace photo</span></div>
-        </div>
-        <div class="modal-id-strip" id="modal-id-strip"></div>
+<div class="modal-overlay" id="edit-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit Surface</div>
+      <button class="modal-close" id="edit-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ef-id">
+      <div class="ef-row"><label>Name</label><input type="text" id="ef-name"></div>
+      <div class="ef-row"><label>Description</label><textarea id="ef-desc" rows="2"></textarea></div>
+      <div class="ef-row"><label>Notes</label><textarea id="ef-notes" rows="2"></textarea></div>
+      <div class="ef-row">
+        <label>Material</label>
+        <select id="ef-material">
+          <option>Painted Panels</option>
+          <option>Plastic Laminate</option>
+          <option>Ceramic Tile</option>
+          <option>Special Material</option>
+          <option>Sticker &amp; Printed</option>
+          <option>Paper</option>
+          <option>3D Elements</option>
+          <option>Solid Wood</option>
+        </select>
       </div>
-      <!-- RIGHT: fields -->
-      <div class="modal-fields-col">
-        <div class="modal-head">
-          <div class="modal-title" id="modal-title">Edit Surface</div>
-          <button class="modal-close" id="modal-close-btn">&#10005;</button>
-        </div>
-
-        <div class="mf">
-          <label>Name</label>
-          <input type="text" id="ef-name" placeholder="Surface name">
-        </div>
-
-        <div class="modal-row">
-          <div class="mf">
-            <label>Material</label>
-            <select id="ef-material">
-              <option value="Painted Panels">Painted Panels</option>
-              <option value="Plastic Laminate">Plastic Laminate</option>
-              <option value="Ceramic Tile">Ceramic Tile</option>
-              <option value="Sticker &amp; Printed">Sticker &amp; Printed</option>
-              <option value="Special Material">Special Material</option>
-              <option value="Paper">Paper</option>
-              <option value="3D Elements">3D Elements</option>
-              <option value="Solid Wood">Solid Wood</option>
-            </select>
-          </div>
-          <div class="mf" style="max-width:88px">
-            <label>Size Override</label>
-            <select id="ef-size">
-              <option value="">Auto</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- All 3 dims + qty in one row -->
-        <div class="modal-row">
-          <div class="mf">
-            <label>Length (cm)</label>
-            <input type="number" id="ef-length" placeholder="—" min="0" step="0.1">
-          </div>
-          <div class="mf">
-            <label>Width (cm)</label>
-            <input type="number" id="ef-width" placeholder="—" min="0" step="0.1">
-          </div>
-          <div class="mf">
-            <label>Diameter (cm)</label>
-            <input type="number" id="ef-diameter" placeholder="—" min="0" step="0.1">
-          </div>
-          <div class="mf" style="max-width:60px">
-            <label>Qty</label>
-            <input type="number" id="ef-qty" placeholder="1" min="1" step="1">
-          </div>
-        </div>
-
-        <!-- Property toggles -->
-        <div class="modal-checks">
-          <label class="mcheck">
-            <input type="checkbox" id="ef-wet-safe">
-            <span>💧 Wet-Safe</span>
-          </label>
-          <label class="mcheck">
-            <input type="checkbox" id="ef-has-small">
-            <span>📐 Has Small Version</span>
-          </label>
-        </div>
-
-        <!-- Small dims (shown only when has_small checked) -->
-        <div id="ef-small-panel" class="modal-row">
-          <div class="mf">
-            <label>Small Length (cm)</label>
-            <input type="number" id="ef-small-length" placeholder="—" min="0" step="0.1">
-          </div>
-          <div class="mf">
-            <label>Small Width (cm)</label>
-            <input type="number" id="ef-small-width" placeholder="—" min="0" step="0.1">
-          </div>
-        </div>
-
-        <div class="mf">
-          <label>Notes</label>
-          <input type="text" id="ef-notes" placeholder="e.g. BACK-TO-BACK [D], project refs…">
-        </div>
-
-        <div class="modal-footer">
-          <button class="modal-btn" id="modal-cancel-btn">Cancel</button>
-          <button class="modal-btn primary" id="modal-save-btn">Save Surface</button>
+      <div class="ef-row">
+        <label>Dimensions (cm)</label>
+        <div class="ef-grid">
+          <div><label style="font-size:9px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px">Length</label><input type="number" id="ef-length" min="0" step="0.5"></div>
+          <div><label style="font-size:9px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px">Width</label><input type="number" id="ef-width" min="0" step="0.5"></div>
+          <div><label style="font-size:9px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px">Diameter</label><input type="number" id="ef-diameter" min="0" step="0.5"></div>
         </div>
       </div>
+      <div class="ef-row">
+        <label>Quantity</label>
+        <input type="number" id="ef-qty" min="1" step="1" style="width:100px">
+      </div>
+      <div class="ef-row" style="display:flex;gap:24px;flex-wrap:wrap">
+        <label class="ef-check"><input type="checkbox" id="ef-wet"> Wet-Safe</label>
+        <label class="ef-check"><input type="checkbox" id="ef-has-small"> Has Small Version</label>
+      </div>
+      <div class="ef-small-dims" id="ef-small-dims" style="display:none">
+        <div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px">Small Version Dimensions</div>
+        <div class="ef-grid-2">
+          <div><label style="font-size:9px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px">Length</label><input type="number" id="ef-sl" min="0" step="0.5"></div>
+          <div><label style="font-size:9px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px">Width</label><input type="number" id="ef-sw" min="0" step="0.5"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="ef-cancel" id="ef-cancel">Cancel</button>
+      <button class="ef-save" id="ef-save">Save Changes</button>
     </div>
   </div>
 </div>
@@ -391,14 +274,11 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
   <div class="logo">PhotoKitchen</div>
   <span class="header-meta">Props Catalog 2.0 &mdash; Surfaces</span>
   <div class="header-right">
-    <button id="save-btn" type="button">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Save Changes
-    </button>
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="catalog">Catalog</button>
       <button class="mode-btn" data-mode="shuffler">Shuffler</button>
     </div>
+    <button class="save-btn" id="save-btn">&#8681; Save Changes</button>
   </div>
 </header>
 
@@ -418,6 +298,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
           <select id="color-select">
             <option value="">Select a Color</option>
             <option value="ro">Red / Orange</option>
+            <option value="gr">Green</option>
           </select>
         </div>
       </div>
@@ -436,17 +317,6 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
         </div>
       </div>
       <div class="sidebar-section">
-        <div class="sidebar-label">Size</div>
-        <div class="chip-group" id="size-filters">
-          <button class="chip active" data-size="all">All</button>
-          <button class="chip" data-size="S">S &lt;40cm</button>
-          <button class="chip" data-size="M">M 40–69cm</button>
-          <button class="chip" data-size="L">L 70–99cm</button>
-          <button class="chip" data-size="XL">XL ≥100cm</button>
-          <button class="chip chip-nosize" data-size="none">No Size</button>
-        </div>
-      </div>
-      <div class="sidebar-section">
         <div class="sidebar-label">Properties</div>
         <div class="chip-group">
           <button class="chip" id="wet-chip">&#128167; Wet-Safe</button>
@@ -454,27 +324,17 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
         </div>
       </div>
       <div class="sidebar-section">
-        <div class="sidebar-label">
-          Dimension Range (cm)
-          <span class="info-icon" data-tip="USE THE FIELD DROPDOWN TO TARGET LENGTH, WIDTH, OR DIAMETER. SURFACES WITHOUT THE SELECTED DIMENSION ARE EXCLUDED WHEN THIS FILTER IS ACTIVE.">i</span>
-        </div>
+        <div class="sidebar-label">Length (cm)</div>
         <div class="size-inputs">
-          <div class="size-input-wrap" style="flex:none">
-            <label>Field</label>
-            <select class="dim-select" id="dim-field">
-              <option value="length">Length</option>
-              <option value="width">Width</option>
-              <option value="diameter">Diameter</option>
-            </select>
-          </div>
-          <div class="size-input-wrap">
-            <label>Min</label>
-            <input type="number" id="min-dim" placeholder="0" min="0">
-          </div>
-          <div class="size-input-wrap">
-            <label>Max</label>
-            <input type="number" id="max-dim" placeholder="any" min="0">
-          </div>
+          <div class="size-input-wrap"><label>Min</label><input type="number" id="min-l" placeholder="0" min="0"></div>
+          <div class="size-input-wrap"><label>Max</label><input type="number" id="max-l" placeholder="any" min="0"></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Width (cm)</div>
+        <div class="size-inputs">
+          <div class="size-input-wrap"><label>Min</label><input type="number" id="min-w" placeholder="0" min="0"></div>
+          <div class="size-input-wrap"><label>Max</label><input type="number" id="max-w" placeholder="any" min="0"></div>
         </div>
       </div>
       <button class="reset-btn" id="reset">&#8634; Reset all filters</button>
@@ -513,90 +373,79 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 </div>
 
 <script>
-// ── COLOR CONFIG ──
+var IMAGES = {};
+
 var COLOR_CONFIG = [
-  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' }
+  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' },
+  { key: 'gr', label: 'Green',        file: 'data/gr.js', swatch: '#4a7c4e', swatch2: null }
 ];
 
-var IMAGES = {};
+function swatchAccent(cfg) { return cfg.key === 'wh' ? '#999' : cfg.swatch; }
+function swatchPale(cfg) { return cfg.swatch + '18'; }
+
 var surfaces = [];
 var loadedColors = {};
-var dirtyColors = {};
+var loadedColorData = {}; // full data per key for save
+var dirtyColors = new Set ? new Set() : {};
+var usesSet = typeof Set !== 'undefined';
 var curColor = null;
-var editTarget = null;
-var editPendingImageB64 = null;
-
-var fState = {
-  search: '', mat: 'all', size: 'all', wet: false, hasSmall: false,
-  dimField: 'length', minDim: null, maxDim: null
-};
+var fState = { search: '', mat: 'all', wet: false, hasSmall: false, minL: null, maxL: null, minW: null, maxW: null };
 var bgCount = 1, surfCount = 1;
 var shColFilter = ['all'];
 var slots = [];
 var shReady = false, shInited = false;
 
-// ── SIZE ──
-function getSizeCategory(s) {
-  if (s.size) return s.size; // explicit override wins
-  var longest = null;
-  if (s.length != null) longest = s.length;
-  if (s.diameter != null && (longest === null || s.diameter > longest)) longest = s.diameter;
-  if (longest === null) return null;
-  if (longest < 40)  return 'S';
-  if (longest < 70)  return 'M';
-  if (longest < 100) return 'L';
-  return 'XL';
-}
-function sizeBadgeClass(cat) {
-  return { S:'sz-s', M:'sz-m', L:'sz-l', XL:'sz-xl' }[cat] || 'sz-none';
-}
-function missingDims(s) {
-  return (s.length == null || s.width == null) && s.diameter == null;
-}
+function isDirty(key) { return usesSet ? dirtyColors.has(key) : dirtyColors[key]; }
+function setDirty(key) { if (usesSet) dirtyColors.add(key); else dirtyColors[key] = true; }
+function clearDirty() { if (usesSet) dirtyColors.clear(); else dirtyColors = {}; }
+
+function missingDims(s) { return (s.length === null || s.length === undefined) && (s.width === null || s.width === undefined) && (s.diameter === null || s.diameter === undefined); }
+
 function dimStr(s) {
   var p = [];
-  if (s.length != null)   p.push('L: ' + s.length + 'cm');
-  if (s.width != null)    p.push('W: ' + s.width + 'cm');
+  if (s.length != null) p.push('L: ' + s.length + 'cm');
+  if (s.width != null) p.push('W: ' + s.width + 'cm');
   if (s.diameter != null) p.push('D: ' + s.diameter + 'cm');
   return p.join('  ') || '—';
 }
 
 function randPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function shColHas(k) { return shColFilter.indexOf(k) !== -1; }
-function shColAdd(k) { if (!shColHas(k)) shColFilter.push(k); }
-function shColRemove(k) { shColFilter = shColFilter.filter(function(x) { return x !== k; }); }
 
-// ── DATA LOADING ──
+function shColHas(key) { return shColFilter.indexOf(key) !== -1; }
+function shColAdd(key) { if (!shColHas(key)) shColFilter.push(key); }
+function shColRemove(key) { shColFilter = shColFilter.filter(function(k) { return k !== key; }); }
+
 function loadScript(cfg) {
   return new Promise(function(res) {
     if (loadedColors[cfg.key]) { res(loadedColors[cfg.key]); return; }
-    var el = document.createElement('script');
-    el.src = cfg.file;
-    el.onload = function() {
-      var data = (window._pkSurfaces || []).map(function(x) {
-        return Object.assign({}, x, { colorKey: cfg.key });
-      });
+    var scriptEl = document.createElement('script');
+    scriptEl.src = cfg.file;
+    scriptEl.onload = function() {
+      var data = (window._pkSurfaces || []).map(function(x) { return Object.assign({}, x, { colorKey: cfg.key }); });
       loadedColors[cfg.key] = data;
-      if (window._pkImages) Object.assign(IMAGES, window._pkImages);
-      window._pkSurfaces = null; window._pkImages = null;
+      loadedColorData[cfg.key] = data;
+      if (window._pkImages) { Object.assign(IMAGES, window._pkImages); }
+      window._pkSurfaces = null;
+      window._pkImages = null;
       res(data);
     };
-    el.onerror = function() { loadedColors[cfg.key] = []; res([]); };
-    document.head.appendChild(el);
+    scriptEl.onerror = function() { loadedColors[cfg.key] = []; res([]); };
+    document.head.appendChild(scriptEl);
   });
 }
+
 function loadAll() {
   return Promise.all(COLOR_CONFIG.map(function(c) { return loadScript(c); }));
 }
 
-// ── COLOR UI ──
 function selectColor(key) {
   document.querySelectorAll('#mat-filters .chip').forEach(function(c) {
     c.classList.toggle('active', c.getAttribute('data-mat') === 'all');
   });
   fState.mat = 'all';
   if (!key) { curColor = null; surfaces = []; applyColorUI(null); render(); return; }
-  var cfg = COLOR_CONFIG.filter(function(c) { return c.key === key; })[0];
+  var cfg = null;
+  for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === key) { cfg = COLOR_CONFIG[i]; break; } }
   if (!cfg) return;
   loadScript(cfg).then(function(data) { curColor = cfg; surfaces = data; applyColorUI(cfg); render(); });
 }
@@ -610,46 +459,37 @@ function applyColorUI(cfg) {
     sel.style.backgroundImage = '';
     return;
   }
-  var sw = cfg.swatch;
+  var accent = swatchAccent(cfg);
   dot.style.opacity = '1';
   dot.style.background = cfg.swatch2
-    ? 'conic-gradient(' + sw + ' 50%,' + cfg.swatch2 + ' 50%)' : sw;
-  sel.style.backgroundColor = sw + '1A';
-  sel.style.borderColor = sw;
-  sel.style.color = sw;
-  sel.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M0 0l5 6 5-6z\' fill=\'' + encodeURIComponent(sw) + '\'/%3E%3C/svg%3E")';
+    ? 'conic-gradient(' + cfg.swatch + ' 50%,' + cfg.swatch2 + ' 50%)'
+    : cfg.swatch;
+  sel.style.backgroundColor = swatchPale(cfg);
+  sel.style.borderColor = accent;
+  sel.style.color = accent;
 }
 
-// ── FILTERING ──
 function matches(s) {
   if (fState.mat !== 'all' && s.material !== fState.mat) return false;
-  var sc = getSizeCategory(s);
-  if (fState.size !== 'all') {
-    if (fState.size === 'none') { if (sc !== null) return false; }
-    else { if (sc !== fState.size) return false; }
-  }
   if (fState.wet && !s.wet_safe) return false;
   if (fState.hasSmall && !s.has_small) return false;
-  if (fState.minDim !== null || fState.maxDim !== null) {
-    var val = s[fState.dimField];
-    if (val == null) return false;
-    if (fState.minDim !== null && val < fState.minDim) return false;
-    if (fState.maxDim !== null && val > fState.maxDim) return false;
-  }
+  if (fState.minL !== null && (s.length == null || s.length < fState.minL)) return false;
+  if (fState.maxL !== null && (s.length == null || s.length > fState.maxL)) return false;
+  if (fState.minW !== null && (s.width == null || s.width < fState.minW)) return false;
+  if (fState.maxW !== null && (s.width == null || s.width > fState.maxW)) return false;
   if (fState.search) {
     var q = fState.search.toLowerCase();
-    var hay = [s.name, s.material, s.notes || ''].join(' ').toLowerCase();
+    var hay = [s.name, s.material, s.description || '', s.notes || ''].join(' ').toLowerCase();
     if (hay.indexOf(q) === -1) return false;
   }
   return true;
 }
 
-// ── RENDER ──
 function render() {
-  var grid  = document.getElementById('grid');
+  var grid = document.getElementById('grid');
   var empty = document.getElementById('empty');
   var count = document.getElementById('results-count');
-  var hdr   = document.getElementById('color-header-text');
+  var hdr = document.getElementById('color-header-text');
 
   if (!curColor) {
     grid.innerHTML = '';
@@ -660,24 +500,20 @@ function render() {
     return;
   }
 
-  var sw = curColor.swatch;
-  var bc = '<span style="color:' + sw + '">' + curColor.label + '</span>';
-  if (fState.mat !== 'all') {
-    bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + fState.mat + '</span>';
-  }
-  if (fState.size !== 'all') {
-    var sizeLabels = { S:'S (<40cm)', M:'M (40–69cm)', L:'L (70–99cm)', XL:'XL (≥100cm)', none:'No Size' };
-    bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / ' + (sizeLabels[fState.size] || fState.size) + '</span>';
-  }
-  if (fState.wet)      bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
+  var accent = swatchAccent(curColor);
+  var bc = '<span style="color:' + accent + '">' + curColor.label + '</span>';
+  if (fState.mat !== 'all') bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + fState.mat + '</span>';
+  if (fState.wet) bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
   if (fState.hasSmall) bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
-  hdr.style.color = ''; hdr.innerHTML = bc;
+  hdr.style.color = '';
+  hdr.innerHTML = bc;
 
   var filtered = surfaces.filter(matches);
   count.innerHTML = '<span>' + filtered.length + '</span> surface' + (filtered.length !== 1 ? 's' : '');
 
   if (!filtered.length) { grid.innerHTML = ''; empty.classList.add('show'); return; }
   empty.classList.remove('show');
+
   grid.innerHTML = '';
   filtered.forEach(function(s, i) { grid.appendChild(buildCard(s, i)); });
 
@@ -704,17 +540,13 @@ function render() {
 
 function buildCard(s, i) {
   var miss = missingDims(s);
-  var sw   = curColor ? curColor.swatch : '#ccc';
+  var sw = curColor ? curColor.swatch : '#ccc';
   var imgSrc = IMAGES[s.id] || null;
-  var sc = getSizeCategory(s);
-  var sbClass = sc ? sizeBadgeClass(sc) : 'sz-none';
-  var sbLabel = sc || 'No Size';
 
   var card = document.createElement('div');
   card.className = 'card';
   card.style.animationDelay = Math.min(i * 0.025, 0.3) + 's';
 
-  // ── IMAGE ──
   var imgDiv = document.createElement('div');
   imgDiv.className = 'card-img';
   if (imgSrc) {
@@ -730,363 +562,307 @@ function buildCard(s, i) {
   ph.style.display = imgSrc ? 'none' : 'flex';
   ph.innerHTML = '<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Photo coming</span>';
   imgDiv.appendChild(ph);
-
   var stripe = document.createElement('div');
   stripe.className = 'color-stripe';
   stripe.style.background = sw;
   imgDiv.appendChild(stripe);
-
   if (s.qty && s.qty > 1) {
-    var qb = document.createElement('div');
-    qb.className = 'qty-badge';
-    qb.textContent = '× ' + s.qty;
-    imgDiv.appendChild(qb);
+    var qb = document.createElement('div'); qb.className = 'qty-badge'; qb.textContent = '\u00d7 ' + s.qty; imgDiv.appendChild(qb);
   }
-  var idTag = document.createElement('div');
-  idTag.className = 'id-tag';
-  idTag.textContent = s.id.toUpperCase();
-  imgDiv.appendChild(idTag);
+  var idTag = document.createElement('div'); idTag.className = 'id-tag'; idTag.textContent = s.id.toUpperCase(); imgDiv.appendChild(idTag);
 
-  // Edit button — bottom-right of image, like Vessels btn-replace-photo
-  var editBtn = document.createElement('button');
-  editBtn.type = 'button';
-  editBtn.className = 'btn-edit-card';
-  editBtn.title = 'Edit surface';
-  editBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
-  editBtn.addEventListener('click', function(e) { e.stopPropagation(); openEditModal(s); });
+  // Edit button
+  var editBtn = document.createElement('button'); editBtn.type = 'button'; editBtn.className = 'edit-btn'; editBtn.title = 'Edit surface'; editBtn.textContent = '\u270e';
+  (function(surface) { editBtn.addEventListener('click', function(e) { e.stopPropagation(); openEditModal(surface); }); })(s);
   imgDiv.appendChild(editBtn);
 
   card.appendChild(imgDiv);
 
-  // ── BODY ──
   var body = document.createElement('div');
   body.className = 'card-body' + (miss ? ' no-dims' : '');
+  var title = document.createElement('div'); title.className = 'card-title'; title.textContent = s.name; body.appendChild(title);
+  if (s.description) { var desc = document.createElement('div'); desc.className = 'card-desc'; desc.textContent = s.description; body.appendChild(desc); }
 
-  // Title + size badge (like Vessels card-top)
-  var top = document.createElement('div');
-  top.className = 'card-top';
-  var titleEl = document.createElement('div');
-  titleEl.className = 'card-title';
-  titleEl.textContent = s.name;
-  top.appendChild(titleEl);
-  var badge = document.createElement('span');
-  badge.className = 'size-badge ' + sbClass;
-  badge.textContent = sbLabel;
-  top.appendChild(badge);
-  body.appendChild(top);
-
-  // Dims
-  var dims = document.createElement('div');
-  dims.className = 'card-dims';
-  function addDR(label, val, unit) {
+  var dims = document.createElement('div'); dims.className = 'card-dims';
+  function addDimRow(label, val, unit) {
     var dr = document.createElement('div'); dr.className = 'dr';
     var dl = document.createElement('span'); dl.className = 'dl'; dl.textContent = label;
-    var dv = document.createElement('span');
-    dv.className = val != null ? 'dv' : 'dv miss';
-    dv.textContent = val != null ? val + (unit || '') : '—';
+    var dv = document.createElement('span'); dv.className = val != null ? 'dv' : 'dv miss'; dv.textContent = val != null ? val + (unit || '') : '—';
     dr.appendChild(dl); dr.appendChild(dv); dims.appendChild(dr);
   }
-  addDR('Length', s.length, 'cm');
-  if (s.diameter != null) addDR('Diameter', s.diameter, 'cm');
-  else addDR('Width', s.width, 'cm');
+  addDimRow('Length', s.length, 'cm');
+  if (s.diameter != null) addDimRow('Diameter', s.diameter, 'cm');
+  else addDimRow('Width', s.width, 'cm');
   if (s.has_small && s.small_length) {
-    var smHdr = document.createElement('div'); smHdr.className = 'small-hdr'; smHdr.textContent = 'Small version'; dims.appendChild(smHdr);
-    addDR('Length', s.small_length, 'cm');
-    if (s.small_width) addDR('Width', s.small_width, 'cm');
+    var sh2 = document.createElement('div'); sh2.className = 'small-hdr'; sh2.textContent = 'Small version'; dims.appendChild(sh2);
+    addDimRow('Length', s.small_length, 'cm');
+    if (s.small_width) addDimRow('Width', s.small_width, 'cm');
   }
   body.appendChild(dims);
+  if (s.notes) { var note = document.createElement('div'); note.className = 'card-note'; note.textContent = s.notes; body.appendChild(note); }
 
-  if (s.notes) {
-    var note = document.createElement('div'); note.className = 'card-note'; note.textContent = s.notes; body.appendChild(note);
-  }
-
-  // ── FOOTER / TAGS — color-tag (swatch-tinted) + mat-tag (gray), like Vessels ──
-  var footer = document.createElement('div');
-  footer.className = 'card-footer';
-
-  // Color tag — colored border/text/bg, swatch dot
-  var colorTag = document.createElement('span');
-  colorTag.className = 'tag color-tag';
-  colorTag.style.cssText = 'border-color:' + sw + ';color:' + sw + ';background:' + sw + '1A';
-  var dot2 = document.createElement('span'); dot2.className = 'tag-dot'; dot2.style.background = sw;
-  colorTag.appendChild(dot2);
-  colorTag.appendChild(document.createTextNode(curColor.label));
-  footer.appendChild(colorTag);
-
-  // Material tag — always gray, neutral
-  var matTag = document.createElement('span');
-  matTag.className = 'tag mat-tag';
-  matTag.textContent = s.material;
-  footer.appendChild(matTag);
-
-  if (s.wet_safe) {
-    var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '💧 Wet-Safe'; footer.appendChild(wt);
-  }
-  if (s.has_small) {
-    var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '📐 + Small'; footer.appendChild(st);
-  }
-
-  body.appendChild(footer);
+  var tags = document.createElement('div'); tags.className = 'card-tags';
+  var matTag = document.createElement('span'); matTag.className = 'tag';
+  matTag.style.cssText = 'border-color:' + sw + ';color:' + sw + ';background:' + sw + '18';
+  var tdot = document.createElement('span'); tdot.className = 'tag-dot'; tdot.style.background = sw; matTag.appendChild(tdot);
+  matTag.appendChild(document.createTextNode(s.material)); tags.appendChild(matTag);
+  if (s.wet_safe) { var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '\ud83d\udca7 Wet-Safe'; tags.appendChild(wt); }
+  if (s.has_small) { var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '\ud83d\udcd0 + Small'; tags.appendChild(st); }
+  body.appendChild(tags);
   card.appendChild(body);
   return card;
 }
 
-// ── EDIT MODAL ──
+// EDIT MODAL
 function openEditModal(s) {
-  editTarget = s;
-  editPendingImageB64 = null;
-  document.getElementById('modal-title').textContent = s.name;
-  document.getElementById('modal-id-strip').textContent = s.id.toUpperCase();
+  document.getElementById('ef-id').value = s.id;
   document.getElementById('ef-name').value = s.name || '';
-  document.getElementById('ef-material').value = s.material || '';
-  document.getElementById('ef-size').value = s.size || '';
-  document.getElementById('ef-length').value   = s.length   != null ? s.length   : '';
-  document.getElementById('ef-width').value    = s.width    != null ? s.width    : '';
-  document.getElementById('ef-diameter').value = s.diameter != null ? s.diameter : '';
-  document.getElementById('ef-qty').value = s.qty || '';
-  document.getElementById('ef-wet-safe').checked = !!s.wet_safe;
-  document.getElementById('ef-has-small').checked = !!s.has_small;
-  document.getElementById('ef-small-panel').style.display = s.has_small ? 'flex' : 'none';
-  document.getElementById('ef-small-length').value = s.small_length || '';
-  document.getElementById('ef-small-width').value  = s.small_width  || '';
+  document.getElementById('ef-desc').value = s.description || '';
   document.getElementById('ef-notes').value = s.notes || '';
-
-  var preview = document.getElementById('modal-photo-preview');
-  var placeholder = document.getElementById('modal-photo-placeholder');
-  var existing = IMAGES[s.id] || null;
-  if (existing) {
-    preview.src = existing;
-    preview.style.display = 'block';
-    placeholder.style.display = 'none';
-  } else {
-    preview.src = '';
-    preview.style.display = 'none';
-    placeholder.style.display = 'flex';
-  }
-  document.getElementById('edit-modal-overlay').classList.add('open');
+  document.getElementById('ef-material').value = s.material || 'Painted Panels';
+  document.getElementById('ef-length').value = s.length != null ? s.length : '';
+  document.getElementById('ef-width').value = s.width != null ? s.width : '';
+  document.getElementById('ef-diameter').value = s.diameter != null ? s.diameter : '';
+  document.getElementById('ef-qty').value = s.qty != null ? s.qty : '';
+  document.getElementById('ef-wet').checked = !!s.wet_safe;
+  document.getElementById('ef-has-small').checked = !!s.has_small;
+  document.getElementById('ef-sl').value = s.small_length != null ? s.small_length : '';
+  document.getElementById('ef-sw').value = s.small_width != null ? s.small_width : '';
+  document.getElementById('ef-small-dims').style.display = s.has_small ? 'block' : 'none';
+  document.getElementById('edit-overlay').classList.add('open');
 }
 
-function closeEditModal() {
-  document.getElementById('edit-modal-overlay').classList.remove('open');
-  editTarget = null;
-  editPendingImageB64 = null;
-}
+function closeEditModal() { document.getElementById('edit-overlay').classList.remove('open'); }
 
 function saveEditModal() {
-  if (!editTarget) return;
-  var s = editTarget;
-  s.name     = document.getElementById('ef-name').value.trim() || s.name;
-  s.material = document.getElementById('ef-material').value;
-  s.size     = document.getElementById('ef-size').value || null;
-  var lv = document.getElementById('ef-length').value;
-  var wv = document.getElementById('ef-width').value;
-  var dv = document.getElementById('ef-diameter').value;
-  var qv = document.getElementById('ef-qty').value;
-  s.length   = lv !== '' ? parseFloat(lv) : null;
-  s.width    = wv !== '' ? parseFloat(wv) : null;
-  s.diameter = dv !== '' ? parseFloat(dv) : null;
-  s.qty      = qv !== '' ? parseInt(qv, 10) : null;
-  s.wet_safe  = document.getElementById('ef-wet-safe').checked;
-  s.has_small = document.getElementById('ef-has-small').checked;
-  var slv = document.getElementById('ef-small-length').value;
-  var swv = document.getElementById('ef-small-width').value;
-  s.small_length = slv !== '' ? parseFloat(slv) : null;
-  s.small_width  = swv !== '' ? parseFloat(swv) : null;
-  s.notes = document.getElementById('ef-notes').value.trim() || null;
-  if (editPendingImageB64) IMAGES[s.id] = editPendingImageB64;
-  if (curColor) { dirtyColors[curColor.key] = true; updateSaveBtn(); }
+  var id = document.getElementById('ef-id').value;
+  // Find the surface in the loaded data
+  var colorKey = curColor ? curColor.key : null;
+  if (!colorKey || !loadedColorData[colorKey]) { closeEditModal(); return; }
+  var arr = loadedColorData[colorKey];
+  var idx = -1;
+  for (var i = 0; i < arr.length; i++) { if (arr[i].id === id) { idx = i; break; } }
+  if (idx === -1) { closeEditModal(); return; }
+
+  function numOrNull(id) { var v = document.getElementById(id).value; return v === '' ? null : parseFloat(v); }
+
+  arr[idx].name        = document.getElementById('ef-name').value;
+  arr[idx].description = document.getElementById('ef-desc').value;
+  arr[idx].notes       = document.getElementById('ef-notes').value;
+  arr[idx].material    = document.getElementById('ef-material').value;
+  arr[idx].length      = numOrNull('ef-length');
+  arr[idx].width       = numOrNull('ef-width');
+  arr[idx].diameter    = numOrNull('ef-diameter');
+  arr[idx].qty         = numOrNull('ef-qty');
+  arr[idx].wet_safe    = document.getElementById('ef-wet').checked;
+  arr[idx].has_small   = document.getElementById('ef-has-small').checked;
+  arr[idx].small_length = numOrNull('ef-sl');
+  arr[idx].small_width  = numOrNull('ef-sw');
+
+  // Sync back to surfaces array if this is the current color
+  surfaces = arr;
+  setDirty(colorKey);
+  document.getElementById('save-btn').classList.add('visible');
   closeEditModal();
   render();
 }
 
-function updateSaveBtn() {
-  var hasDirty = Object.keys(dirtyColors).some(function(k) { return dirtyColors[k]; });
-  var btn = document.getElementById('save-btn');
-  if (hasDirty) btn.classList.add('visible'); else btn.classList.remove('visible');
+// SAVE / DOWNLOAD
+function serializeColorFile(key) {
+  var arr = loadedColorData[key] || [];
+  // Collect images for this color
+  var imgEntries = [];
+  arr.forEach(function(s) { if (IMAGES[s.id]) imgEntries.push([s.id, IMAGES[s.id]]); });
+
+  // Find meta
+  var cfg = null;
+  for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === key) { cfg = COLOR_CONFIG[i]; break; } }
+
+  var lines = ['window._pkSurfaces = ['];
+  arr.forEach(function(s, i) {
+    function js(v) { return v == null ? 'null' : (typeof v === 'string' ? "'" + v.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + "'" : v); }
+    lines.push('  {');
+    lines.push("    id: '" + s.id + "',");
+    lines.push("    material: " + js(s.material) + ',');
+    lines.push("    name: " + js(s.name) + ',');
+    lines.push("    description: " + js(s.description || '') + ',');
+    lines.push("    notes: " + js(s.notes || '') + ',');
+    lines.push("    length: " + js(s.length) + ',');
+    lines.push("    width: " + js(s.width) + ',');
+    lines.push("    diameter: " + js(s.diameter) + ',');
+    lines.push("    small_length: " + js(s.small_length) + ',');
+    lines.push("    small_width: " + js(s.small_width) + ',');
+    lines.push("    qty: " + js(s.qty) + ',');
+    lines.push("    wet_safe: " + (s.wet_safe ? 'true' : 'false') + ',');
+    lines.push("    has_small: " + (s.has_small ? 'true' : 'false') + ',');
+    lines.push("    size: " + js(s.size || null) + ',');
+    lines.push('  }' + (i < arr.length - 1 ? ',' : ''));
+  });
+  lines.push('];', '');
+  lines.push('window._pkImages = {');
+  imgEntries.forEach(function(pair, i) {
+    lines.push("  '" + pair[0] + "': '" + pair[1] + "'" + (i < imgEntries.length - 1 ? ',' : ''));
+  });
+  lines.push('};', '');
+  if (cfg) {
+    var swatches = cfg.swatch2 ? "['" + cfg.swatch + "','" + cfg.swatch2 + "']" : "['" + cfg.swatch + "']";
+    lines.push('window._pkColorMeta = {');
+    lines.push("  label: '" + cfg.label + "',");
+    lines.push("  accent: '" + cfg.swatch + "',");
+    lines.push("  accentPale: '" + cfg.swatch + "1A',");
+    lines.push('  swatchColors: ' + swatches + ',');
+    lines.push('};');
+  }
+  return lines.join('\n');
 }
 
-// ── PHOTO UPLOAD ──
-document.getElementById('modal-photo-file').addEventListener('change', function(e) {
-  var file = e.target.files[0]; if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    var img2 = new Image();
-    img2.onload = function() {
-      var canvas = document.createElement('canvas');
-      var maxW = 800, scale = img2.width > maxW ? maxW / img2.width : 1;
-      canvas.width = Math.round(img2.width * scale);
-      canvas.height = Math.round(img2.height * scale);
-      canvas.getContext('2d').drawImage(img2, 0, 0, canvas.width, canvas.height);
-      var compressed = canvas.toDataURL('image/jpeg', 0.9);
-      editPendingImageB64 = compressed;
-      var preview = document.getElementById('modal-photo-preview');
-      var placeholder = document.getElementById('modal-photo-placeholder');
-      preview.src = compressed;
-      preview.style.display = 'block';
-      placeholder.style.display = 'none';
-    };
-    img2.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// ── SAVE / DOWNLOAD ──
-document.getElementById('save-btn').addEventListener('click', function() {
-  Object.keys(dirtyColors).filter(function(k) { return dirtyColors[k]; }).forEach(function(k) {
-    downloadColorFile(k); dirtyColors[k] = false;
-  });
-  updateSaveBtn();
-});
-
-function downloadColorFile(colorKey) {
-  var data = loadedColors[colorKey]; if (!data) return;
-  var lines = ['window._pkSurfaces = ['];
-  data.forEach(function(s, idx) {
-    var f = [];
-    f.push('  id: ' + JSON.stringify(s.id));
-    f.push('  color: ' + JSON.stringify(s.color || ''));
-    f.push('  material: ' + JSON.stringify(s.material || ''));
-    if (s.size) f.push('  size: ' + JSON.stringify(s.size));
-    f.push('  name: ' + JSON.stringify(s.name || ''));
-    f.push('  length: '   + (s.length   != null ? s.length   : null));
-    f.push('  width: '    + (s.width    != null ? s.width    : null));
-    f.push('  diameter: ' + (s.diameter != null ? s.diameter : null));
-    if (s.qty) f.push('  qty: ' + s.qty);
-    f.push('  wet_safe: ' + !!s.wet_safe);
-    f.push('  has_small: ' + !!s.has_small);
-    if (s.small_length != null) f.push('  small_length: ' + s.small_length);
-    if (s.small_width  != null) f.push('  small_width: '  + s.small_width);
-    if (s.notes) f.push('  notes: ' + JSON.stringify(s.notes));
-    lines.push('  {\n' + f.join(',\n') + '\n  }' + (idx < data.length - 1 ? ',' : ''));
-  });
-  lines.push('];', '', 'window._pkImages = {');
-  var colorIds = data.map(function(s) { return s.id; });
-  var imgKeys = Object.keys(IMAGES).filter(function(k) { return colorIds.indexOf(k) !== -1; });
-  imgKeys.forEach(function(k, idx) {
-    lines.push('  ' + JSON.stringify(k) + ': ' + JSON.stringify(IMAGES[k]) + (idx < imgKeys.length - 1 ? ',' : ''));
-  });
-  lines.push('};');
-  var now = new Date();
-  var yy = String(now.getFullYear()).slice(2);
-  var mm = String(now.getMonth() + 1).padStart(2, '0');
-  var dd = String(now.getDate()).padStart(2, '0');
-  var blob = new Blob([lines.join('\n')], { type: 'text/javascript' });
+function downloadFile(filename, content) {
+  var blob = new Blob([content], { type: 'text/javascript' });
   var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url; a.download = yy + mm + dd + '-' + colorKey + '.js';
+  var a = document.createElement('a'); a.href = url; a.download = filename;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-// ── SHUFFLER ──
+function saveAllDirty() {
+  var today = new Date();
+  var yy = String(today.getFullYear()).slice(2);
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var dd = String(today.getDate()).padStart(2, '0');
+  var dateStr = yy + mm + dd;
+  var keys = usesSet ? Array.from(dirtyColors) : Object.keys(dirtyColors);
+  keys.forEach(function(key) {
+    downloadFile(dateStr + '-' + key + '.js', serializeColorFile(key));
+  });
+  clearDirty();
+  document.getElementById('save-btn').classList.remove('visible');
+}
+
+// SHUFFLER
 function shPool() {
   var all = [];
   Object.keys(loadedColors).forEach(function(k) { all = all.concat(loadedColors[k]); });
   if (shColHas('all')) return all;
   return all.filter(function(s) { return shColHas(s.colorKey); });
 }
+
 function buildSlots() {
-  var pool = shPool(), cfg2 = [];
-  for (var i = 0; i < bgCount; i++)   cfg2.push('bg');
-  for (var i = 0; i < surfCount; i++) cfg2.push('surface');
-  slots = cfg2.map(function(type, i) {
+  var pool = shPool();
+  var cfg = [];
+  for (var i = 0; i < bgCount; i++) cfg.push('bg');
+  for (var i = 0; i < surfCount; i++) cfg.push('surface');
+  slots = cfg.map(function(type, i) {
     var ex = slots[i];
     if (ex && ex.type === type) return ex;
     return { type: type, surface: pool.length ? randPick(pool) : null, pinned: false };
   });
 }
+
 function reshuffle() {
   var pool = shPool();
   slots = slots.map(function(sl) {
     return sl.pinned ? sl : { type: sl.type, surface: pool.length ? randPick(pool) : null, pinned: false };
   });
 }
+
 function renderShuffler() {
   var stage = document.getElementById('sh-stage');
   var loading = document.getElementById('sh-loading');
   if (loading) loading.style.display = 'none';
-  while (stage.firstChild) stage.removeChild(stage.firstChild);
+  while (stage.firstChild) { stage.removeChild(stage.firstChild); }
+
   var bgSlots = slots.filter(function(s) { return s.type === 'bg'; });
   var sfSlots = slots.filter(function(s) { return s.type === 'surface'; });
-  function mkCard2(slot) {
-    var wrap = document.createElement('div');
-    wrap.className = 'sc' + (slot.pinned ? ' pinned' : '');
+
+  function mkCard(slot) {
+    var wrap = document.createElement('div'); wrap.className = 'sc' + (slot.pinned ? ' pinned' : '');
     var imgArea = document.createElement('div'); imgArea.className = 'sc-ph';
     if (slot.surface) {
-      var is2 = IMAGES[slot.surface.id] || null;
-      if (is2) {
-        var img3 = document.createElement('img');
-        img3.src = is2; img3.alt = slot.surface.name;
-        img3.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
-        imgArea.textContent = ''; imgArea.appendChild(img3); imgArea.style.padding = '0';
+      var imgSrc = IMAGES[slot.surface.id] || null;
+      if (imgSrc) {
+        var img = document.createElement('img');
+        img.src = imgSrc; img.alt = slot.surface.name;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        imgArea.textContent = ''; imgArea.appendChild(img); imgArea.style.padding = '0';
       } else {
-        var cfg3 = COLOR_CONFIG.filter(function(c) { return c.key === slot.surface.colorKey; })[0];
-        if (cfg3) imgArea.style.background = 'linear-gradient(135deg,' + cfg3.swatch + '44,' + cfg3.swatch + '11)';
-        imgArea.textContent = '🖼';
+        var scfg = null;
+        for (var i = 0; i < COLOR_CONFIG.length; i++) { if (COLOR_CONFIG[i].key === slot.surface.colorKey) { scfg = COLOR_CONFIG[i]; break; } }
+        if (scfg) imgArea.style.background = 'linear-gradient(135deg,' + scfg.swatch + '44,' + scfg.swatch + '11)';
+        imgArea.textContent = '\ud83d\uddbc';
       }
-    } else { imgArea.textContent = '🖼'; }
+    } else { imgArea.textContent = '\ud83d\uddbc'; }
     wrap.appendChild(imgArea);
     var pin = document.createElement('button'); pin.type = 'button';
     pin.className = 'pin-btn' + (slot.pinned ? ' on' : '');
-    pin.textContent = slot.pinned ? '📌' : '📍';
+    pin.textContent = slot.pinned ? '\ud83d\udccc' : '\ud83d\udccd';
     pin.addEventListener('click', function() { slot.pinned = !slot.pinned; renderShuffler(); });
     wrap.appendChild(pin);
     if (slot.surface) {
-      var s2 = slot.surface;
-      var b2 = document.createElement('div'); b2.className = 'sc-body';
-      var t2 = document.createElement('div'); t2.className = 'sc-title'; t2.textContent = s2.name; b2.appendChild(t2);
-      var m2 = document.createElement('div'); m2.className = 'sc-tags';
-      var ct2 = document.createElement('span'); ct2.className = 'sc-tag ctag'; ct2.textContent = s2.colorKey; m2.appendChild(ct2);
-      var mt2 = document.createElement('span'); mt2.className = 'sc-tag'; mt2.textContent = s2.material; m2.appendChild(mt2);
-      b2.appendChild(m2);
-      var d2 = document.createElement('div'); d2.className = 'sc-dims'; d2.textContent = dimStr(s2); b2.appendChild(d2);
-      wrap.appendChild(b2);
+      var s = slot.surface;
+      var b = document.createElement('div'); b.className = 'sc-body';
+      var t = document.createElement('div'); t.className = 'sc-title'; t.textContent = s.name; b.appendChild(t);
+      var m = document.createElement('div'); m.className = 'sc-tags';
+      var ct = document.createElement('span'); ct.className = 'sc-tag ctag'; ct.textContent = s.colorKey; m.appendChild(ct);
+      var mt = document.createElement('span'); mt.className = 'sc-tag'; mt.textContent = s.material; m.appendChild(mt);
+      b.appendChild(m);
+      var d = document.createElement('div'); d.className = 'sc-dims'; d.textContent = dimStr(s); b.appendChild(d);
+      wrap.appendChild(b);
     }
     return wrap;
   }
+
   function mkRowHdr(label, cur, min, max, onChange) {
-    var hdr2 = document.createElement('div'); hdr2.className = 'rh';
-    var lbl2 = document.createElement('div'); lbl2.className = 'rl'; lbl2.textContent = label; hdr2.appendChild(lbl2);
+    var hdr = document.createElement('div'); hdr.className = 'rh';
+    var lbl = document.createElement('div'); lbl.className = 'rl'; lbl.textContent = label; hdr.appendChild(lbl);
     var tog = document.createElement('div'); tog.className = 'rct';
     for (var n = min; n <= max; n++) {
       (function(num) {
-        var btn2 = document.createElement('button'); btn2.type = 'button';
-        btn2.className = 'rcb' + (num === cur ? ' on' : '');
-        btn2.textContent = String(num);
-        btn2.addEventListener('click', function() { onChange(num); });
-        tog.appendChild(btn2);
+        var btn = document.createElement('button'); btn.type = 'button';
+        btn.className = 'rcb' + (num === cur ? ' on' : '');
+        btn.textContent = String(num);
+        btn.addEventListener('click', function() { onChange(num); });
+        tog.appendChild(btn);
       })(n);
     }
-    hdr2.appendChild(tog); return hdr2;
+    hdr.appendChild(tog); return hdr;
   }
+
   stage.appendChild(mkRowHdr('Background', bgCount, 0, 2, function(n) { bgCount = n; buildSlots(); renderShuffler(); }));
-  if (bgSlots.length) { var r2 = document.createElement('div'); r2.className = 'srow'; bgSlots.forEach(function(sl) { r2.appendChild(mkCard2(sl)); }); stage.appendChild(r2); }
-  stage.appendChild(mkRowHdr('Surface', surfCount, 0, 2, function(n) { surfCount = n; buildSlots(); renderShuffler(); }));
-  var sr2 = document.createElement('div'); sr2.className = 'srow';
-  sfSlots.forEach(function(sl) { sr2.appendChild(mkCard2(sl)); }); stage.appendChild(sr2);
+  if (bgSlots.length) {
+    var r = document.createElement('div'); r.className = 'srow';
+    bgSlots.forEach(function(sl) { r.appendChild(mkCard(sl)); }); stage.appendChild(r);
+  }
+  stage.appendChild(mkRowHdr('Surface', surfCount, 1, 2, function(n) { surfCount = n; buildSlots(); renderShuffler(); }));
+  var sr = document.createElement('div'); sr.className = 'srow';
+  sfSlots.forEach(function(sl) { sr.appendChild(mkCard(sl)); }); stage.appendChild(sr);
 }
+
 function initShuffler() {
   var cont = document.getElementById('sh-chips'); cont.innerHTML = '';
-  function addChip2(label, isAll, key) {
-    var c2 = document.createElement('button'); c2.type = 'button';
-    c2.className = 'sh-chip' + (isAll ? ' on' : '');
-    c2.textContent = label;
-    c2.addEventListener('click', function() {
-      if (isAll) { shColFilter = ['all']; cont.querySelectorAll('.sh-chip').forEach(function(x) { x.classList.toggle('on', x === c2); }); }
-      else {
-        shColRemove('all'); cont.querySelector('.sh-chip').classList.remove('on');
-        if (shColHas(key)) { shColRemove(key); c2.classList.remove('on'); }
-        else { shColAdd(key); c2.classList.add('on'); }
+  function addChip(label, isAll, key) {
+    var c = document.createElement('button'); c.type = 'button';
+    c.className = 'sh-chip' + (isAll ? ' on' : '');
+    c.textContent = label;
+    c.addEventListener('click', function() {
+      if (isAll) {
+        shColFilter = ['all'];
+        cont.querySelectorAll('.sh-chip').forEach(function(x) { x.classList.toggle('on', x === c); });
+      } else {
+        shColRemove('all');
+        cont.querySelector('.sh-chip').classList.remove('on');
+        if (shColHas(key)) { shColRemove(key); c.classList.remove('on'); }
+        else { shColAdd(key); c.classList.add('on'); }
         if (shColFilter.length === 0) { shColAdd('all'); cont.querySelector('.sh-chip').classList.add('on'); }
       }
       if (shReady) { buildSlots(); renderShuffler(); }
     });
-    cont.appendChild(c2);
+    cont.appendChild(c);
   }
-  addChip2('All Colors', true, null);
-  COLOR_CONFIG.forEach(function(cfg) { addChip2(cfg.label, false, cfg.key); });
+  addChip('All Colors', true, null);
+  COLOR_CONFIG.forEach(function(cfg) { addChip(cfg.label, false, cfg.key); });
   loadAll().then(function() { shReady = true; buildSlots(); renderShuffler(); });
 }
+
 function setMode(mode) {
   document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-mode') === mode); });
   var cat = document.getElementById('catalog-view');
@@ -1095,40 +871,26 @@ function setMode(mode) {
   else { cat.style.display = 'none'; sh.style.display = 'flex'; if (!shInited) { shInited = true; initShuffler(); } }
 }
 
-// ── FLOATING TOOLTIP — like Vessels ──
+// PASSWORD GATE
 (function() {
-  var tip = document.getElementById('floating-tooltip');
-  document.querySelectorAll('.info-icon[data-tip]').forEach(function(icon) {
-    icon.addEventListener('mouseenter', function() { tip.textContent = icon.getAttribute('data-tip'); tip.classList.add('visible'); });
-    icon.addEventListener('mousemove',  function(e) { tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 8) + 'px'; });
-    icon.addEventListener('mouseleave', function() { tip.classList.remove('visible'); });
-  });
-})();
-
-// ── PASSWORD GATE ──
-(function() {
-  var CORRECT = 'pksurfaces2026', KEY = 'pk_surfaces_auth';
+  var CORRECT = 'pksurfaces2026';
+  var KEY = 'pk_surfaces_auth';
   var gate = document.getElementById('pw-gate');
   var input = document.getElementById('pw-input');
+  var submit = document.getElementById('pw-submit');
   var errEl = document.getElementById('pw-error');
   if (sessionStorage.getItem(KEY) === '1') { gate.classList.add('hidden'); }
   else { setTimeout(function() { input.focus(); }, 100); }
   function attempt() {
     if (input.value === CORRECT) { sessionStorage.setItem(KEY, '1'); gate.classList.add('hidden'); }
-    else {
-      errEl.textContent = 'Incorrect password';
-      input.classList.add('error'); input.value = '';
-      setTimeout(function() { input.classList.remove('error'); errEl.textContent = ''; input.focus(); }, 800);
-    }
+    else { errEl.textContent = 'Incorrect password'; input.classList.add('error'); input.value = ''; setTimeout(function() { input.classList.remove('error'); errEl.textContent = ''; input.focus(); }, 800); }
   }
-  document.getElementById('pw-submit').addEventListener('click', attempt);
+  submit.addEventListener('click', attempt);
   input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
 })();
 
-// ── EVENT LISTENERS ──
-document.querySelectorAll('.mode-btn').forEach(function(b) {
-  b.addEventListener('click', function() { setMode(b.getAttribute('data-mode')); });
-});
+// EVENT LISTENERS
+document.querySelectorAll('.mode-btn').forEach(function(b) { b.addEventListener('click', function() { setMode(b.getAttribute('data-mode')); }); });
 document.getElementById('color-select').addEventListener('change', function(e) { selectColor(e.target.value); });
 document.getElementById('search').addEventListener('input', function(e) { fState.search = e.target.value; render(); });
 document.querySelectorAll('#mat-filters .chip').forEach(function(chip) {
@@ -1137,43 +899,35 @@ document.querySelectorAll('#mat-filters .chip').forEach(function(chip) {
     chip.classList.add('active'); fState.mat = chip.getAttribute('data-mat'); render();
   });
 });
-document.querySelectorAll('#size-filters .chip').forEach(function(chip) {
-  chip.addEventListener('click', function() {
-    document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.remove('active'); });
-    chip.classList.add('active'); fState.size = chip.getAttribute('data-size'); render();
-  });
-});
-document.getElementById('wet-chip').addEventListener('click', function()   { fState.wet      = !fState.wet;      this.classList.toggle('active', fState.wet);      render(); });
+document.getElementById('wet-chip').addEventListener('click', function() { fState.wet = !fState.wet; this.classList.toggle('active', fState.wet); render(); });
 document.getElementById('small-chip').addEventListener('click', function() { fState.hasSmall = !fState.hasSmall; this.classList.toggle('active', fState.hasSmall); render(); });
-document.getElementById('dim-field').addEventListener('change',  function(e) { fState.dimField = e.target.value; render(); });
-document.getElementById('min-dim').addEventListener('input',    function(e) { fState.minDim = e.target.value ? +e.target.value : null; render(); });
-document.getElementById('max-dim').addEventListener('input',    function(e) { fState.maxDim = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('min-l').addEventListener('input', function(e) { fState.minL = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('max-l').addEventListener('input', function(e) { fState.maxL = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('min-w').addEventListener('input', function(e) { fState.minW = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('max-w').addEventListener('input', function(e) { fState.maxW = e.target.value ? +e.target.value : null; render(); });
 document.getElementById('reset').addEventListener('click', function() {
-  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, dimField:'length', minDim:null, maxDim:null };
+  fState = { search: '', mat: 'all', wet: false, hasSmall: false, minL: null, maxL: null, minW: null, maxW: null };
   document.getElementById('search').value = '';
-  document.querySelectorAll('#mat-filters .chip').forEach(function(c)  { c.classList.toggle('active', c.getAttribute('data-mat')  === 'all'); });
-  document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-size') === 'all'); });
+  document.querySelectorAll('#mat-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-mat') === 'all'); });
   document.getElementById('wet-chip').classList.remove('active');
   document.getElementById('small-chip').classList.remove('active');
-  document.getElementById('dim-field').value = 'length';
-  document.getElementById('min-dim').value = '';
-  document.getElementById('max-dim').value = '';
+  ['min-l','max-l','min-w','max-w'].forEach(function(id) { document.getElementById(id).value = ''; });
   render();
-});
-document.getElementById('modal-close-btn').addEventListener('click', closeEditModal);
-document.getElementById('modal-cancel-btn').addEventListener('click', closeEditModal);
-document.getElementById('modal-save-btn').addEventListener('click', saveEditModal);
-document.getElementById('edit-modal-overlay').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
-document.getElementById('ef-has-small').addEventListener('change', function() {
-  document.getElementById('ef-small-panel').style.display = this.checked ? 'flex' : 'none';
 });
 document.getElementById('shuf-btn').addEventListener('click', function() {
   if (!shReady) return;
-  this.classList.add('spin');
-  var self = this;
+  var self = this; self.classList.add('spin');
   setTimeout(function() { self.classList.remove('spin'); }, 400);
   reshuffle(); renderShuffler();
 });
+document.getElementById('edit-overlay').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
+document.getElementById('edit-close').addEventListener('click', closeEditModal);
+document.getElementById('ef-cancel').addEventListener('click', closeEditModal);
+document.getElementById('ef-save').addEventListener('click', saveEditModal);
+document.getElementById('ef-has-small').addEventListener('change', function() {
+  document.getElementById('ef-small-dims').style.display = this.checked ? 'block' : 'none';
+});
+document.getElementById('save-btn').addEventListener('click', saveAllDirty);
 </script>
 </body>
 </html>
