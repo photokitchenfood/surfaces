@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>[SURFACES] PhotoKitchen Props Catalog</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌫️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -418,14 +419,6 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
           <select id="color-select">
             <option value="">Select a Color</option>
             <option value="ro">Red / Orange</option>
-            <option value="gr">Green</option>
-            <option value="ye">Yellow</option>
-            <option value="pk">Pink / Purple</option>
-            <option value="br">Beige / Brown</option>
-            <option value="bl">Blue</option>
-            <option value="gy">Gray</option>
-            <option value="bk">Black</option>
-            <option value="wh">White</option>
           </select>
         </div>
       </div>
@@ -523,15 +516,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 <script>
 // ── COLOR CONFIG ──
 var COLOR_CONFIG = [
-  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' },
-  { key: 'gr', label: 'Green',        file: 'data/gr.js', swatch: '#4a7c4e', swatch2: null      },
-  { key: 'ye', label: 'Yellow',       file: 'data/ye.js', swatch: '#C8A800', swatch2: null      },
-  { key: 'pk', label: 'Pink / Purple',file: 'data/pk.js', swatch: '#C2547A', swatch2: '#8B5BAE' },
-  { key: 'br', label: 'Beige / Brown',file: 'data/br.js', swatch: '#9C7B5A', swatch2: '#C4A882' },
-  { key: 'bl', label: 'Blue',         file: 'data/bl.js', swatch: '#2563A8', swatch2: null      },
-  { key: 'gy', label: 'Gray',         file: 'data/gy.js', swatch: '#7A7A7A', swatch2: null      },
-  { key: 'bk', label: 'Black',        file: 'data/bk.js', swatch: '#1A1A18', swatch2: null      },
-  { key: 'wh', label: 'White',        file: 'data/wh.js', swatch: '#999999', swatch2: null      },
+  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' }
 ];
 
 var IMAGES = {};
