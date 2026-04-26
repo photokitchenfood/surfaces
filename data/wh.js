@@ -1,7 +1,76 @@
 window._pkSurfaces = [
-  // Solid Wood
+
+  // ── Solid Wood ──────────────────────────────
   {
     id: 'wh-sw-1',
+    material: 'Solid Wood',
+    name: 'White Distressed Solid Wood Panel',
+    description: '',
+    notes: 'BACK-TO-BACK [B3]',
+    length: 112,
+    width: 70,
+    diameter: null,
+    small_length: null,
+    small_width: null,
+    qty: null,
+    wet_safe: false,
+    has_small: false,
+    size: null,
+    archived: true,
+  },
+  {
+    id: 'wh-sw-2',
+    material: 'Solid Wood',
+    name: 'White Weathered Solid Wood Panel',
+    description: '',
+    notes: 'BACK-TO-BACK [B3]',
+    length: 70,
+    width: 40,
+    diameter: null,
+    small_length: null,
+    small_width: null,
+    qty: null,
+    wet_safe: false,
+    has_small: false,
+    size: null,
+    archived: true,
+  },
+  {
+    id: 'wh-sw-3',
+    material: 'Solid Wood',
+    name: 'White Rustic Solid Wood Panel',
+    description: '',
+    notes: 'BACK-TO-BACK [B3]',
+    length: 81,
+    width: 70,
+    diameter: null,
+    small_length: null,
+    small_width: null,
+    qty: null,
+    wet_safe: false,
+    has_small: false,
+    size: null,
+    archived: true,
+  },
+  {
+    id: 'wh-sw-4',
+    material: 'Solid Wood',
+    name: 'White Groove Solid Wood Panel',
+    description: '',
+    notes: 'Single plank: 132×14cm',
+    length: 132,
+    width: 14,
+    diameter: null,
+    small_length: null,
+    small_width: null,
+    qty: 7,
+    wet_safe: false,
+    has_small: false,
+    size: null,
+    archived: true,
+  },
+  {
+    id: 'wh-sw-5',
     material: 'Solid Wood',
     name: 'White Solid Wood Panel',
     description: '',
@@ -17,7 +86,7 @@ window._pkSurfaces = [
     size: null,
   },
   {
-    id: 'wh-sw-2',
+    id: 'wh-sw-6',
     material: 'Solid Wood',
     name: 'White Short Solid Wood Panel',
     description: '',
@@ -32,7 +101,8 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // Painted Panels
+
+  // ── Painted Panels ───────────────────────────
   {
     id: 'wh-pp-1',
     material: 'Painted Panels',
@@ -129,7 +199,8 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // Plastic Laminate
+
+  // ── Plastic Laminate ─────────────────────────
   {
     id: 'wh-pl-1',
     material: 'Plastic Laminate',
@@ -226,7 +297,8 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // Ceramic Tile
+
+  // ── Ceramic Tile ─────────────────────────────
   {
     id: 'wh-ct-1',
     material: 'Ceramic Tile',
@@ -323,7 +395,25 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // Sticker & Printed
+  {
+    id: 'wh-ct-7',
+    material: 'Ceramic Tile',
+    name: 'White Mixed Mosaic Ceramic Tile',
+    description: '',
+    notes: 'Single tile: TBD',
+    length: null,
+    width: null,
+    diameter: null,
+    small_length: null,
+    small_width: null,
+    qty: null,
+    wet_safe: true,
+    has_small: false,
+    size: null,
+    archived: true,
+  },
+
+  // ── Sticker & Printed ────────────────────────
   {
     id: 'wh-sp-1',
     material: 'Sticker & Printed',
@@ -388,7 +478,8 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // Paper
+
+  // ── Paper ────────────────────────────────────
   {
     id: 'wh-pa-1',
     material: 'Paper',
@@ -453,7 +544,8 @@ window._pkSurfaces = [
     has_small: false,
     size: null,
   },
-  // 3D Elements
+
+  // ── 3D Elements ──────────────────────────────
   {
     id: 'wh-3d-1',
     material: '3D Elements',
