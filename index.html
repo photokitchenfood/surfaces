@@ -63,6 +63,12 @@ aside{flex:1;padding:28px 20px;overflow-y:auto}
 /* No Size chip — amber/goldenrod like Vessels nodims */
 .chip-nosize{background:#fff8dc !important;color:#8B6F00 !important;border-color:#D4A800 !important}
 .chip-nosize.active{background:#D4A800 !important;color:#fff !important;border-color:#D4A800 !important}
+/* Wet-safe chip — light blue matching card wet-tag */
+.chip-wet{background:#E3F2FD !important;color:#1565C0 !important;border-color:#90CAF9 !important}
+.chip-wet.active{background:#1565C0 !important;color:#fff !important;border-color:#1565C0 !important}
+/* Small ver. chip — light purple matching card small-tag */
+.chip-small{background:#F3E5F5 !important;color:#6A1B9A !important;border-color:#CE93D8 !important}
+.chip-small.active{background:#6A1B9A !important;color:#fff !important;border-color:#6A1B9A !important}
 
 /* DIM SELECT — matching Vessels dim-select */
 .dim-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border-radius:var(--radius);border:1.5px solid var(--tag-border);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
@@ -390,16 +396,16 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 
 <header>
   <div class="logo">PhotoKitchen</div>
-  <span class="header-meta">Props Catalog 2.0 &mdash; Surfaces</span>
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="catalog">Catalog</button>
+    <button class="mode-btn" data-mode="shuffler">Shuffler</button>
+  </div>
   <div class="header-right">
     <button id="save-btn" type="button">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Save Changes
     </button>
-    <div class="mode-toggle">
-      <button class="mode-btn active" data-mode="catalog">Catalog</button>
-      <button class="mode-btn" data-mode="shuffler">Shuffler</button>
-    </div>
+    <span class="header-meta">Props Catalog 2.0 &mdash; Surfaces</span>
   </div>
 </header>
 
@@ -458,8 +464,8 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
       <div class="sidebar-section">
         <div class="sidebar-label">Properties</div>
         <div class="chip-group">
-          <button class="chip" id="wet-chip">&#128167; Wet-Safe</button>
-          <button class="chip" id="small-chip">&#128208; Small ver.</button>
+          <button class="chip chip-wet" id="wet-chip">&#128167; Wet-Safe</button>
+          <button class="chip chip-small" id="small-chip">&#128208; Small ver.</button>
         </div>
       </div>
       <div class="sidebar-section">
@@ -537,8 +543,8 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
     <div class="sh-section">
       <div class="sh-lbl">Properties</div>
       <div class="chip-group">
-        <button class="chip" id="sh-wet-chip">&#128167; Wet-Safe</button>
-        <button class="chip" id="sh-small-chip">&#128208; Small ver.</button>
+        <button class="chip chip-wet" id="sh-wet-chip">&#128167; Wet-Safe</button>
+        <button class="chip chip-small" id="sh-small-chip">&#128208; Small ver.</button>
       </div>
     </div>
   </div>
@@ -546,7 +552,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
     <div class="sh-stage" id="sh-stage">
       <div class="sh-loading" id="sh-loading">
         <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
-        <span style="font-size:11px;color:var(--ink-faint);letter-spacing:.05em;font-family:'DM Mono',monospace">Loading surfaces&hellip;</span>
+        <span style="font-size:13px;color:var(--ink);font-family:'Syne',sans-serif;font-weight:600">Loading surfaces&hellip;</span>
       </div>
     </div>
   </div>
