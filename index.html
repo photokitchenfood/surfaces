@@ -206,42 +206,42 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 
 /* SHUFFLER */
 #shuffler-view{display:none;flex-direction:row;min-height:calc(100vh - 64px)}
-.sh-sidebar{width:260px;flex-shrink:0;background:#2a2a28;border-right:1px solid #333;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;padding:24px 18px}
+.sh-sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--tag-border);position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;padding:24px 18px}
 .sh-section{margin-bottom:24px}
-.sh-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#3a3a3a;margin-bottom:10px;font-weight:500}
-.sh-chip{display:inline-block;font-family:"DM Mono",monospace;font-size:11px;padding:4px 10px;border-radius:100px;border:1.5px solid #2a2a2a;background:transparent;color:#555;cursor:pointer;transition:all .15s;white-space:nowrap;margin:0 4px 6px 0}
-.sh-chip:hover{border-color:#666;color:#aaa}
-.sh-chip.on{background:#2a2a2a;border-color:#777;color:#ccc}
-.shuf-btn{font-family:"Syne",sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:10px 28px;border-radius:6px;border:none;background:#fff;color:#111;cursor:pointer;display:flex;align-items:center;gap:8px;transition:opacity .15s}
+.sh-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px;font-weight:500}
+.sh-chip{display:inline-block;font-family:"DM Mono",monospace;font-size:11px;padding:4px 10px;border-radius:100px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s;white-space:nowrap;margin:0 4px 6px 0}
+.sh-chip:hover{border-color:var(--ink);color:var(--ink)}
+.sh-chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.shuf-btn{font-family:"Syne",sans-serif;font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:10px 28px;border-radius:6px;border:none;background:var(--ink);color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:opacity .15s}
 .shuf-btn:hover{opacity:.88}
 .shuf-btn:active{transform:scale(.97)}
 .sh-icon{font-size:15px;display:inline-block}
 .shuf-btn.spin .sh-icon{animation:shspin .4s ease}
 @keyframes shspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.sh-stage{flex:1;padding:32px 28px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;align-items:flex-start}
-.sh-main{flex:1;background:#111;display:flex;flex-direction:column;min-height:calc(100vh - 64px)}
+.sh-stage{flex:1;padding:32px 28px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;align-items:flex-start;background:var(--bg)}
+.sh-main{flex:1;background:var(--bg);display:flex;flex-direction:column;min-height:calc(100vh - 64px)}
 .rh{display:flex;align-items:center;gap:12px}
-.rl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#3a3a3a;font-family:"DM Mono",monospace}
+.rl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-family:"DM Mono",monospace}
 .rct{display:flex;gap:4px}
-.rcb{font-family:"DM Mono",monospace;font-size:11px;width:26px;height:26px;border-radius:5px;border:1.5px solid #2a2a2a;background:transparent;color:#444;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.rcb:hover{border-color:#666;color:#aaa}
-.rcb.on{border-color:#888;color:#ddd;background:rgba(255,255,255,.07)}
+.rcb{font-family:"DM Mono",monospace;font-size:11px;width:26px;height:26px;border-radius:5px;border:1.5px solid var(--tag-border);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.rcb:hover{border-color:var(--ink);color:var(--ink)}
+.rcb.on{border-color:var(--ink);color:#fff;background:var(--ink)}
 .srow{display:flex;gap:20px;flex-wrap:wrap}
-.sc{width:340px;flex-shrink:0;background:#1a1a1a;border-radius:10px;border:1.5px solid #252525;overflow:hidden;position:relative}
-.sc.pinned{border-color:#666}
-.sc-ph{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:28px;color:#2a2a2a;background:#111}
+.sc{width:340px;flex-shrink:0;background:var(--surface);border-radius:10px;border:1.5px solid var(--tag-border);overflow:hidden;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sc.pinned{border-color:var(--ink)}
+.sc-ph{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--ink-faint);background:#F0EDE8}
 .sc-body{padding:12px 14px 14px}
-.sc-title{font-family:"Syne",sans-serif;font-size:13px;font-weight:600;color:#ccc;margin-bottom:6px;line-height:1.3}
+.sc-title{font-family:"Syne",sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.3}
 .sc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
-.sc-tag{font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid #2a2a2a;color:#555;letter-spacing:.04em;text-transform:uppercase}
-.sc-tag.ctag{border-color:#333;color:#666}
-.sc-dims{font-size:10px;color:#444;line-height:1.6}
-.pin-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:6px;border:1.5px solid #252525;background:rgba(0,0,0,.6);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;color:#444}
-.pin-btn:hover{border-color:#666;color:#aaa}
-.pin-btn.on{border-color:#888;color:#ccc}
+.sc-tag{font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid var(--tag-border);color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase;background:var(--tag-bg)}
+.sc-tag.ctag{border-color:var(--tag-border);color:var(--ink-faint)}
+.sc-dims{font-size:10px;color:var(--ink-soft);line-height:1.6}
+.pin-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:6px;border:1.5px solid var(--tag-border);background:rgba(255,255,255,.85);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .15s;color:var(--ink-soft)}
+.pin-btn:hover{border-color:var(--ink);color:var(--ink)}
+.pin-btn.on{border-color:var(--ink);color:var(--ink);background:#fff}
 .sh-loading{display:flex;align-items:center;justify-content:center;height:240px;flex-direction:column;gap:14px}
 .ldots{display:flex;gap:6px}
-.ldot{width:6px;height:6px;border-radius:50%;background:#2a2a2a;animation:ldp 1s ease-in-out infinite}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--ink-faint);animation:ldp 1s ease-in-out infinite}
 .ldot:nth-child(2){animation-delay:.15s}
 .ldot:nth-child(3){animation-delay:.3s}
 @keyframes ldp{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
@@ -419,6 +419,14 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
           <select id="color-select">
             <option value="">Select a Color</option>
             <option value="ro">Red / Orange</option>
+            <option value="gr">Green</option>
+            <option value="ye">Yellow</option>
+            <option value="pk">Pink / Purple</option>
+            <option value="br">Beige / Brown</option>
+            <option value="bl">Blue</option>
+            <option value="gy">Gray</option>
+            <option value="bk">Black</option>
+            <option value="wh">White</option>
           </select>
         </div>
       </div>
@@ -492,22 +500,53 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 </div>
 
 <div id="shuffler-view">
-  <div class="sh-sidebar" style="display:flex;flex-direction:column">
+  <div class="sh-sidebar" style="display:flex;flex-direction:column;overflow-y:auto">
     <div style="margin-bottom:24px">
       <button class="shuf-btn" id="shuf-btn" style="width:100%;justify-content:center">
         <span class="sh-icon">&#10227;</span> Shuffle
       </button>
     </div>
     <div class="sh-section">
-      <div class="sh-lbl">Color Filter</div>
+      <div class="sh-lbl">Color</div>
       <div id="sh-chips"></div>
+    </div>
+    <div class="sh-section">
+      <div class="sh-lbl">Material</div>
+      <div class="chip-group" id="sh-mat-filters">
+        <button class="chip active" data-shmat="all">All</button>
+        <button class="chip" data-shmat="Painted Panels">Painted Panels</button>
+        <button class="chip" data-shmat="Plastic Laminate">Plastic Laminate</button>
+        <button class="chip" data-shmat="Ceramic Tile">Ceramic Tile</button>
+        <button class="chip" data-shmat="Sticker &amp; Printed">Sticker &amp; Printed</button>
+        <button class="chip" data-shmat="Special Material">Special Material</button>
+        <button class="chip" data-shmat="Paper">Paper</button>
+        <button class="chip" data-shmat="3D Elements">3D Elements</button>
+        <button class="chip" data-shmat="Solid Wood">Solid Wood</button>
+      </div>
+    </div>
+    <div class="sh-section">
+      <div class="sh-lbl">Size</div>
+      <div class="chip-group" id="sh-size-filters">
+        <button class="chip active" data-shsize="all">All</button>
+        <button class="chip" data-shsize="S">S &lt;40cm</button>
+        <button class="chip" data-shsize="M">M 40–69cm</button>
+        <button class="chip" data-shsize="L">L 70–99cm</button>
+        <button class="chip" data-shsize="XL">XL ≥100cm</button>
+      </div>
+    </div>
+    <div class="sh-section">
+      <div class="sh-lbl">Properties</div>
+      <div class="chip-group">
+        <button class="chip" id="sh-wet-chip">&#128167; Wet-Safe</button>
+        <button class="chip" id="sh-small-chip">&#128208; Has Small</button>
+      </div>
     </div>
   </div>
   <div class="sh-main">
     <div class="sh-stage" id="sh-stage">
       <div class="sh-loading" id="sh-loading">
         <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
-        <span style="font-size:11px;color:#333;letter-spacing:.05em;font-family:'DM Mono',monospace">Loading surfaces&hellip;</span>
+        <span style="font-size:11px;color:var(--ink-faint);letter-spacing:.05em;font-family:'DM Mono',monospace">Loading surfaces&hellip;</span>
       </div>
     </div>
   </div>
@@ -516,7 +555,15 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 <script>
 // ── COLOR CONFIG ──
 var COLOR_CONFIG = [
-  { key: 'ro', label: 'Red / Orange', file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' }
+  { key: 'ro', label: 'Red / Orange',  file: 'data/ro.js', swatch: '#C0392B', swatch2: '#E8621A' },
+  { key: 'gr', label: 'Green',         file: 'data/gr.js', swatch: '#4a7c4e', swatch2: null      },
+  { key: 'ye', label: 'Yellow',        file: 'data/ye.js', swatch: '#C8A800', swatch2: null      },
+  { key: 'pk', label: 'Pink / Purple', file: 'data/pk.js', swatch: '#C2547A', swatch2: '#8B5BAE' },
+  { key: 'br', label: 'Beige / Brown', file: 'data/br.js', swatch: '#9C7B5A', swatch2: '#C4A882' },
+  { key: 'bl', label: 'Blue',          file: 'data/bl.js', swatch: '#2563A8', swatch2: null      },
+  { key: 'gy', label: 'Gray',          file: 'data/gy.js', swatch: '#7A7A7A', swatch2: null      },
+  { key: 'bk', label: 'Black',         file: 'data/bk.js', swatch: '#1A1A18', swatch2: null      },
+  { key: 'wh', label: 'White',         file: 'data/wh.js', swatch: '#999999', swatch2: null      },
 ];
 
 var IMAGES = {};
@@ -980,11 +1027,21 @@ function downloadColorFile(colorKey) {
 }
 
 // ── SHUFFLER ──
+var shState = { mat: 'all', size: 'all', wet: false, hasSmall: false };
+
 function shPool() {
   var all = [];
   Object.keys(loadedColors).forEach(function(k) { all = all.concat(loadedColors[k]); });
-  if (shColHas('all')) return all;
-  return all.filter(function(s) { return shColHas(s.colorKey); });
+  // Color filter
+  if (!shColHas('all')) all = all.filter(function(s) { return shColHas(s.colorKey); });
+  // Material filter
+  if (shState.mat !== 'all') all = all.filter(function(s) { return s.material === shState.mat; });
+  // Size filter
+  if (shState.size !== 'all') all = all.filter(function(s) { return getSizeCategory(s) === shState.size; });
+  // Properties
+  if (shState.wet)      all = all.filter(function(s) { return s.wet_safe; });
+  if (shState.hasSmall) all = all.filter(function(s) { return s.has_small; });
+  return all;
 }
 function buildSlots() {
   var pool = shPool(), cfg2 = [];
@@ -1068,24 +1125,101 @@ function renderShuffler() {
 }
 function initShuffler() {
   var cont = document.getElementById('sh-chips'); cont.innerHTML = '';
-  function addChip2(label, isAll, key) {
+
+  // Build color chips — "All Colors" + one per color in CONFIG
+  function addColorChip(label, isAll, key, swatch) {
     var c2 = document.createElement('button'); c2.type = 'button';
     c2.className = 'sh-chip' + (isAll ? ' on' : '');
     c2.textContent = label;
+    if (isAll) {
+      c2.style.cssText = ''; // default ink styling when active
+    }
     c2.addEventListener('click', function() {
-      if (isAll) { shColFilter = ['all']; cont.querySelectorAll('.sh-chip').forEach(function(x) { x.classList.toggle('on', x === c2); }); }
-      else {
-        shColRemove('all'); cont.querySelector('.sh-chip').classList.remove('on');
-        if (shColHas(key)) { shColRemove(key); c2.classList.remove('on'); }
-        else { shColAdd(key); c2.classList.add('on'); }
-        if (shColFilter.length === 0) { shColAdd('all'); cont.querySelector('.sh-chip').classList.add('on'); }
+      if (isAll) {
+        shColFilter = ['all'];
+        cont.querySelectorAll('.sh-chip').forEach(function(x) {
+          x.classList.toggle('on', x === c2);
+          if (x !== c2) x.style.background = x.style.borderColor = x.style.color = '';
+        });
+        c2.style.background = 'var(--ink)';
+        c2.style.borderColor = 'var(--ink)';
+        c2.style.color = '#fff';
+      } else {
+        // Deactivate "All" chip
+        shColRemove('all');
+        var allChip = cont.querySelector('.sh-chip');
+        allChip.classList.remove('on');
+        allChip.style.background = allChip.style.borderColor = allChip.style.color = '';
+        // Toggle this color
+        if (shColHas(key)) {
+          shColRemove(key);
+          c2.classList.remove('on');
+          c2.style.background = c2.style.borderColor = c2.style.color = '';
+        } else {
+          shColAdd(key);
+          c2.classList.add('on');
+          c2.style.background = swatch;
+          c2.style.borderColor = swatch;
+          c2.style.color = '#fff';
+        }
+        // If nothing selected, fall back to All
+        if (shColFilter.length === 0) {
+          shColAdd('all');
+          allChip.classList.add('on');
+          allChip.style.background = 'var(--ink)';
+          allChip.style.borderColor = 'var(--ink)';
+          allChip.style.color = '#fff';
+        }
       }
       if (shReady) { buildSlots(); renderShuffler(); }
     });
+    // Initial active style for "All"
+    if (isAll) {
+      c2.style.background = 'var(--ink)';
+      c2.style.borderColor = 'var(--ink)';
+      c2.style.color = '#fff';
+    }
     cont.appendChild(c2);
   }
-  addChip2('All Colors', true, null);
-  COLOR_CONFIG.forEach(function(cfg) { addChip2(cfg.label, false, cfg.key); });
+
+  addColorChip('All Colors', true, null, null);
+  COLOR_CONFIG.forEach(function(cfg) {
+    // For two-tone swatches use the primary swatch for the chip active color
+    addColorChip(cfg.label, false, cfg.key, cfg.swatch);
+  });
+
+  // Wire up Material chips in shuffler sidebar
+  document.querySelectorAll('#sh-mat-filters .chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('#sh-mat-filters .chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      shState.mat = chip.getAttribute('data-shmat');
+      if (shReady) { buildSlots(); renderShuffler(); }
+    });
+  });
+
+  // Wire up Size chips in shuffler sidebar
+  document.querySelectorAll('#sh-size-filters .chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('#sh-size-filters .chip').forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      shState.size = chip.getAttribute('data-shsize');
+      if (shReady) { buildSlots(); renderShuffler(); }
+    });
+  });
+
+  // Wire up Properties chips
+  document.getElementById('sh-wet-chip').addEventListener('click', function() {
+    shState.wet = !shState.wet;
+    this.classList.toggle('active', shState.wet);
+    if (shReady) { buildSlots(); renderShuffler(); }
+  });
+  document.getElementById('sh-small-chip').addEventListener('click', function() {
+    shState.hasSmall = !shState.hasSmall;
+    this.classList.toggle('active', shState.hasSmall);
+    if (shReady) { buildSlots(); renderShuffler(); }
+  });
+
   loadAll().then(function() { shReady = true; buildSlots(); renderShuffler(); });
 }
 function setMode(mode) {
