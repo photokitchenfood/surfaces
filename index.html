@@ -69,6 +69,9 @@ aside{flex:1;padding:28px 20px;overflow-y:auto}
 /* Small ver. chip — light purple matching card small-tag */
 .chip-small{background:#F3E5F5 !important;color:#6A1B9A !important;border-color:#CE93D8 !important}
 .chip-small.active{background:#6A1B9A !important;color:#fff !important;border-color:#6A1B9A !important}
+/* Planks chip — muted brown matching card planks-tag / ep-planks */
+.chip-planks{background:#FBF0E8 !important;color:#7B4F2E !important;border-color:#C4895A !important}
+.chip-planks.active{background:#7B4F2E !important;color:#fff !important;border-color:#7B4F2E !important}
 
 /* DIM SELECT — matching Vessels dim-select */
 .dim-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border-radius:var(--radius);border:1.5px solid var(--tag-border);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
@@ -137,16 +140,21 @@ main{padding:28px 32px}
 .card-dims .dv{color:var(--ink)}
 .card-dims .dv.miss{color:#c09000;font-style:italic}
 .card-dims .small-hdr{font-size:9px;color:#CE93D8;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.card-dims .plank-hdr{font-size:9px;color:#7B4F2E;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .card-note{font-size:10px;color:var(--ink-soft);font-style:italic;line-height:1.4}
 
 /* CARD FOOTER / TAGS — like Vessels: color-tag (colored) + mat-tag (gray) */
-.card-footer{display:flex;align-items:center;gap:4px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+.card-footer{display:flex;align-items:flex-end;justify-content:space-between;gap:6px;margin-top:auto;padding-top:4px}
+.card-footer-tags{display:flex;flex-direction:column;gap:4px;min-width:0}
+.card-footer-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .tag{font-size:9px;padding:2px 7px;border-radius:3px;background:var(--tag-bg);border:1px solid var(--tag-border);color:var(--ink-soft);letter-spacing:.04em;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
 .tag.color-tag{display:inline-flex;align-items:center;gap:4px}
 .tag-dot{width:6px;height:6px;border-radius:50%;border:1px solid rgba(0,0,0,.1);flex-shrink:0}
 .tag.mat-tag{background:var(--tag-bg);border-color:var(--tag-border);color:var(--ink-soft)}
 .tag.wet-tag{background:#E3F2FD;border-color:#90CAF9;color:#1565C0}
 .tag.small-tag{background:#F3E5F5;border-color:#CE93D8;color:#6A1B9A}
+.tag.planks-tag{background:#FBF0E8;border-color:#C4895A;color:#7B4F2E}
+.storage-tag{flex-shrink:0;max-width:110px;background:var(--ink);color:#fff;font-family:"DM Mono",monospace;font-size:13px;line-height:1;padding:4px 6px;border-radius:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 aside::-webkit-scrollbar{width:4px}
 aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
@@ -580,6 +588,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
         <div class="chip-group">
           <button class="chip chip-wet" id="wet-chip">&#128167; Wet-Safe</button>
           <button class="chip chip-small" id="small-chip">&#128208; Small ver.</button>
+          <button class="chip chip-planks" id="planks-chip">&#129717; Planks</button>
         </div>
       </div>
       <div class="sidebar-section">
@@ -660,6 +669,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
       <div class="chip-group">
         <button class="chip chip-wet" id="sh-wet-chip">&#128167; Wet-Safe</button>
         <button class="chip chip-small" id="sh-small-chip">&#128208; Small ver.</button>
+        <button class="chip chip-planks" id="sh-planks-chip">&#129717; Planks</button>
       </div>
     </div>
   </div>
@@ -696,7 +706,7 @@ var editTarget = null;
 var editPendingImageB64 = null;
 
 var fState = {
-  search: '', mat: 'all', size: 'all', wet: false, hasSmall: false,
+  search: '', mat: 'all', size: 'all', wet: false, hasSmall: false, planks: false,
   dimField: 'length', minDim: null, maxDim: null
 };
 var bgCount = 1, surfCount = 1;
@@ -805,6 +815,7 @@ function matches(s) {
   }
   if (fState.wet && !s.wet_safe) return false;
   if (fState.hasSmall && !s.has_small) return false;
+  if (fState.planks && !s.planks) return false;
   if (fState.minDim !== null || fState.maxDim !== null) {
     var val = s[fState.dimField];
     if (val == null) return false;
@@ -936,6 +947,7 @@ function render() {
   }
   if (fState.wet)      bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Wet-Safe</span>';
   if (fState.hasSmall) bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
+  if (fState.planks)   bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Planks</span>';
   hdr.style.color = ''; hdr.innerHTML = bc;
 
   var filtered = sortArchivedLast(surfaces.filter(matches));
@@ -1070,6 +1082,11 @@ function buildCard(s, i) {
     addDR('Length', s.small_length, 'cm');
     if (s.small_width) addDR('Width', s.small_width, 'cm');
   }
+  if (s.planks && s.plank_length) {
+    var plHdr = document.createElement('div'); plHdr.className = 'plank-hdr'; plHdr.textContent = 'Plank Dimensions'; dims.appendChild(plHdr);
+    addDR('Length', s.plank_length, 'cm');
+    if (s.plank_width) addDR('Width', s.plank_width, 'cm');
+  }
   body.appendChild(dims);
 
   if (s.notes) {
@@ -1080,6 +1097,13 @@ function buildCard(s, i) {
   var footer = document.createElement('div');
   footer.className = 'card-footer';
 
+  // Left-flowing tags — color+material on row 1, wet-safe+small-ver on row 2
+  var footerTags = document.createElement('div');
+  footerTags.className = 'card-footer-tags';
+
+  var footerRow1 = document.createElement('div');
+  footerRow1.className = 'card-footer-row';
+
   // Color tag — colored border/text/bg, swatch dot
   var colorTag = document.createElement('span');
   colorTag.className = 'tag color-tag';
@@ -1087,19 +1111,34 @@ function buildCard(s, i) {
   var dot2 = document.createElement('span'); dot2.className = 'tag-dot'; dot2.style.background = sw;
   colorTag.appendChild(dot2);
   colorTag.appendChild(document.createTextNode(curColor.label));
-  footer.appendChild(colorTag);
+  footerRow1.appendChild(colorTag);
 
   // Material tag — always gray, neutral
   var matTag = document.createElement('span');
   matTag.className = 'tag mat-tag';
   matTag.textContent = s.material;
-  footer.appendChild(matTag);
+  footerRow1.appendChild(matTag);
+  footerTags.appendChild(footerRow1);
 
-  if (s.wet_safe) {
-    var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '💧 Wet-Safe'; footer.appendChild(wt);
+  if (s.wet_safe || s.has_small || s.planks) {
+    var footerRow2 = document.createElement('div');
+    footerRow2.className = 'card-footer-row';
+    if (s.wet_safe) {
+      var wt = document.createElement('span'); wt.className = 'tag wet-tag'; wt.textContent = '💧 Wet-Safe'; footerRow2.appendChild(wt);
+    }
+    if (s.has_small) {
+      var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '📐 + Small'; footerRow2.appendChild(st);
+    }
+    if (s.planks) {
+      var pt = document.createElement('span'); pt.className = 'tag planks-tag'; pt.textContent = '🪵 Planks'; footerRow2.appendChild(pt);
+    }
+    footerTags.appendChild(footerRow2);
   }
-  if (s.has_small) {
-    var st = document.createElement('span'); st.className = 'tag small-tag'; st.textContent = '📐 + Small'; footer.appendChild(st);
+  footer.appendChild(footerTags);
+
+  // Storage tag — pinned to the right edge of the footer, independent of the left-flowing tags
+  if (s.storage) {
+    var lt = document.createElement('span'); lt.className = 'storage-tag'; lt.textContent = s.storage; footer.appendChild(lt);
   }
 
   body.appendChild(footer);
@@ -1279,7 +1318,7 @@ function downloadColorFile(colorKey) {
 }
 
 // ── SHUFFLER ──
-var shState = { mat: 'all', size: 'all', wet: false, hasSmall: false };
+var shState = { mat: 'all', size: 'all', wet: false, hasSmall: false, planks: false };
 
 function shPool() {
   var all = [];
@@ -1295,6 +1334,7 @@ function shPool() {
   // Properties
   if (shState.wet)      all = all.filter(function(s) { return s.wet_safe; });
   if (shState.hasSmall) all = all.filter(function(s) { return s.has_small; });
+  if (shState.planks)   all = all.filter(function(s) { return s.planks; });
   return all;
 }
 function buildSlots() {
@@ -1476,6 +1516,11 @@ function initShuffler() {
     this.classList.toggle('active', shState.hasSmall);
     if (shReady) { buildSlots(); renderShuffler(); }
   });
+  document.getElementById('sh-planks-chip').addEventListener('click', function() {
+    shState.planks = !shState.planks;
+    this.classList.toggle('active', shState.planks);
+    if (shReady) { buildSlots(); renderShuffler(); }
+  });
 
   loadAll().then(function() { shReady = true; buildSlots(); renderShuffler(); });
 }
@@ -1537,16 +1582,18 @@ document.querySelectorAll('#size-filters .chip').forEach(function(chip) {
 });
 document.getElementById('wet-chip').addEventListener('click', function()   { fState.wet      = !fState.wet;      this.classList.toggle('active', fState.wet);      render(); });
 document.getElementById('small-chip').addEventListener('click', function() { fState.hasSmall = !fState.hasSmall; this.classList.toggle('active', fState.hasSmall); render(); });
+document.getElementById('planks-chip').addEventListener('click', function() { fState.planks = !fState.planks; this.classList.toggle('active', fState.planks); render(); });
 document.getElementById('dim-field').addEventListener('change',  function(e) { fState.dimField = e.target.value; render(); });
 document.getElementById('min-dim').addEventListener('input',    function(e) { fState.minDim = e.target.value ? +e.target.value : null; render(); });
 document.getElementById('max-dim').addEventListener('input',    function(e) { fState.maxDim = e.target.value ? +e.target.value : null; render(); });
 document.getElementById('reset').addEventListener('click', function() {
-  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, dimField:'length', minDim:null, maxDim:null };
+  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, planks:false, dimField:'length', minDim:null, maxDim:null };
   document.getElementById('search').value = '';
   document.querySelectorAll('#mat-filters .chip').forEach(function(c)  { c.classList.toggle('active', c.getAttribute('data-mat')  === 'all'); });
   document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-size') === 'all'); });
   document.getElementById('wet-chip').classList.remove('active');
   document.getElementById('small-chip').classList.remove('active');
+  document.getElementById('planks-chip').classList.remove('active');
   document.getElementById('dim-field').value = 'length';
   document.getElementById('min-dim').value = '';
   document.getElementById('max-dim').value = '';
