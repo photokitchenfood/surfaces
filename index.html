@@ -106,9 +106,10 @@ main{padding:28px 32px}
 .id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap;pointer-events:none}
 .card:hover .id-tag{opacity:1}
 .qty-badge{position:absolute;top:8px;left:8px;background:#fff;color:var(--ink);font-size:10px;padding:2px 6px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.card.is-archived{opacity:.55}
-.card.is-archived .card-img img{filter:grayscale(.6)}
-.archived-tag{background:#1A1A18;color:#fff;font-size:9px;padding:2px 7px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.chip-archived{background:#EFEFEB;color:var(--ink);border-color:var(--ink)}
+.chip-archived.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.archived-overlay{position:absolute;inset:0;background:rgba(0,0,0,.50);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.archived-overlay svg{color:#fff;opacity:.9;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))}
 
 /* EDIT BUTTON — bottom-right of image, exactly like Vessels btn-replace-photo */
 .btn-edit-card{position:absolute;bottom:8px;right:8px;background:none;border:none;padding:2px;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;color:var(--ink-soft)}
@@ -560,6 +561,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
           <button class="chip" data-mat="Paper">Paper</button>
           <button class="chip" data-mat="3D Elements">3D Elements</button>
           <button class="chip" data-mat="Solid Wood">Solid Wood</button>
+          <button class="chip chip-archived" data-mat="__archived__">🗄️ Archived</button>
         </div>
       </div>
       <div class="sidebar-section">
@@ -791,7 +793,11 @@ function applyColorUI(cfg) {
 
 // ── FILTERING ──
 function matches(s) {
-  if (fState.mat !== 'all' && s.material !== fState.mat) return false;
+  if (fState.mat === '__archived__') {
+    if (!s.archived) return false;
+  } else {
+    if (fState.mat !== 'all' && s.material !== fState.mat) return false;
+  }
   var sc = getSizeCategory(s);
   if (fState.size !== 'all') {
     if (fState.size === 'none') { if (sc !== null) return false; }
@@ -811,6 +817,14 @@ function matches(s) {
     if (hay.indexOf(q) === -1) return false;
   }
   return true;
+}
+
+// Archived surfaces always sink to the bottom of whatever view is showing,
+// while preserving each group's existing relative order.
+function sortArchivedLast(list) {
+  var active   = list.filter(function(s) { return !s.archived; });
+  var archived = list.filter(function(s) { return  s.archived; });
+  return active.concat(archived);
 }
 
 // ── RENDER ──
@@ -914,7 +928,7 @@ function render() {
   var sw = curColor.swatch;
   var bc = '<span style="color:' + sw + '">' + curColor.label + '</span>';
   if (fState.mat !== 'all') {
-    bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + fState.mat + '</span>';
+    bc += ' <span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:var(--ink)"> / ' + (fState.mat === '__archived__' ? 'Archived' : fState.mat) + '</span>';
   }
   if (fState.size !== 'all') {
     var sizeLabels = { S:'S (<40cm)', M:'M (40–69cm)', L:'L (70–99cm)', XL:'XL (≥100cm)', none:'No Size' };
@@ -924,8 +938,14 @@ function render() {
   if (fState.hasSmall) bc += ' <span style="font-family:\'DM Mono\',monospace;font-size:11px;color:#A8A49C"> / Has Small</span>';
   hdr.style.color = ''; hdr.innerHTML = bc;
 
-  var filtered = surfaces.filter(matches);
+  var filtered = sortArchivedLast(surfaces.filter(matches));
   count.innerHTML = '<span>' + filtered.length + '</span> surface' + (filtered.length !== 1 ? 's' : '');
+  if (fState.mat !== '__archived__') {
+    var archivedCount = filtered.filter(function(s) { return s.archived; }).length;
+    if (archivedCount > 0) {
+      count.innerHTML += ' <span style="color:#A8A49C;font-weight:400;">/ ' + archivedCount + ' archived</span>';
+    }
+  }
 
   if (!filtered.length) { grid.innerHTML = ''; empty.classList.add('show'); return; }
   empty.classList.remove('show');
@@ -962,7 +982,7 @@ function buildCard(s, i) {
   var sbLabel = sc || 'No Size';
 
   var card = document.createElement('div');
-  card.className = 'card' + (s.archived ? ' is-archived' : '');
+  card.className = 'card';
   card.style.animationDelay = Math.min(i * 0.025, 0.3) + 's';
 
   // ── IMAGE ──
@@ -987,7 +1007,12 @@ function buildCard(s, i) {
   stripe.style.background = sw;
   imgDiv.appendChild(stripe);
 
-  if (s.qty && s.qty > 1) {
+  if (s.archived) {
+    var overlay = document.createElement('div');
+    overlay.className = 'archived-overlay';
+    overlay.innerHTML = '<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="8" y1="8" x2="32" y2="32"/><line x1="32" y1="8" x2="8" y2="32"/></svg>';
+    imgDiv.appendChild(overlay);
+  } else if (s.qty && s.qty > 1) {
     var qb = document.createElement('div');
     qb.className = 'qty-badge';
     qb.textContent = '× ' + s.qty;
@@ -1020,12 +1045,6 @@ function buildCard(s, i) {
   titleEl.className = 'card-title';
   titleEl.textContent = s.name;
   top.appendChild(titleEl);
-  if (s.archived) {
-    var archivedTag = document.createElement('span');
-    archivedTag.className = 'archived-tag';
-    archivedTag.textContent = 'Archived';
-    top.appendChild(archivedTag);
-  }
   var badge = document.createElement('span');
   badge.className = 'size-badge ' + sbClass;
   badge.textContent = sbLabel;
