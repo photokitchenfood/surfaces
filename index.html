@@ -1215,10 +1215,16 @@ function downloadColorFile(colorKey) {
     f.push('  material: ' + JSON.stringify(s.material || ''));
     if (s.size) f.push('  size: ' + JSON.stringify(s.size));
     f.push('  name: ' + JSON.stringify(s.name || ''));
+    if (s.description) f.push('  description: ' + JSON.stringify(s.description));
     f.push('  length: '   + (s.length   != null ? s.length   : null));
     f.push('  width: '    + (s.width    != null ? s.width    : null));
     f.push('  diameter: ' + (s.diameter != null ? s.diameter : null));
     if (s.qty) f.push('  qty: ' + s.qty);
+    if (s.storage) f.push('  storage: ' + JSON.stringify(s.storage));
+    f.push('  broken: ' + !!s.broken);
+    f.push('  planks: ' + !!s.planks);
+    if (s.assembled_length != null) f.push('  assembled_length: ' + s.assembled_length);
+    if (s.assembled_width  != null) f.push('  assembled_width: '  + s.assembled_width);
     f.push('  wet_safe: ' + !!s.wet_safe);
     f.push('  has_small: ' + !!s.has_small);
     if (s.small_length != null) f.push('  small_length: ' + s.small_length);
