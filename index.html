@@ -106,6 +106,9 @@ main{padding:28px 32px}
 .id-tag{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.85);color:var(--ink-soft);font-size:10px;padding:2px 6px;border-radius:3px;letter-spacing:.05em;opacity:0;transition:opacity .15s;white-space:nowrap;pointer-events:none}
 .card:hover .id-tag{opacity:1}
 .qty-badge{position:absolute;top:8px;left:8px;background:#fff;color:var(--ink);font-size:10px;padding:2px 6px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.card.is-archived{opacity:.55}
+.card.is-archived .card-img img{filter:grayscale(.6)}
+.archived-tag{background:#1A1A18;color:#fff;font-size:9px;padding:2px 7px;border-radius:3px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
 
 /* EDIT BUTTON — bottom-right of image, exactly like Vessels btn-replace-photo */
 .btn-edit-card{position:absolute;bottom:8px;right:8px;background:none;border:none;padding:2px;cursor:pointer;opacity:0;transition:opacity .15s;display:flex;align-items:center;justify-content:center;line-height:1;color:var(--ink-soft)}
@@ -479,11 +482,11 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
               <div id="ef-planks-panel" class="em-prop-fields">
                 <div class="mf ep-planks-field">
                   <label>Length (cm)</label>
-                  <input type="number" id="ef-assembled-length" placeholder="—" min="0" step="0.1">
+                  <input type="number" id="ef-plank-length" placeholder="—" min="0" step="0.1">
                 </div>
                 <div class="mf ep-planks-field">
                   <label>Width (cm)</label>
-                  <input type="number" id="ef-assembled-width" placeholder="—" min="0" step="0.1">
+                  <input type="number" id="ef-plank-width" placeholder="—" min="0" step="0.1">
                 </div>
               </div>
             </div>
@@ -959,7 +962,7 @@ function buildCard(s, i) {
   var sbLabel = sc || 'No Size';
 
   var card = document.createElement('div');
-  card.className = 'card';
+  card.className = 'card' + (s.archived ? ' is-archived' : '');
   card.style.animationDelay = Math.min(i * 0.025, 0.3) + 's';
 
   // ── IMAGE ──
@@ -1017,6 +1020,12 @@ function buildCard(s, i) {
   titleEl.className = 'card-title';
   titleEl.textContent = s.name;
   top.appendChild(titleEl);
+  if (s.archived) {
+    var archivedTag = document.createElement('span');
+    archivedTag.className = 'archived-tag';
+    archivedTag.textContent = 'Archived';
+    top.appendChild(archivedTag);
+  }
   var badge = document.createElement('span');
   badge.className = 'size-badge ' + sbClass;
   badge.textContent = sbLabel;
@@ -1094,7 +1103,7 @@ function openEditModal(s) {
   document.getElementById('ef-width').value    = s.width    != null ? s.width    : '';
   document.getElementById('ef-diameter').value = s.diameter != null ? s.diameter : '';
   document.getElementById('ef-qty').value = s.qty != null ? s.qty : '';
-  document.getElementById('ef-archive').checked  = !!s.broken;
+  document.getElementById('ef-archive').checked  = !!s.archived;
   document.getElementById('ef-storage').value    = s.storage || '';
   document.getElementById('ef-notes').value      = s.notes   || '';
   document.getElementById('ef-wet-safe').checked  = !!s.wet_safe;
@@ -1104,8 +1113,8 @@ function openEditModal(s) {
   document.getElementById('ef-small-width').value  = s.small_width  != null ? s.small_width  : '';
   document.getElementById('ef-planks').checked = !!s.planks;
   document.getElementById('ef-planks-panel').classList.toggle('active', !!s.planks);
-  document.getElementById('ef-assembled-length').value = s.assembled_length != null ? s.assembled_length : '';
-  document.getElementById('ef-assembled-width').value  = s.assembled_width  != null ? s.assembled_width  : '';
+  document.getElementById('ef-plank-length').value = s.plank_length != null ? s.plank_length : '';
+  document.getElementById('ef-plank-width').value  = s.plank_width  != null ? s.plank_width  : '';
 
   var preview = document.getElementById('modal-photo-preview');
   var placeholder = document.getElementById('modal-photo-placeholder');
@@ -1145,7 +1154,7 @@ function saveEditModal() {
   s.width    = wv !== '' ? parseFloat(wv) : null;
   s.diameter = dv !== '' ? parseFloat(dv) : null;
   s.qty      = qv !== '' ? parseInt(qv, 10) : null;
-  s.broken   = document.getElementById('ef-archive').checked;
+  s.archived = document.getElementById('ef-archive').checked;
   s.storage  = document.getElementById('ef-storage').value.trim() || null;
   s.notes    = document.getElementById('ef-notes').value.trim() || null;
   s.wet_safe  = document.getElementById('ef-wet-safe').checked;
@@ -1155,10 +1164,10 @@ function saveEditModal() {
   s.small_length = slv !== '' ? parseFloat(slv) : null;
   s.small_width  = swv !== '' ? parseFloat(swv) : null;
   s.planks = document.getElementById('ef-planks').checked;
-  var alv = document.getElementById('ef-assembled-length').value;
-  var awv = document.getElementById('ef-assembled-width').value;
-  s.assembled_length = alv !== '' ? parseFloat(alv) : null;
-  s.assembled_width  = awv !== '' ? parseFloat(awv) : null;
+  var alv = document.getElementById('ef-plank-length').value;
+  var awv = document.getElementById('ef-plank-width').value;
+  s.plank_length = alv !== '' ? parseFloat(alv) : null;
+  s.plank_width  = awv !== '' ? parseFloat(awv) : null;
   if (editPendingImageB64) IMAGES[s.id] = editPendingImageB64;
   if (curColor) { dirtyColors[curColor.key] = true; updateSaveBtn(); }
   closeEditModal();
@@ -1210,26 +1219,25 @@ function downloadColorFile(colorKey) {
   var lines = ['window._pkSurfaces = ['];
   data.forEach(function(s, idx) {
     var f = [];
-    f.push('  id: ' + JSON.stringify(s.id));
-    f.push('  color: ' + JSON.stringify(s.color || ''));
-    f.push('  material: ' + JSON.stringify(s.material || ''));
-    if (s.size) f.push('  size: ' + JSON.stringify(s.size));
-    f.push('  name: ' + JSON.stringify(s.name || ''));
-    if (s.description) f.push('  description: ' + JSON.stringify(s.description));
-    f.push('  length: '   + (s.length   != null ? s.length   : null));
-    f.push('  width: '    + (s.width    != null ? s.width    : null));
-    f.push('  diameter: ' + (s.diameter != null ? s.diameter : null));
-    if (s.qty) f.push('  qty: ' + s.qty);
-    if (s.storage) f.push('  storage: ' + JSON.stringify(s.storage));
-    f.push('  broken: ' + !!s.broken);
-    f.push('  planks: ' + !!s.planks);
-    if (s.assembled_length != null) f.push('  assembled_length: ' + s.assembled_length);
-    if (s.assembled_width  != null) f.push('  assembled_width: '  + s.assembled_width);
-    f.push('  wet_safe: ' + !!s.wet_safe);
-    f.push('  has_small: ' + !!s.has_small);
-    if (s.small_length != null) f.push('  small_length: ' + s.small_length);
-    if (s.small_width  != null) f.push('  small_width: '  + s.small_width);
-    if (s.notes) f.push('  notes: ' + JSON.stringify(s.notes));
+    f.push('  "id": ' + JSON.stringify(s.id));
+    f.push('  "color": ' + JSON.stringify(s.color || ''));
+    f.push('  "material": ' + JSON.stringify(s.material || ''));
+    if (s.size) f.push('  "size": ' + JSON.stringify(s.size));
+    f.push('  "name": ' + JSON.stringify(s.name || ''));
+    f.push('  "length": '   + (s.length   != null ? s.length   : null));
+    f.push('  "width": '    + (s.width    != null ? s.width    : null));
+    f.push('  "diameter": ' + (s.diameter != null ? s.diameter : null));
+    if (s.qty) f.push('  "qty": ' + s.qty);
+    if (s.storage) f.push('  "storage": ' + JSON.stringify(s.storage));
+    f.push('  "archived": ' + !!s.archived);
+    f.push('  "planks": ' + !!s.planks);
+    if (s.plank_length != null) f.push('  "plank_length": ' + s.plank_length);
+    if (s.plank_width  != null) f.push('  "plank_width": '  + s.plank_width);
+    f.push('  "wet_safe": ' + !!s.wet_safe);
+    f.push('  "has_small": ' + !!s.has_small);
+    if (s.small_length != null) f.push('  "small_length": ' + s.small_length);
+    if (s.small_width  != null) f.push('  "small_width": '  + s.small_width);
+    if (s.notes) f.push('  "notes": ' + JSON.stringify(s.notes));
     lines.push('  {\n' + f.join(',\n') + '\n  }' + (idx < data.length - 1 ? ',' : ''));
   });
   lines.push('];', '', 'window._pkImages = {');
@@ -1257,6 +1265,8 @@ var shState = { mat: 'all', size: 'all', wet: false, hasSmall: false };
 function shPool() {
   var all = [];
   Object.keys(loadedColors).forEach(function(k) { all = all.concat(loadedColors[k]); });
+  // Exclude archived surfaces — not shoot-ready
+  all = all.filter(function(s) { return !s.archived; });
   // Color filter
   if (!shColHas('all')) all = all.filter(function(s) { return shColHas(s.colorKey); });
   // Material filter
