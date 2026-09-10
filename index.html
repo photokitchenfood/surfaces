@@ -202,6 +202,20 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 .modal-photo-hover span{font-size:10px;color:#fff;letter-spacing:.06em;text-transform:uppercase}
 .modal-photo-file{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
 
+/* Photo edit-preview toggle button */
+.modal-photo-edit-btn{position:absolute;top:8px;right:8px;z-index:4;display:none;align-items:center;justify-content:center;padding:5px 10px;background:rgba(20,20,18,.72);color:#fff;border:none;border-radius:5px;font-family:"DM Mono",monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.modal-photo-edit-btn:hover{background:rgba(20,20,18,.9)}
+.modal-photo-wrap.has-photo .modal-photo-edit-btn{display:flex}
+.modal-photo-wrap.crop-mode .modal-photo-hover{display:none}
+.modal-photo-wrap.crop-mode .modal-photo-file{pointer-events:none}
+
+/* Crop overlay (card preview position) */
+.modal-crop-overlay{position:absolute;inset:0;z-index:3;display:none}
+.modal-photo-wrap.crop-mode .modal-crop-overlay{display:block}
+.modal-crop-mask{position:absolute;left:0;width:100%;background:rgba(0,0,0,.5);pointer-events:none}
+.modal-crop-window{position:absolute;left:0;width:100%;border:2px solid #fff;box-sizing:border-box;box-shadow:0 0 0 1px rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.25);cursor:grab;touch-action:none}
+.modal-crop-window.dragging{cursor:grabbing}
+
 /* Fields column */
 .modal-fields-col{flex:1;padding:0 28px 28px 0;display:flex;flex-direction:column;gap:10px;min-width:0;overflow-y:auto;max-height:calc(90vh - 54px)}
 .mf{display:flex;flex-direction:column;gap:4px}
@@ -382,7 +396,14 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
           </div>
           <img id="modal-photo-preview" class="modal-photo-preview" alt="">
           <div class="modal-photo-hover"><span>Replace photo</span></div>
+          <button type="button" class="modal-photo-edit-btn" id="modal-crop-toggle-btn">Edit Preview</button>
+          <div class="modal-crop-overlay" id="modal-crop-overlay">
+            <div class="modal-crop-mask" id="modal-crop-mask-top"></div>
+            <div class="modal-crop-window" id="modal-crop-window"></div>
+            <div class="modal-crop-mask" id="modal-crop-mask-bottom"></div>
+          </div>
         </div>
+        <input type="hidden" id="ef-focal-y" value="50">
       </div>
       <!-- RIGHT: fields -->
       <div class="modal-fields-col">
@@ -1005,7 +1026,8 @@ function buildCard(s, i) {
     img.className = 'lazy-img';
     img.setAttribute('data-src', imgSrc);
     img.alt = s.name;
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .2s';
+    var focalY = s.imgFocalY != null ? s.imgFocalY : 50;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center ' + focalY + '%;opacity:0;transition:opacity .2s';
     imgDiv.appendChild(img);
   }
   var ph = document.createElement('div');
@@ -1189,11 +1211,74 @@ function openEditModal(s) {
     placeholder.style.display = 'flex';
     wrap.classList.remove('has-photo');
   }
+  document.getElementById('ef-focal-y').value = s.imgFocalY != null ? s.imgFocalY : 50;
+  closeCropMode();
   document.getElementById('edit-modal-overlay').classList.add('open');
 }
 
+// ── CARD PREVIEW POSITION (crop overlay) ──
+function cropGeometry(wrap) {
+  var w = wrap.clientWidth, h = wrap.clientHeight;
+  var winH = Math.min(h, w * 2 / 3);
+  return { w: w, h: h, winH: winH, range: Math.max(0, h - winH) };
+}
+
+function layoutCropOverlay() {
+  var wrap = document.getElementById('modal-photo-wrap');
+  var geo = cropGeometry(wrap);
+  var focalY = parseFloat(document.getElementById('ef-focal-y').value) || 0;
+  var top = geo.range * (focalY / 100);
+  document.getElementById('modal-crop-mask-top').style.cssText    = 'top:0;height:' + top + 'px';
+  document.getElementById('modal-crop-window').style.cssText      = 'top:' + top + 'px;height:' + geo.winH + 'px';
+  document.getElementById('modal-crop-mask-bottom').style.cssText = 'top:' + (top + geo.winH) + 'px;height:' + (geo.h - top - geo.winH) + 'px';
+}
+
+function openCropMode() {
+  document.getElementById('modal-photo-wrap').classList.add('crop-mode');
+  document.getElementById('modal-crop-toggle-btn').textContent = 'Done';
+  layoutCropOverlay();
+}
+
+function closeCropMode() {
+  document.getElementById('modal-photo-wrap').classList.remove('crop-mode');
+  document.getElementById('modal-crop-toggle-btn').textContent = 'Edit Preview';
+}
+
+document.getElementById('modal-crop-toggle-btn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  var wrap = document.getElementById('modal-photo-wrap');
+  if (wrap.classList.contains('crop-mode')) closeCropMode(); else openCropMode();
+});
+
+(function() {
+  var win = document.getElementById('modal-crop-window');
+  var dragging = false, startY = 0, startTop = 0, geo = null;
+  win.addEventListener('pointerdown', function(e) {
+    var wrap = document.getElementById('modal-photo-wrap');
+    geo = cropGeometry(wrap);
+    if (geo.range <= 0) return;
+    dragging = true;
+    win.classList.add('dragging');
+    startY = e.clientY;
+    startTop = (parseFloat(document.getElementById('ef-focal-y').value) || 0) / 100 * geo.range;
+    win.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  win.addEventListener('pointermove', function(e) {
+    if (!dragging) return;
+    var top = Math.min(geo.range, Math.max(0, startTop + (e.clientY - startY)));
+    var focalY = geo.range > 0 ? (top / geo.range * 100) : 50;
+    document.getElementById('ef-focal-y').value = Math.round(focalY);
+    layoutCropOverlay();
+  });
+  function endDrag() { dragging = false; win.classList.remove('dragging'); }
+  win.addEventListener('pointerup', endDrag);
+  win.addEventListener('pointercancel', endDrag);
+})();
+
 function closeEditModal() {
   document.getElementById('edit-modal-overlay').classList.remove('open');
+  closeCropMode();
   editTarget = null;
   editPendingImageB64 = null;
 }
@@ -1227,6 +1312,7 @@ function saveEditModal() {
   s.plank_length = alv !== '' ? parseFloat(alv) : null;
   s.plank_width  = awv !== '' ? parseFloat(awv) : null;
   if (editPendingImageB64) IMAGES[s.id] = editPendingImageB64;
+  s.imgFocalY = parseInt(document.getElementById('ef-focal-y').value, 10);
   if (curColor) { dirtyColors[curColor.key] = true; updateSaveBtn(); }
   closeEditModal();
   render();
@@ -1258,6 +1344,10 @@ document.getElementById('modal-photo-file').addEventListener('change', function(
       preview.style.display = 'block';
       placeholder.style.display = 'none';
       document.getElementById('modal-photo-wrap').classList.add('has-photo');
+      document.getElementById('ef-focal-y').value = 50;
+      if (document.getElementById('modal-photo-wrap').classList.contains('crop-mode')) {
+        requestAnimationFrame(layoutCropOverlay);
+      }
     };
     img2.src = ev.target.result;
   };
@@ -1295,6 +1385,7 @@ function downloadColorFile(colorKey) {
     f.push('  "has_small": ' + !!s.has_small);
     if (s.small_length != null) f.push('  "small_length": ' + s.small_length);
     if (s.small_width  != null) f.push('  "small_width": '  + s.small_width);
+    if (s.imgFocalY != null && s.imgFocalY !== 50) f.push('  "imgFocalY": ' + s.imgFocalY);
     if (s.notes) f.push('  "notes": ' + JSON.stringify(s.notes));
     lines.push('  {\n' + f.join(',\n') + '\n  }' + (idx < data.length - 1 ? ',' : ''));
   });
@@ -1369,7 +1460,8 @@ function renderShuffler() {
       if (is2) {
         var img3 = document.createElement('img');
         img3.src = is2; img3.alt = slot.surface.name;
-        img3.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+        var focalY3 = slot.surface.imgFocalY != null ? slot.surface.imgFocalY : 50;
+        img3.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center ' + focalY3 + '%;display:block';
         imgArea.textContent = ''; imgArea.appendChild(img3); imgArea.style.padding = '0';
       } else {
         var cfg3 = COLOR_CONFIG.filter(function(c) { return c.key === slot.surface.colorKey; })[0];
