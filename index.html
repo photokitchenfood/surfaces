@@ -7,6 +7,9 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌫️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* LOGO FONT */
+@font-face{font-family:'Engineer Heavy';src:url('assets/fonts/engineer-heavy.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#F5F2EE;--surface:#FFFFFF;--ink:#1A1A18;--ink-soft:#6B6860;
@@ -17,7 +20,8 @@ body{font-family:"DM Mono",monospace;background:var(--bg);color:var(--ink);min-h
 
 /* HEADER */
 header{background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 24px;position:sticky;top:0;z-index:100}
-.logo{font-family:"Barlow Semi Condensed",sans-serif;font-size:23px}
+.logo{font-family:'Engineer Heavy',"Barlow Semi Condensed",sans-serif;font-weight:400;font-size:23px;letter-spacing:0;display:flex;align-items:center;gap:10px;cursor:pointer}
+.logo:hover{opacity:.82}
 .header-meta{font-size:11px;color:#888;letter-spacing:.08em;text-transform:uppercase}
 .header-right{display:flex;align-items:center;gap:12px}
 .mode-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:6px;padding:3px;gap:2px}
@@ -76,6 +80,9 @@ aside{flex:1;padding:28px 20px;overflow-y:auto}
 /* DIM SELECT — matching Vessels dim-select */
 .dim-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border-radius:var(--radius);border:1.5px solid var(--tag-border);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
 .dim-select:focus{outline:none;border-color:var(--ink)}
+
+/* SORT SELECT — ported from Takeout's .sort-select */
+.sort-select{font-family:"DM Mono",monospace;font-size:11px;padding:6px 24px 6px 9px;border:1.5px solid var(--tag-border);border-radius:var(--radius);background:var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 7px center;background-size:8px;color:var(--ink);cursor:pointer;outline:none;box-sizing:border-box;height:32px;-webkit-appearance:none;-moz-appearance:none;appearance:none}
 
 /* DIM RANGE INPUTS */
 .size-inputs{display:flex;flex-direction:row;align-items:flex-end;gap:6px}
@@ -163,7 +170,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 #pw-gate{position:fixed;inset:0;background:#1A1A18;z-index:9999;display:flex;align-items:center;justify-content:center}
 #pw-gate.hidden{display:none}
 .pw-box{display:flex;flex-direction:column;align-items:center;gap:20px;width:320px}
-.pw-logo{font-family:"Barlow Semi Condensed",sans-serif;font-size:26px;color:#fff;margin-bottom:4px}
+.pw-logo{font-family:'Engineer Heavy',"Barlow Semi Condensed",sans-serif;font-size:26px;color:#fff;letter-spacing:0;margin-bottom:4px}
 .pw-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#666;font-family:"DM Mono",monospace}
 .pw-input-wrap{width:100%;position:relative}
 #pw-input{width:100%;background:#2A2A28;border:1.5px solid #3A3A38;border-radius:6px;padding:11px 44px 11px 14px;font-family:"DM Mono",monospace;font-size:13px;color:#fff;outline:none;transition:border-color .15s;letter-spacing:.08em}
@@ -330,7 +337,8 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 #landing-banner{display:none}
 #landing-banner.show{display:block}
 .landing-wrap{padding:0 0 40px}
-#landing-banner-img{width:100%;height:300px;object-fit:cover;object-position:center 40%;border-radius:var(--card-radius);display:block;margin-bottom:28px}
+#landing-banner-img{width:100%;aspect-ratio:2400/1098;object-fit:contain;border-radius:var(--card-radius);display:block;margin-bottom:28px;background:var(--tag-bg)}
+@media (min-width:1440px){#landing-banner-img{height:450px;aspect-ratio:unset;object-fit:cover;object-position:center 40%}}
 .landing-section-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;margin-top:4px}
 .landing-colors-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px}
 .landing-color-card{display:flex;align-items:center;gap:8px;padding:7px 13px;background:var(--surface);border:1px solid rgba(0,0,0,.1);border-radius:var(--card-radius);cursor:pointer;transition:background .15s,border-color .15s}
@@ -356,6 +364,7 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
 .howto-step-title{font-family:"Syne",sans-serif;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
 .howto-step-desc{font-family:"Syne",sans-serif;font-size:12px;font-weight:400;color:#999;line-height:1.4}
 </style>
+<script src="data/meta.js"></script>
 </head>
 <body>
 
@@ -642,7 +651,16 @@ aside::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:2px}
   <main>
     <div class="results-bar">
       <div id="color-header-text" style="font-family:'Syne',sans-serif;font-size:25px;font-weight:700;line-height:1.1;color:var(--ink-faint)">No Color Selected</div>
-      <div class="results-count" id="results-count"><span>&mdash;</span> surfaces</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="results-count" id="results-count" style="margin-right:4px"><span>&mdash;</span> surfaces</div>
+        <select class="sort-select" id="sort">
+          <option value="default">Sort: Default</option>
+          <option value="size-asc">Size: Small &rarr; Large</option>
+          <option value="size-desc">Size: Large &rarr; Small</option>
+          <option value="mat">Material A&ndash;Z</option>
+          <option value="id">ID A&ndash;Z</option>
+        </select>
+      </div>
     </div>
     <div id="landing-banner"></div>
     <div id="grid"></div>
@@ -728,7 +746,7 @@ var editPendingImageB64 = null;
 
 var fState = {
   search: '', mat: 'all', size: 'all', wet: false, hasSmall: false, planks: false,
-  dimField: 'length', minDim: null, maxDim: null
+  dimField: 'length', minDim: null, maxDim: null, sort: 'default'
 };
 var bgCount = 1, surfCount = 1;
 var shColFilter = ['all'];
@@ -851,12 +869,25 @@ function matches(s) {
   return true;
 }
 
+function getPrimaryDim(s) {
+  return s.diameter || s.length || s.width || 0;
+}
+
 // Archived surfaces always sink to the bottom of whatever view is showing,
-// while preserving each group's existing relative order.
+// while preserving each group's existing relative order. Within each group,
+// apply the active sort (ported from Takeout's sorted()).
 function sortArchivedLast(list) {
   var active   = list.filter(function(s) { return !s.archived; });
   var archived = list.filter(function(s) { return  s.archived; });
-  return active.concat(archived);
+  function sortGroup(arr) {
+    var copy = arr.slice();
+    if (fState.sort === 'size-asc')  return copy.sort(function(a, b) { return getPrimaryDim(a) - getPrimaryDim(b); });
+    if (fState.sort === 'size-desc') return copy.sort(function(a, b) { return getPrimaryDim(b) - getPrimaryDim(a); });
+    if (fState.sort === 'mat')       return copy.sort(function(a, b) { return a.material.localeCompare(b.material); });
+    if (fState.sort === 'id')        return copy.sort(function(a, b) { return (a.id || '').localeCompare(b.id || '', undefined, { numeric: true }); });
+    return copy;
+  }
+  return sortGroup(active).concat(sortGroup(archived));
 }
 
 // ── RENDER ──
@@ -868,6 +899,12 @@ function render() {
   var landing = document.getElementById('landing-banner');
 
   if (!curColor) {
+    var meta = (typeof CATALOG_META !== 'undefined') ? CATALOG_META : { lastUpdated: null, colors: {} };
+    var lastUpdated = meta.lastUpdated || null;
+    var updatedStr = lastUpdated
+      ? new Date(lastUpdated + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+      : '2026';
+
     var CATEGORY_GUIDE = [
       { icon: '🎨', name: 'Painted Panels',    wet: 'dry',    desc: 'Hand-painted wooden boards.' },
       { icon: '🪣', name: 'Plastic Laminate',  wet: 'wet',    desc: 'Durable laminate sheets.' },
@@ -949,7 +986,7 @@ function render() {
     grid.style.display = 'none';
     count.innerHTML = '<span>&mdash;</span> surfaces';
     hdr.style.color = '';
-    hdr.innerHTML = 'Surfaces Catalog 2.0';
+    hdr.innerHTML = 'Surfaces Catalog 2.0' + (updatedStr ? '<span style="font-family:\'Syne\',sans-serif;font-size:18px;font-weight:500;color:#999;margin-left:12px">' + ' / Last Updated: ' + updatedStr + '</span>' : '');
     empty.classList.remove('show');
     return;
   }
@@ -1636,7 +1673,7 @@ function setMode(mode) {
 
 // ── PASSWORD GATE ──
 (function() {
-  var CORRECT = 'pksurfaces2026', KEY = 'pk_surfaces_auth';
+  var CORRECT = 'pkprops2026', KEY = 'pk_surfaces_auth';
   var gate = document.getElementById('pw-gate');
   var input = document.getElementById('pw-input');
   var errEl = document.getElementById('pw-error');
@@ -1654,7 +1691,29 @@ function setMode(mode) {
   input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
 })();
 
+// ── HEADER LOGO: RETURN TO LANDING ──
+function resetToLanding() {
+  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, planks:false, dimField:'length', minDim:null, maxDim:null, sort:'default' };
+  document.getElementById('search').value = '';
+  document.querySelectorAll('#mat-filters .chip').forEach(function(c)  { c.classList.toggle('active', c.getAttribute('data-mat')  === 'all'); });
+  document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-size') === 'all'); });
+  document.getElementById('wet-chip').classList.remove('active');
+  document.getElementById('small-chip').classList.remove('active');
+  document.getElementById('planks-chip').classList.remove('active');
+  document.getElementById('dim-field').value = 'length';
+  document.getElementById('min-dim').value = '';
+  document.getElementById('max-dim').value = '';
+  document.getElementById('sort').value = 'default';
+  curColor = null;
+  surfaces = [];
+  document.getElementById('color-select').value = '';
+  applyColorUI(null);
+  setMode('catalog');
+  render();
+}
+
 // ── EVENT LISTENERS ──
+document.querySelector('.logo').addEventListener('click', resetToLanding);
 document.querySelectorAll('.mode-btn').forEach(function(b) {
   b.addEventListener('click', function() { setMode(b.getAttribute('data-mode')); });
 });
@@ -1678,8 +1737,9 @@ document.getElementById('planks-chip').addEventListener('click', function() { fS
 document.getElementById('dim-field').addEventListener('change',  function(e) { fState.dimField = e.target.value; render(); });
 document.getElementById('min-dim').addEventListener('input',    function(e) { fState.minDim = e.target.value ? +e.target.value : null; render(); });
 document.getElementById('max-dim').addEventListener('input',    function(e) { fState.maxDim = e.target.value ? +e.target.value : null; render(); });
+document.getElementById('sort').addEventListener('change', function(e) { fState.sort = e.target.value; render(); });
 document.getElementById('reset').addEventListener('click', function() {
-  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, planks:false, dimField:'length', minDim:null, maxDim:null };
+  fState = { search:'', mat:'all', size:'all', wet:false, hasSmall:false, planks:false, dimField:'length', minDim:null, maxDim:null, sort:'default' };
   document.getElementById('search').value = '';
   document.querySelectorAll('#mat-filters .chip').forEach(function(c)  { c.classList.toggle('active', c.getAttribute('data-mat')  === 'all'); });
   document.querySelectorAll('#size-filters .chip').forEach(function(c) { c.classList.toggle('active', c.getAttribute('data-size') === 'all'); });
@@ -1689,6 +1749,7 @@ document.getElementById('reset').addEventListener('click', function() {
   document.getElementById('dim-field').value = 'length';
   document.getElementById('min-dim').value = '';
   document.getElementById('max-dim').value = '';
+  document.getElementById('sort').value = 'default';
   render();
 });
 document.getElementById('modal-cancel-btn').addEventListener('click', closeEditModal);
